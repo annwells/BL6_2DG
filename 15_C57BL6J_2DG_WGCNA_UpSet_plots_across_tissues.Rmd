@@ -1,0 +1,193 @@
+---
+title: "Chang_B6_96hr_4wk 2DG UpSet plots Across Tissue Modules for Chosen Modules"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+# Introduction
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","UpSetR")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+```{r load data}
+heart <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.membership.RData"))
+
+small.intestine <- readRDS(here("Data","Small Intestine", "log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA.module.membership.RData"))
+
+spleen <- readRDS(here("Data","Spleen","log.tdata.FPKM.sample.info.subset.spleen.WGCNA.module.membership.RData"))
+
+brain <- readRDS(here("Data","Brain","log.tdata.FPKM.sample.info.subset.hip.hyp.cortex.WGCNA.module.membership.RData"))
+
+muscle <- readRDS(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.membership.RData"))
+
+liver <- readRDS(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.WGCNA.module.membership.RData"))
+
+hyp <- readRDS(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.membership.RData"))
+
+cortex <- readRDS(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA.module.membership.RData"))
+
+```
+
+## Upset Plots {.tabset .tabset-fade .tabset-pills}
+```{r pull modules significant for treatment for each tissue}
+## heart
+Matched.module.heart <- split(heart$Gene, heart$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.heart)){
+    modules <- unique(heart$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.heart) <- modulenames
+
+## small intestine
+Matched.module.SI <- split(small.intestine$Gene, small.intestine$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.SI)){
+    modules <- unique(small.intestine$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.SI) <- modulenames
+
+## skeletal muscle
+Matched.module.SM <- split(muscle$Gene, muscle$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.SM)){
+    modules <- unique(muscle$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.SM) <- modulenames
+
+## liver
+Matched.module.liver <- split(liver$Gene, liver$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.liver)){
+    modules <- unique(liver$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.liver) <- modulenames
+
+## hypothalamus
+Matched.module.hyp <- split(hyp$Gene, hyp$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.hyp)){
+    modules <- unique(hyp$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.hyp) <- modulenames
+
+## prefrontal cortex
+Matched.module.cortex <- split(cortex$Gene, cortex$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.cortex)){
+    modules <- unique(cortex$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.cortex) <- modulenames
+```
+### With Brain
+```{r}
+tissues.treat <- list("Heart" = Matched.module.heart$darkgreen, "Hypothalamus" = Matched.module.hyp$bisque4, "Liver" = Matched.module.liver$darkolivegreen, "Prefrontal Cortex" = Matched.module.cortex$bisque2, "Skeletal Muscle" = Matched.module.SM$salmon2, "Small Intestine" = Matched.module.SI$green4)
+
+upset(nsets=6, fromList(tissues.treat), main.bar.color = "salmon", matrix.color = "midnightblue", sets.bar.color = "darkolivegreen", text.scale = 1)
+```
+
+### Without Brain
+```{r}
+tissues.treat.nobrain <- list("Heart" = Matched.module.heart$darkgreen, "Liver" = Matched.module.liver$darkolivegreen, "Skeletal Muscle" = Matched.module.SM$salmon2, "Small Intestine" = Matched.module.SI$green4)
+
+upset(nsets=, fromList(tissues.treat.nobrain), main.bar.color = "salmon", matrix.color = "midnightblue", sets.bar.color = "darkolivegreen", text.scale = 1)
+```
+
+### Pathways
+
+## Load data
+```{r load data}
+heart <- readRDS(here("Data","Heart","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_heart_WGCNA.RData"))
+names(heart) <- as.list(names(Matched.module.heart))
+
+hyp <- readRDS(here("Data","Hypothalamus","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hypothalamus_WGCNA.RData"))
+names(hyp) <- as.list(names(Matched.module.hyp))
+
+liver <- readRDS(here("Data","Liver","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_liver_WGCNA.RData"))
+names(liver) <- as.list(names(Matched.module.liver))
+
+cortex <- readRDS(here("Data","Prefrontal Cortex","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_prefrontal_cortex_WGCNA.RData"))
+names(cortex) <- as.list(names(Matched.module.cortex))
+
+muscle <- readRDS(here("Data","Skeletal Muscle","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_skeletal_muscle_WGCNA.RData"))
+names(muscle) <- as.list(names(Matched.module.SM))
+
+small.intestine <- readRDS(here("Data","Small Intestine","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_small_intestine_WGCNA.RData"))
+names(small.intestine) <- as.list(names(Matched.module.SI))
+```
+
+### Treatment
+```{r}
+treat <- list("Heart" = heart$darkgreen$term_name, "Hypothalamus" = hyp$bisque4$term_name, "Liver" = liver$darkolivegreen$term_name, "Prefrontal Cortex" = cortex$bisque2$term_name, "Skeletal Muscle" = muscle$salmon2$term_name, "Small Intestine" = small.intestine$green4$term_name)
+
+upset(nsets=6, fromList(treat), main.bar.color = "darkolivegreen4", matrix.color = "darkorchid4", sets.bar.color = "dodgerblue4", text.scale = 1)
+```

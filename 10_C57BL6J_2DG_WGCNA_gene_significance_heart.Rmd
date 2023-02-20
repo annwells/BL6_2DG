@@ -1,0 +1,97 @@
+---
+title: "Chang B6 96hr 4wk 2DG Gene Connectivity with Traits Heart"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each module identified, as well as the relationship of each gene within the module and its significance.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap","cowplot","downloadthis")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+source(here("source_files","plot_theme.R"))
+
+```
+
+```{r load data}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5] 
+
+log.tdata.FPKM.sample.info.subset <- cbind(log.tdata.FPKM.subset,tdata.FPKM.sample.info[,27238:27240])
+log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.heart <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Heart") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.heart <- cbind(log.tdata.FPKM.sample.info.subset.heart, Time.Treat = paste(log.tdata.FPKM.sample.info.subset.heart$Time,log.tdata.FPKM.sample.info.subset.heart$Treatment))
+
+module.labels <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.labels.RData"))
+module.eigens <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.eigens.RData"))
+modules <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.membership.RData"))
+net.deg <- readRDS(here("Data","Heart","Chang_2DG_BL6_connectivity_heart.RData"))
+ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
+
+Matched<-readRDS(here("Data","Heart","Annotated_genes_in_heart_WGCNA_Chang_B6_96hr_4wk.RData"))
+
+```
+
+## Association of Gene Connectivity with Traits {.tabset .tabset-fade .tabset-pills}
+
+We can use the ANOVA tests between categorical variables as a measure of gene significance. As described by the authors of the WGCNA package, “gene significance” is a value assigned to each gene in the network based on a trait. This can be a correlation coefficient between the gene expression and the trait, for instance. It can also be a p-value from an association test.
+
+For categorical variables (time, treatment, and tissue), I assign a gene significance p-value. I use a one-way ANOVA to generate a p-value of association between the trait and the gene. I then use the -log10(p-value) as the gene significance.
+
+The mean gene significance in a module can inform which modules are important for a trait. For instance, a module with a high mean gene significance contains many genes that are associated with the trait.
+
+In a weighted network, the concept of connectivity (k) for any given gene is the sum of the weights of edges that are incident to the gene in the network. A higher connectivity generally signals a “more central” gene in the network. If the gene significance is correlated with the gene connectivity in a module, we can infer that the central genes (hub genes) are associated with the trait of interest.
+
+All this information is graphed together in the following graphs.
+
+```{r, results='asis', fig.height=15,fig.width=12}
+factors <- c("Time","Treatment","Time.Treat")
+gene.significance(factors,log.tdata.FPKM.sample.info.subset.heart, modules)
+```
+
+```{r, include=FALSE}
+ p <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length)
+
+p
+```

@@ -1,0 +1,809 @@
+---
+title: "Comparing Significant Overlaps (Jaccard) for Modules Related to Traits through Pathways Identified"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlaped.
+
+## Load in Packages and read in files
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "rlist")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+## Load data
+```{r load data}
+heart <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.membership.RData"))
+
+hip <- readRDS(here("Data","Hippocampus","log.tdata.FPKM.sample.info.subset.hippocampus.WGCNA.module.membership.RData"))
+
+hyp <- readRDS(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.membership.RData"))
+
+kidney <- readRDS(here("Data","Kidney","log.tdata.FPKM.sample.info.subset.kidney.WGCNA.module.membership.RData"))
+
+liver <- readRDS(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.WGCNA.module.membership.RData"))
+
+cortex <- readRDS(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA.module.membership.RData"))
+
+muscle <- readRDS(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.membership.RData"))
+
+small.intestine <- readRDS(here("Data","Small Intestine","log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA.module.membership.RData"))
+
+spleen <- readRDS(here("Data","Spleen","log.tdata.FPKM.sample.info.subset.spleen.WGCNA.module.membership.RData"))
+
+```
+
+## Jaccard Plots Genes {.tabset .tabset-fade .tabset-pills}
+```{r pull modules significant for treatment for each tissue}
+## heart
+Matched.module.heart <- split(heart$Gene, heart$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.heart)){
+    modules <- unique(heart$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.heart) <- modulenames
+
+## hippocampus
+Matched.module.hip <- split(hip$Gene, hip$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.hip)){
+    modules <- unique(hip$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.hip) <- modulenames
+
+## hypothalamus
+Matched.module.hyp <- split(hyp$Gene, hyp$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.hyp)){
+    modules <- unique(hyp$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.hyp) <- modulenames
+
+## kidney
+Matched.module.kidney <- split(kidney$Gene, kidney$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.kidney)){
+    modules <- unique(kidney$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.kidney) <- modulenames
+
+## liver
+Matched.module.liver <- split(liver$Gene, liver$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.liver)){
+    modules <- unique(liver$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.liver) <- modulenames
+
+## prefrontal cortex
+Matched.module.cortex <- split(cortex$Gene, cortex$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.cortex)){
+    modules <- unique(cortex$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.cortex) <- modulenames
+
+## skeletal muscle
+Matched.module.muscle <- split(muscle$Gene, muscle$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.muscle)){
+    modules <- unique(muscle$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.muscle) <- modulenames
+
+## small intestine
+Matched.module.small.intestine <- split(small.intestine$Gene, small.intestine$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.small.intestine)){
+    modules <- unique(small.intestine$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.small.intestine) <- modulenames
+
+## spleen
+Matched.module.spleen <- split(spleen$Gene, spleen$Module)
+
+modulenames <- c()
+  for(i in 1:length(Matched.module.spleen)){
+    modules <- unique(spleen$Module)
+    name <- strsplit(modules,"_")
+    modulenames[i] <- name[[i]][2]
+    
+    #gene <- as.vector(Matched.module[[i]])
+  }
+
+modulenames <- sort(modulenames)
+
+names(Matched.module.spleen) <- modulenames
+```
+
+### Treatment
+```{r}
+tissues.treat <- list("Heart" = Matched.module.heart$darkgreen, "Liver" = Matched.module.liver$darkolivegreen, "Hypothalamus" = Matched.module.hyp$bisque4, "Prefrontal Cortex" = Matched.module.cortex$bisque2, "Muscle" = Matched.module.muscle$salmon2, "Small Intestine" = Matched.module.small.intestine$green4)
+```
+
+<!-- ### Treatment -->
+<!-- ```{r} -->
+<!-- tissues.treat <- list("Heart antiquewhite4" = Matched.module.heart$antiquewhite4, "Heart coral2" = Matched.module.heart$coral2, "Heart darkolivegreen" = Matched.module.heart$darkolivegreen, "Heart darkslateblue" = Matched.module.heart$darkslateblue, "Heart firebrick4" = Matched.module.heart$firebrick4, "Heart floralwhite" = Matched.module.heart$floralwhite, "Heart lavenderblush3" = Matched.module.heart$lavenderblush3, "Heart mediumpurple2" = Matched.module.heart$mediumpurple2, "Heart thistle" = Matched.module.heart$thistle, "Hippocampus coral" = Matched.module.hip$coral, "Hippocampus coral3" = Matched.module.hip$coral3, "Hippocampus orangered4" = Matched.module.hip$orangered4, "Hypothalamus paleturquoise" =  Matched.module.hyp$paleturquoise, "Hypothalamus saddlebrown" = Matched.module.hyp$saddlebrown, "Kidney green" = Matched.module.kidney$green,"liver black" = Matched.module.liver$black, "Prefrontal Cortex antiquewhite4" = Matched.module.cortex$antiquewhite4, "Prefontal Cortex blue" = Matched.module.cortex$blue, "Prefrontal Cortex blue2" = Matched.module.cortex$blue2, "Prefrontal Cortex coral" = Matched.module.cortex$coral, "Prefrontal Cortex darkseagreen3" = Matched.module.cortex$darkseagreen3, "Prefrontal Cortex honeydew1" = Matched.module.cortex$honeydew1, "Prefrontal Cortex indianred4" = Matched.module.cortex$indianred4, "Prefrontal Cortex lightyellow" = Matched.module.cortex$lightyellow, "Prefrontal Cortex orange" = Matched.module.cortex$orange, "Prefrontal Cortex orangered3" = Matched.module.cortex$orangered3, "Prefrontal Cortex turquoise" = Matched.module.cortex$turquoise, "Muscle grey" = Matched.module.muscle$grey, "Muscle navajowhite2" = Matched.module.muscle$navajowhite2, "Small Intestine grey" = Matched.module.small.intestine$grey, "Spleen black" = Matched.module.spleen$black) -->
+<!-- ``` -->
+
+<!-- ### Time -->
+<!-- ```{r} -->
+<!-- tissues.time <- list("Heart brown2" = Matched.module.heart$brown2, "Heart darkslateblue" = Matched.module.heart$darkslateblue, "Hippocampus darkmagenta" = Matched.module.hip$darkmagenta, "Hippocampus magenta" = Matched.module.hip$magenta, "Hippocampus plum3" = Matched.module.hip$plum3,  "Liver darkolivegreen" = Matched.module.liver$darkolivegreen, "Liver pink" = Matched.module.liver$pink, "Prefrontal Cortex coral" = Matched.module.cortex$coral, "Prefrontal Cortex thistle" = Matched.module.cortex$thistle) -->
+<!-- ``` -->
+
+```{r}
+mods<-crossprod(table(stack(tissues.treat)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(tissues.treat[rownames(mods)[i]]),unlist(tissues.treat[colnames(mods)[j]])))
+            S <- I/(length(unlist(tissues.treat[rownames(mods)[i]]))+length(unlist(tissues.treat[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(tissues.treat[rownames(mods)[i]])),unique(unlist(tissues.treat[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
+        #write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
+breaks<-seq(0,.07,length.out = 100)
+
+pheatmap(mods,cluster_cols=F,cluster_rows=F, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+# ```{r}
+# mods<-crossprod(table(stack(tissues.treat.time)))
+#         
+#         for (i in 1:length(rownames(mods))) {
+#           for (j in 1:length(colnames(mods))) {
+#             I <- length(intersect(unlist(tissues.treat.time[rownames(mods)[i]]),unlist(tissues.treat.time[colnames(mods)[j]])))
+#             S <- I/(length(unlist(tissues.treat.time[rownames(mods)[i]]))+length(unlist(tissues.treat.time[colnames(mods)[j]]))-I)
+#             mods[i,j]<-S
+#           }
+#         }
+# ```
+
+<!-- ##Fisher's Exact test Time by treat -->
+<!-- ```{r jaccard} -->
+<!--         matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         for(i in 1:length(rownames(mods))){ -->
+<!--           for(j in 1:length(colnames(mods))){ -->
+<!--             overlap<-newGeneOverlap(unique(unlist(tissues.treat.time[rownames(mods)[i]])),unique(unlist(tissues.treat.time[colnames(mods)[j]]))) -->
+<!--             overlap2<-testGeneOverlap(overlap) -->
+<!--             Jaccard[i,j]<-getJaccard(overlap2) -->
+<!--             p.val[i,j]<-getPval(overlap2) -->
+<!--           } -->
+<!--         } -->
+<!--         colnames(p.val)<-colnames(mods) -->
+<!--         rownames(p.val)<-rownames(mods) -->
+<!--         colnames(Jaccard)<-colnames(mods) -->
+<!--         rownames(Jaccard)<-rownames(mods) -->
+
+<!--         write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!--         write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1) -->
+<!-- breaks<-seq(0,.07,length.out = 100) -->
+
+<!-- pheatmap(Jaccard,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- mods<-crossprod(table(stack(tissues.time))) -->
+
+<!--         for (i in 1:length(rownames(mods))) { -->
+<!--           for (j in 1:length(colnames(mods))) { -->
+<!--             I <- length(intersect(unlist(tissues.time[rownames(mods)[i]]),unlist(tissues.time[colnames(mods)[j]]))) -->
+<!--             S <- I/(length(unlist(tissues.time[rownames(mods)[i]]))+length(unlist(tissues.time[colnames(mods)[j]]))-I) -->
+<!--             mods[i,j]<-S -->
+<!--           } -->
+<!--         } -->
+<!-- ``` -->
+<!-- ##Fisher's Exact test Time -->
+<!-- ```{r jaccard} -->
+<!--         matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         for(i in 1:length(rownames(mods))){ -->
+<!--           for(j in 1:length(colnames(mods))){ -->
+<!--             overlap<-newGeneOverlap(unique(unlist(tissues.time[rownames(mods)[i]])),unique(unlist(tissues.time[colnames(mods)[j]]))) -->
+<!--             overlap2<-testGeneOverlap(overlap) -->
+<!--             Jaccard[i,j]<-getJaccard(overlap2) -->
+<!--             p.val[i,j]<-getPval(overlap2) -->
+<!--           } -->
+<!--         } -->
+<!--         colnames(p.val)<-colnames(mods) -->
+<!--         rownames(p.val)<-rownames(mods) -->
+<!--         colnames(Jaccard)<-colnames(mods) -->
+<!--         rownames(Jaccard)<-rownames(mods) -->
+
+<!--         write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!--         write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1) -->
+<!-- breaks<-seq(0,.07,length.out = 100) -->
+
+<!-- pheatmap(Jaccard,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks) -->
+<!-- ``` -->
+
+# Pathway Jaccard
+
+## Load data
+```{r load data}
+heart <- readRDS(here("Data","Heart","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_heart_WGCNA.RData"))
+
+hip <- readRDS(here("Data","Hippocampus","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hippocampus_WGCNA.RData"))
+
+hyp <- readRDS(here("Data","Hypothalamus","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hypothalamus_WGCNA.RData"))
+
+kidney <- readRDS(here("Data","Kidney","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_kidney_WGCNA.RData"))
+
+liver <- readRDS(here("Data","Liver","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_liver_WGCNA.RData"))
+
+cortex <- readRDS(here("Data","Prefrontal Cortex","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_prefrontal_cortex_WGCNA.RData"))
+
+muscle <- readRDS(here("Data","Skeletal Muscle","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_skeletal_muscle_WGCNA.RData"))
+
+small.intestine <- readRDS(here("Data","Small Intestine","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_small_intestine_WGCNA.RData"))
+
+spleen <- readRDS(here("Data","Spleen","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_spleen_WGCNA.RData"))
+```
+
+### Treatment
+```{r}
+tissues.treat <- list("Heart" = Matched.module.heart$darkgreen, "Liver" = Matched.module.liver$darkolivegreen, "Hypothalamus" = Matched.module.hyp$bisque4, "Prefrontal Cortex" = Matched.module.cortex$bisque2, "Muscle" = Matched.module.muscle$salmon2, "Small Intestine" = Matched.module.small.intestine$green4)
+```
+
+<!-- ### Treatment by time -->
+<!-- ```{r} -->
+<!-- tissues.treat <- list("Heart antiquewhite4" = heart$`list("antiquewhite4")`$term_name, "Heart coral2" = heart$`list("coral2")`$term_name, "Heart darkolivegreen" = heart$`list("darkolivegreen")`$term_name, "Heart darkslateblue" = heart$`list("darkslateblue")`$term_name, "Heart firebrick4" = heart$`list("firebrick4")`$term_name, "Heart floralwhite" = heart$`list("floralwhite")`$term_name, "Heart lavenderblush3" = heart$`list("lavenderblush3")`$term_name, "Heart mediumpurple2" = heart$`list("mediumpurple2")`$term_name, "Heart thistle" = heart$`list("thistle")`$term_name, "Hippocampus coral" = hip$`list("coral")`$term_name, "Hippocampus coral3" = hip$`list("coral3")`$term_name, "Hippocampus orangered4" = hip$`list("orangered4")`$term_name, "Hypothalamus paleturquoise" =  hyp$`list("paleturquoise")`$term_name, "Hypothalamus saddlebrown" = hyp$`list("saddlebrown")`$term_name, "Kidney green" = kidney$`list("green")`$term_name ,"liver black" = liver$`list("black")`$term_name, "Prefrontal Cortex antiquewhite4" = cortex$`list("antiquewhite4")`$term_name, "Prefontal Cortex blue" = cortex$`list("blue")`$term_name, "Prefrontal Cortex blue2" = cortex$`list("blue2")`$term_name, "Prefrontal Cortex coral" = cortex$`list("coral")`$term_name, "Prefrontal Cortex darkseagreen3" = cortex$`list("darkseagreen3")`$term_name, "Prefrontal Cortex honeydew1" = cortex$`list("honeydew1")`$term_name, "Prefrontal Cortex indianred4" = cortex$`list("indianred4")`$term_name, "Prefrontal Cortex lightyellow" = cortex$`list("lightyellow")`$term_name, "Prefrontal Cortex orange" = cortex$`list("orange")`$term_name, "Prefrontal Cortex orangered3" = cortex$`list("orangered3")`$term_name, "Prefrontal Cortex turquoise" = cortex$`list("turquoise")`$term_name, "Muscle grey" = muscle$`list("grey")`$term_name, "Muscle navajowhite2" = muscle$`list("navajowhite2")`$term_name, "Small Intestine grey" = small.intestine$`list("grey")`$term_name, "Spleen black" = spleen$`list("black")`$term_name) -->
+<!-- ``` -->
+
+<!-- ### Time -->
+<!-- ```{r} -->
+<!-- tissues.time <- list("Heart brown2" = heart$`list("brown2")`$term_name, "Heart darkslateblue" = heart$`list("darkslateblue")`$term_name, "Hippocampus darkmagenta" = hip$`list("darkmagenta")`$term_name, "Hippocampus magenta" = hip$`list("magenta")`$term_name, "Hippocampus plum3" = hip$`list("plum3")`$term_name,  "Liver darkolivegreen" = liver$`list("darkolivegreen")`$term_name, "Liver pink" = liver$`list("pink")`$term_name, "Prefrontal Cortex coral" = cortex$`list("coral")`$term_name, "Prefrontal Cortex thistle" = cortex$`list("thistle")`$term_name) -->
+<!-- ``` -->
+
+```{r}
+mods<-crossprod(table(stack(tissues.treat)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(tissues.treat[rownames(mods)[i]]),unlist(tissues.treat[colnames(mods)[j]])))
+            S <- I/(length(unlist(tissues.treat[rownames(mods)[i]]))+length(unlist(tissues.treat[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(tissues.treat[rownames(mods)[i]])),unique(unlist(tissues.treat[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
+        #write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues_pathways.csv"))
+```
+
+```{r}
+Jaccard <- read.csv(here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
+
+pval <- read.csv(here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+
+# ```{r}
+# mods<-crossprod(table(stack(tissues.treat.time)))
+#         
+#         for (i in 1:length(rownames(mods))) {
+#           for (j in 1:length(colnames(mods))) {
+#             I <- length(intersect(unlist(tissues.treat.time[rownames(mods)[i]]),unlist(tissues.treat.time[colnames(mods)[j]])))
+#             S <- I/(length(unlist(tissues.treat.time[rownames(mods)[i]]))+length(unlist(tissues.treat.time[colnames(mods)[j]]))-I)
+#             mods[i,j]<-S
+#           }
+#         }
+# ```
+
+<!-- ##Fisher's Exact test Time by treat -->
+<!-- ```{r jaccard} -->
+<!--         matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         for(i in 1:length(rownames(mods))){ -->
+<!--           for(j in 1:length(colnames(mods))){ -->
+<!--             overlap<-newGeneOverlap(unique(unlist(tissues.treat.time[rownames(mods)[i]])),unique(unlist(tissues.treat.time[colnames(mods)[j]]))) -->
+<!--             overlap2<-testGeneOverlap(overlap) -->
+<!--             Jaccard[i,j]<-getJaccard(overlap2) -->
+<!--             p.val[i,j]<-getPval(overlap2) -->
+<!--           } -->
+<!--         } -->
+<!--         colnames(p.val)<-colnames(mods) -->
+<!--         rownames(p.val)<-rownames(mods) -->
+<!--         colnames(Jaccard)<-colnames(mods) -->
+<!--         rownames(Jaccard)<-rownames(mods) -->
+
+<!--         write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!--         write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1) -->
+<!-- breaks<-seq(0,.07,length.out = 100) -->
+
+<!-- pheatmap(Jaccard,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- mods<-crossprod(table(stack(tissues.time))) -->
+
+<!--         for (i in 1:length(rownames(mods))) { -->
+<!--           for (j in 1:length(colnames(mods))) { -->
+<!--             I <- length(intersect(unlist(tissues.time[rownames(mods)[i]]),unlist(tissues.time[colnames(mods)[j]]))) -->
+<!--             S <- I/(length(unlist(tissues.time[rownames(mods)[i]]))+length(unlist(tissues.time[colnames(mods)[j]]))-I) -->
+<!--             mods[i,j]<-S -->
+<!--           } -->
+<!--         } -->
+<!-- ``` -->
+<!-- ##Fisher's Exact test Time -->
+<!-- ```{r jaccard} -->
+<!--         matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods)) -->
+<!--         for(i in 1:length(rownames(mods))){ -->
+<!--           for(j in 1:length(colnames(mods))){ -->
+<!--             overlap<-newGeneOverlap(unique(unlist(tissues.time[rownames(mods)[i]])),unique(unlist(tissues.time[colnames(mods)[j]]))) -->
+<!--             overlap2<-testGeneOverlap(overlap) -->
+<!--             Jaccard[i,j]<-getJaccard(overlap2) -->
+<!--             p.val[i,j]<-getPval(overlap2) -->
+<!--           } -->
+<!--         } -->
+<!--         colnames(p.val)<-colnames(mods) -->
+<!--         rownames(p.val)<-rownames(mods) -->
+<!--         colnames(Jaccard)<-colnames(mods) -->
+<!--         rownames(Jaccard)<-rownames(mods) -->
+
+<!--         write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!--         write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv")) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1) -->
+<!-- breaks<-seq(0,.07,length.out = 100) -->
+
+<!-- pheatmap(Jaccard,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks) -->
+<!-- ``` -->
+
+# Treatment
+```{r}
+heart.darkgreen <- heart[[4]][,c(11,16)] 
+heart.darkgreen <- as.list(heart.darkgreen)
+heart.intersection <- as.list(heart.darkgreen$intersection)
+names(heart.intersection) <- heart.darkgreen$term_name
+heart.darkgreen <- heart.intersection
+
+small.intestine.green4 <- small.intestine[[18]]
+small.intestine.green4 <- as.list(small.intestine.green4)
+small.intestine.intersection <- as.list(small.intestine.green4$intersection)
+names(small.intestine.intersection) <- small.intestine.green4$term_name
+small.intestine.green4 <- small.intestine.intersection
+
+cortex.bisque2 <- cortex[[3]][,c(11,16)]
+cortex.bisque2 <- as.list(cortex.bisque2)
+cortex.intersection <- as.list(cortex.bisque2$intersection)
+names(cortex.intersection) <- cortex.bisque2$term_name
+cortex.bisque2 <- cortex.intersection
+
+hyp.bisque4 <- hyp[[3]][,c(11,16)]
+hyp.bisque4 <- as.list(hyp.bisque4)
+hyp.intersection <- as.list(hyp.bisque4$intersection)
+names(hyp.intersection) <- hyp.bisque4$term_name
+hyp.bisque4 <- hyp.intersection
+
+muscle.salmon2 <- muscle[[35]][,c(11,16)]
+muscle.salmon2 <- as.list(muscle.salmon2)
+muscle.intersection <- as.list(muscle.salmon2$intersection)
+names(muscle.intersection) <- muscle.salmon2$term_name
+muscle.salmon2 <- muscle.intersection
+
+liver.darkolivegreen <- liver[[8]][,c(11,16)]
+liver.darkolivegreen <- as.list(liver.darkolivegreen)
+liver.intersection <- as.list(liver.darkolivegreen$intersection)
+names(liver.intersection) <- liver.darkolivegreen$term_name
+liver.darkolivegreen <- liver.intersection
+```
+
+# Heart
+```{r}
+mods<-crossprod(table(stack(heart.darkgreen)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(heart.darkgreen[rownames(mods)[i]]),unlist(heart.darkgreen[colnames(mods)[j]])))
+            S <- I/(length(unlist(heart.darkgreen[rownames(mods)[i]]))+length(unlist(heart.darkgreen[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(heart.darkgreen[rownames(mods)[i]])),unique(unlist(heart.darkgreen[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Heart","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
+        #write.csv(Jaccard,here("Data","Heart","Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Heart","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+
+# Hypothalamus
+```{r}
+mods<-crossprod(table(stack(hyp.bisque4)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(hyp.bisque4[rownames(mods)[i]]),unlist(hyp.bisque4[colnames(mods)[j]])))
+            S <- I/(length(unlist(hyp.bisque4[rownames(mods)[i]]))+length(unlist(hyp.bisque4[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(hyp.bisque4[rownames(mods)[i]])),unique(unlist(hyp.bisque4[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        
+        #write.csv(p.val,here("Data","Hypothalamus","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
+        #write.csv(Jaccard,here("Data","Hypothalamus","Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Hypothalamus","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+
+# Prefrontal Cortex
+```{r}
+mods<-crossprod(table(stack(cortex.bisque2)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(cortex.bisque2[rownames(mods)[i]]),unlist(cortex.bisque2[colnames(mods)[j]])))
+            S <- I/(length(unlist(cortex.bisque2[rownames(mods)[i]]))+length(unlist(cortex.bisque2[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(cortex.bisque2[rownames(mods)[i]])),unique(unlist(cortex.bisque2[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Prefrontal Cortex","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
+        #write.csv(Jaccard,here("Data","Prefrontal Cortex","Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Prefrontal Cortex","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+
+# Small Intestine
+```{r}
+mods<-crossprod(table(stack(small.intestine.green4)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(small.intestine.green4[rownames(mods)[i]]),unlist(small.intestine.green4[colnames(mods)[j]])))
+            S <- I/(length(unlist(small.intestine.green4[rownames(mods)[i]]))+length(unlist(small.intestine.green4[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(small.intestine.green4[rownames(mods)[i]])),unique(unlist(small.intestine.green4[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Small Intestine","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
+        #write.csv(Jaccard,here("Data","Small Intestine","Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Small Intestine","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 3,fontsize_col = 3,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+
+# Skeletal Muscle
+```{r}
+mods<-crossprod(table(stack(muscle.salmon2)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(muscle.salmon2[rownames(mods)[i]]),unlist(muscle.salmon2[colnames(mods)[j]])))
+            S <- I/(length(unlist(muscle.salmon2[rownames(mods)[i]]))+length(unlist(muscle.salmon2[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(muscle.salmon2[rownames(mods)[i]])),unique(unlist(muscle.salmon2[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Skeletal Muscle","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
+        #write.csv(Jaccard,here("Data","Skeletal Muscle","Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Skeletal Muscle","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 4,fontsize_col = 4,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```
+
+# Liver
+```{r}
+mods<-crossprod(table(stack(liver.darkolivegreen)))
+        
+        for (i in 1:length(rownames(mods))) {
+          for (j in 1:length(colnames(mods))) {
+            I <- length(intersect(unlist(liver.darkolivegreen[rownames(mods)[i]]),unlist(liver.darkolivegreen[colnames(mods)[j]])))
+            S <- I/(length(unlist(liver.darkolivegreen[rownames(mods)[i]]))+length(unlist(liver.darkolivegreen[colnames(mods)[j]]))-I)
+            mods[i,j]<-S
+          }
+        }
+```
+
+##Fisher's Exact test Treat
+```{r jaccard}
+        matrix<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        p.val<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        Jaccard<-matrix(NA,nrow = nrow(mods),ncol = ncol(mods))
+        for(i in 1:length(rownames(mods))){
+          for(j in 1:length(colnames(mods))){
+            overlap<-newGeneOverlap(unique(unlist(liver.darkolivegreen[rownames(mods)[i]])),unique(unlist(liver.darkolivegreen[colnames(mods)[j]])))
+            overlap2<-testGeneOverlap(overlap)
+            Jaccard[i,j]<-getJaccard(overlap2)
+            p.val[i,j]<-getPval(overlap2)
+          }
+        }
+        colnames(p.val)<-colnames(mods)
+        rownames(p.val)<-rownames(mods)
+        colnames(Jaccard)<-colnames(mods)
+        rownames(Jaccard)<-rownames(mods)
+        
+        #write.csv(p.val,here("Data","Liver","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_liver.csv"))
+        #write.csv(Jaccard,here("Data","Liver","Jaccard_Index_module_C57BL6J_genes_across_pathways_liver.csv"))
+```
+
+```{r}
+pval <- read.csv(here("Data","Liver","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_liver.csv"), row.names = 1)
+
+breaks<-seq(0,1,length.out = 100)
+
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+```

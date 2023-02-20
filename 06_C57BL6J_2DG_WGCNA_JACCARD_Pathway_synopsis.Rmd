@@ -1,0 +1,1107 @@
+---
+title: "Comparing Significant Overlaps (Jaccard) for Modules Related to Traits through Pathways Identified"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlaped.
+
+## Load in Packages and read in files
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "clusterProfiler", "rlist")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+```{r read in files}
+filtered.pathways <- readRDS(here("Data","Chang_2DG_BL6_gprofiler_annotation_filtered_list_modules.RData"))
+
+```
+
+# Tissue {.tabset .tabset-fade .tabset-pills}
+Each tissue module was compared to the traits in the experiment. The modules that were significantly correlated for a trait were then compared within the jaccard index across all other tissues. The significant overlaps were then summarized to determine which pathways were most common. Below are the pathway lists and their frequency for each module within a tissue that was also correlated to a trait and their frequency bar plots.
+
+## Heart {.tabset .tabset-fade .tabset-pills}
+
+### Darkgreen
+```{r Heart darkgreen, echo=FALSE}
+jaccard.heart.darkgreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkgreen"))
+]
+
+for(i in 1:length(jaccard.heart.darkgreen)){
+  tissue <- str_split(names(jaccard.heart.darkgreen), pattern = "_")[[i]][3]
+  heart <- str_split(names(jaccard.heart.darkgreen), pattern = "_")[[i]][1]
+  jaccard.heart.darkgreen[[i]] <- jaccard.heart.darkgreen[[i]] %>% 
+    mutate(Heart = if(heart == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.heart.darkgreen.merged <- map_df(jaccard.heart.darkgreen, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.heart.darkgreen.merged <- jaccard.heart.darkgreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.heart.darkgreen.merged)
+```
+
+### Darkgrey
+
+```{r Heart darkgrey, echo=FALSE}
+jaccard.heart.darkgrey <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkgrey"))
+]
+
+for(i in 1:length(jaccard.heart.darkgrey)){
+  tissue <- str_split(names(jaccard.heart.darkgrey), pattern = "_")[[i]][3]
+  heart <- str_split(names(jaccard.heart.darkgrey), pattern = "_")[[i]][1]
+  jaccard.heart.darkgrey[[i]] <- jaccard.heart.darkgrey[[i]] %>% 
+    mutate(Heart = if(heart == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.heart.darkgrey.merged <- map_df(jaccard.heart.darkgrey, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.heart.darkgrey.merged <- jaccard.heart.darkgrey.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.heart.darkgrey.merged)
+```
+
+### Darkorange
+```{r Heart darkorange, echo=FALSE}
+jaccard.heart.darkorange <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkorange"))
+]
+
+for(i in 1:length(jaccard.heart.darkorange)){
+  tissue <- str_split(names(jaccard.heart.darkorange), pattern = "_")[[i]][3]
+  heart <- str_split(names(jaccard.heart.darkorange), pattern = "_")[[i]][1]
+  jaccard.heart.darkorange[[i]] <- jaccard.heart.darkorange[[i]] %>% 
+    mutate(Heart = if(heart == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.heart.darkorange.merged <- map_df(jaccard.heart.darkorange, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.heart.darkorange.merged <- jaccard.heart.darkorange.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results="asis"}
+module.jaccard.pathways(jaccard.heart.darkorange.merged)
+```
+
+### Plum1
+```{r Heart plum1, echo=FALSE}
+jaccard.heart.plum1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_plum1"))
+]
+
+for(i in 1:length(jaccard.heart.plum1)){
+  tissue <- str_split(names(jaccard.heart.plum1), pattern = "_")[[i]][3]
+  heart <- str_split(names(jaccard.heart.plum1), pattern = "_")[[i]][1]
+  jaccard.heart.plum1[[i]] <- jaccard.heart.plum1[[i]] %>% 
+    mutate(Heart = if(heart == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.heart.plum1.merged <- map_df(jaccard.heart.plum1, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.heart.plum1.merged <- jaccard.heart.plum1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results="asis"}
+module.jaccard.pathways(jaccard.heart.plum1.merged)
+```
+
+## Hippocampus {.tabset .tabset-fade .tabset-pills}
+### Green
+```{r Hippocampus green, echo=FALSE}
+jaccard.Hippocampus.green <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_green"))
+]
+
+for(i in 1:length(jaccard.Hippocampus.green)){
+  tissue <- str_split(names(jaccard.Hippocampus.green), pattern = "_")[[i]][3]
+  hippocampus <- str_split(names(jaccard.Hippocampus.green), pattern = "_")[[i]][1]
+  jaccard.Hippocampus.green[[i]] <- jaccard.Hippocampus.green[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(hippocampus == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Hippocampus.green.merged <- map_df(jaccard.Hippocampus.green, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Hippocampus.green.merged <- jaccard.Hippocampus.green.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Hippocampus.green.merged)
+```
+
+### Coral1
+```{r Hippocampus coral1, echo=FALSE}
+jaccard.hippocampus.coral1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_coral1"))
+]
+
+for(i in 1:length(jaccard.hippocampus.coral1)){
+  tissue <- str_split(names(jaccard.hippocampus.coral1), pattern = "_")[[i]][3]
+  hippocampus <- str_split(names(jaccard.hippocampus.coral1), pattern = "_")[[i]][1]
+  jaccard.hippocampus.coral1[[i]] <- jaccard.hippocampus.coral1[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(hippocampus == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.hippocampus.coral1.merged <- map_df(jaccard.hippocampus.coral1, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.hippocampus.coral1.merged <- jaccard.hippocampus.coral1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.hippocampus.coral1.merged)
+```
+
+### Darkslateblue
+```{r Hippocampus darkslateblue, echo=FALSE}
+jaccard.hippocampus.darkslateblue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_darkslateblue"))
+]
+
+for(i in 1:length(jaccard.hippocampus.darkslateblue)){
+  tissue <- str_split(names(jaccard.hippocampus.darkslateblue), pattern = "_")[[i]][3]
+  hippocampus <- str_split(names(jaccard.hippocampus.darkslateblue), pattern = "_")[[i]][1]
+  jaccard.hippocampus.darkslateblue[[i]] <- jaccard.hippocampus.darkslateblue[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(hippocampus == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.hippocampus.darkslateblue.merged <- map_df(jaccard.hippocampus.darkslateblue, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.hippocampus.darkslateblue.merged <- jaccard.hippocampus.darkslateblue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.hippocampus.darkslateblue.merged)
+```
+
+### Darkolivegreen
+```{r Hippocampus darkolivegreen, echo=FALSE}
+jaccard.hippocampus.darkolivegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_darkolivegreen"))
+]
+
+for(i in 1:length(jaccard.hippocampus.darkolivegreen)){
+  tissue <- str_split(names(jaccard.hippocampus.darkolivegreen), pattern = "_")[[i]][3]
+  hippocampus <- str_split(names(jaccard.hippocampus.darkolivegreen), pattern = "_")[[i]][1]
+  jaccard.hippocampus.darkolivegreen[[i]] <- jaccard.hippocampus.darkolivegreen[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(hippocampus == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.hippocampus.darkolivegreen.merged <- map_df(jaccard.hippocampus.darkolivegreen, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.hippocampus.darkolivegreen.merged <- jaccard.hippocampus.darkolivegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.hippocampus.darkolivegreen.merged)
+```
+
+### Khaki3
+```{r Hippocampus khaki3, echo=FALSE}
+jaccard.hippocampus.khaki3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_khaki3"))
+]
+
+for(i in 1:length(jaccard.hippocampus.khaki3)){
+  tissue <- str_split(names(jaccard.hippocampus.khaki3), pattern = "_")[[i]][3]
+  hippocampus <- str_split(names(jaccard.hippocampus.khaki3), pattern = "_")[[i]][1]
+  jaccard.hippocampus.khaki3[[i]] <- jaccard.hippocampus.khaki3[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(hippocampus == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.hippocampus.khaki3.merged <- map_df(jaccard.hippocampus.khaki3, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.hippocampus.khaki3.merged <- jaccard.hippocampus.khaki3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.hippocampus.khaki3.merged)
+```
+
+## Hypothalamus {.tabset .tabset-fade .tabset-pills}
+### Midnightblue
+```{r Hypothalamus midnightblue, echo=FALSE}
+jaccard.Hypothalamus.midnightblue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hypothalamus_midnightblue"))
+]
+
+for(i in 1:length(jaccard.Hypothalamus.midnightblue)){
+  tissue <- str_split(names(jaccard.Hypothalamus.midnightblue), pattern = "_")[[i]][3]
+  hypothalamus <- str_split(names(jaccard.Hypothalamus.midnightblue), pattern = "_")[[i]][1]
+  jaccard.Hypothalamus.midnightblue[[i]] <- jaccard.Hypothalamus.midnightblue[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(hypothalamus == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Hypothalamus.midnightblue.merged <- map_df(jaccard.Hypothalamus.midnightblue, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Hypothalamus.midnightblue.merged <- jaccard.Hypothalamus.midnightblue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Hypothalamus.midnightblue.merged)
+```
+
+### Bisque4
+```{r Hypothalamus bisque4, echo=FALSE}
+jaccard.Hypothalamus.bisque4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hypothalamus_bisque4"))
+]
+
+for(i in 1:length(jaccard.Hypothalamus.bisque4)){
+  tissue <- str_split(names(jaccard.Hypothalamus.bisque4), pattern = "_")[[i]][3]
+  hypothalamus <- str_split(names(jaccard.Hypothalamus.bisque4), pattern = "_")[[i]][1]
+  jaccard.Hypothalamus.bisque4[[i]] <- jaccard.Hypothalamus.bisque4[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(hypothalamus == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Hypothalamus.bisque4.merged <- map_df(jaccard.Hypothalamus.bisque4, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Hypothalamus.bisque4.merged <- jaccard.Hypothalamus.bisque4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Hypothalamus.bisque4.merged)
+```
+
+## Kidney {.tabset .tabset-fade .tabset-pills}
+### Lightyellow
+```{r Kidney lightyellow, echo=FALSE}
+jaccard.Kidney.lightyellow <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_lightyellow"))
+]
+
+for(i in 1:length(jaccard.Kidney.lightyellow)){
+  tissue <- str_split(names(jaccard.Kidney.lightyellow), pattern = "_")[[i]][3]
+  kidney <- str_split(names(jaccard.Kidney.lightyellow), pattern = "_")[[i]][1]
+  jaccard.Kidney.lightyellow[[i]] <- jaccard.Kidney.lightyellow[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(kidney == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Kidney.lightyellow.merged <- map_df(jaccard.Kidney.lightyellow, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Kidney.lightyellow.merged <- jaccard.Kidney.lightyellow.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Kidney.lightyellow.merged)
+```
+
+### Purple
+```{r Kidney purple, echo=FALSE}
+jaccard.Kidney.purple <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_purple"))
+]
+
+for(i in 1:length(jaccard.Kidney.purple)){
+  tissue <- str_split(names(jaccard.Kidney.purple), pattern = "_")[[i]][3]
+  kidney <- str_split(names(jaccard.Kidney.purple), pattern = "_")[[i]][1]
+  jaccard.Kidney.purple[[i]] <- jaccard.Kidney.purple[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(kidney == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Kidney.purple.merged <- map_df(jaccard.Kidney.purple, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Kidney.purple.merged <- jaccard.Kidney.purple.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Kidney.purple.merged)
+```
+
+### Lightcyan
+```{r Kidney lightcyan, echo=FALSE}
+jaccard.Kidney.lightcyan <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_lightcyan"))
+]
+
+for(i in 1:length(jaccard.Kidney.lightcyan)){
+  tissue <- str_split(names(jaccard.Kidney.lightcyan), pattern = "_")[[i]][3]
+  kidney <- str_split(names(jaccard.Kidney.lightcyan), pattern = "_")[[i]][1]
+  jaccard.Kidney.lightcyan[[i]] <- jaccard.Kidney.lightcyan[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(kidney == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Kidney.lightcyan.merged <- map_df(jaccard.Kidney.lightcyan, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Kidney.lightcyan.merged <- jaccard.Kidney.lightcyan.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Kidney.lightcyan.merged)
+```
+
+### Blue
+```{r Kidney blue, echo=FALSE}
+jaccard.Kidney.blue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_blue"))
+]
+
+for(i in 1:length(jaccard.Kidney.blue)){
+  tissue <- str_split(names(jaccard.Kidney.blue), pattern = "_")[[i]][3]
+  kidney <- str_split(names(jaccard.Kidney.blue), pattern = "_")[[i]][1]
+  jaccard.Kidney.blue[[i]] <- jaccard.Kidney.blue[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(kidney == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Kidney.blue.merged <- map_df(jaccard.Kidney.blue, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Kidney.blue.merged <- jaccard.Kidney.blue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Kidney.blue.merged)
+```
+
+### Pink
+```{r Kidney pink, echo=FALSE}
+jaccard.Kidney.pink <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_pink"))
+]
+
+for(i in 1:length(jaccard.Kidney.pink)){
+  tissue <- str_split(names(jaccard.Kidney.pink), pattern = "_")[[i]][3]
+  kidney <- str_split(names(jaccard.Kidney.pink), pattern = "_")[[i]][1]
+  jaccard.Kidney.pink[[i]] <- jaccard.Kidney.pink[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(kidney == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Kidney.pink.merged <- map_df(jaccard.Kidney.pink, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Kidney.pink.merged <- jaccard.Kidney.pink.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Kidney.pink.merged)
+```
+
+## Liver {.tabset .tabset-fade .tabset-pills}
+### Darkturquoise
+```{r Liver darkturquoise, echo=FALSE}
+jaccard.Liver.darkturquoise <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_darkturquoise"))
+]
+
+for(i in 1:length(jaccard.Liver.darkturquoise)){
+  tissue <- str_split(names(jaccard.Liver.darkturquoise), pattern = "_")[[i]][3]
+  Liver <- str_split(names(jaccard.Liver.darkturquoise), pattern = "_")[[i]][1]
+  jaccard.Liver.darkturquoise[[i]] <- jaccard.Liver.darkturquoise[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(Liver == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Liver.darkturquoise.merged <- map_df(jaccard.Liver.darkturquoise, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Liver.darkturquoise.merged <- jaccard.Liver.darkturquoise.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Liver.darkturquoise.merged)
+```
+
+### Darkolivegreen
+```{r Liver darkolivegreen, echo=FALSE}
+jaccard.Liver.darkolivegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_darkolivegreen"))
+]
+
+for(i in 1:length(jaccard.Liver.darkolivegreen)){
+  tissue <- str_split(names(jaccard.Liver.darkolivegreen), pattern = "_")[[i]][3]
+  Liver <- str_split(names(jaccard.Liver.darkolivegreen), pattern = "_")[[i]][1]
+  jaccard.Liver.darkolivegreen[[i]] <- jaccard.Liver.darkolivegreen[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(Liver == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Liver.darkolivegreen.merged <- map_df(jaccard.Liver.darkolivegreen, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Liver.darkolivegreen.merged <- jaccard.Liver.darkolivegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Liver.darkolivegreen.merged)
+```
+
+### Skyblue3
+```{r Liver skyblue3, echo=FALSE}
+jaccard.Liver.skyblue3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_skyblue3"))
+]
+
+for(i in 1:length(jaccard.Liver.skyblue3)){
+  tissue <- str_split(names(jaccard.Liver.skyblue3), pattern = "_")[[i]][3]
+  Liver <- str_split(names(jaccard.Liver.skyblue3), pattern = "_")[[i]][1]
+  jaccard.Liver.skyblue3[[i]] <- jaccard.Liver.skyblue3[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(Liver == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Liver.skyblue3.merged <- map_df(jaccard.Liver.skyblue3, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Liver.skyblue3.merged <- jaccard.Liver.skyblue3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Liver.skyblue3.merged)
+```
+
+## Prefrontal Cortex {.tabset .tabset-fade .tabset-pills}
+### Limegreen
+```{r Prefrontal Cortex limegreen, echo=FALSE}
+jaccard.Prefrontal.Cortex.limegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_limegreen"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.limegreen)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.limegreen), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.limegreen), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.limegreen[[i]] <- jaccard.Prefrontal.Cortex.limegreen[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.limegreen.merged <- map_df(jaccard.Prefrontal.Cortex.limegreen, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.limegreen.merged <- jaccard.Prefrontal.Cortex.limegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.limegreen.merged)
+```
+
+### Rosybrown2
+```{r Prefrontal Cortex rosybrown2, echo=FALSE}
+jaccard.Prefrontal.Cortex.rosybrown2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_rosybrown2"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.rosybrown2)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.rosybrown2), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.rosybrown2), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.rosybrown2[[i]] <- jaccard.Prefrontal.Cortex.rosybrown2[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.rosybrown2.merged <- map_df(jaccard.Prefrontal.Cortex.rosybrown2, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.rosybrown2.merged <- jaccard.Prefrontal.Cortex.rosybrown2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.rosybrown2.merged)
+```
+
+### Lavenderblush2
+```{r Prefrontal Cortex lavenderblush2, echo=FALSE}
+jaccard.Prefrontal.Cortex.lavenderblush2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_lavenderblush2"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.lavenderblush2)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.lavenderblush2), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.lavenderblush2), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.lavenderblush2[[i]] <- jaccard.Prefrontal.Cortex.lavenderblush2[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.lavenderblush2.merged <- map_df(jaccard.Prefrontal.Cortex.lavenderblush2, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.lavenderblush2.merged <- jaccard.Prefrontal.Cortex.lavenderblush2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.lavenderblush2.merged)
+```
+
+### Antiquewhite
+```{r Prefrontal Cortex antiquewhite, echo=FALSE}
+jaccard.Prefrontal.Cortex.antiquewhite <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_antiquewhite"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.antiquewhite)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.antiquewhite), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.antiquewhite), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.antiquewhite[[i]] <- jaccard.Prefrontal.Cortex.antiquewhite[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.antiquewhite.merged <- map_df(jaccard.Prefrontal.Cortex.antiquewhite, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.antiquewhite.merged <- jaccard.Prefrontal.Cortex.antiquewhite.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.antiquewhite.merged)
+```
+
+### Pink
+```{r Prefrontal Cortex pink, echo=FALSE}
+jaccard.Prefrontal.Cortex.pink <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_pink"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.pink)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.pink), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.pink), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.pink[[i]] <- jaccard.Prefrontal.Cortex.pink[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.pink.merged <- map_df(jaccard.Prefrontal.Cortex.pink, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.pink.merged <- jaccard.Prefrontal.Cortex.pink.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.pink.merged)
+```
+
+###Lightpink1
+```{r Prefrontal Cortex lightpink1, echo=FALSE}
+jaccard.Prefrontal.Cortex.lightpink1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_lightpink1"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.lightpink1)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.lightpink1), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.lightpink1), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.lightpink1[[i]] <- jaccard.Prefrontal.Cortex.lightpink1[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.lightpink1.merged <- map_df(jaccard.Prefrontal.Cortex.lightpink1, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.lightpink1.merged <- jaccard.Prefrontal.Cortex.lightpink1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.lightpink1.merged)
+```
+
+### Goldenrod3
+```{r Prefrontal Cortex goldenrod3, echo=FALSE}
+jaccard.Prefrontal.Cortex.goldenrod3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_goldenrod3"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.goldenrod3)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.goldenrod3), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.goldenrod3), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.goldenrod3[[i]] <- jaccard.Prefrontal.Cortex.goldenrod3[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.goldenrod3.merged <- map_df(jaccard.Prefrontal.Cortex.goldenrod3, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.goldenrod3.merged <- jaccard.Prefrontal.Cortex.goldenrod3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.goldenrod3.merged)
+```
+
+### Aquamarine
+```{r Prefrontal Cortex aquamarine, echo=FALSE}
+jaccard.Prefrontal.Cortex.aquamarine <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_aquamarine"))
+]
+
+for(i in 1:length(jaccard.Prefrontal.Cortex.aquamarine)){
+  tissue <- str_split(names(jaccard.Prefrontal.Cortex.aquamarine), pattern = "_")[[i]][3]
+  prefrontal <- str_split(names(jaccard.Prefrontal.Cortex.aquamarine), pattern = "_")[[i]][1]
+  jaccard.Prefrontal.Cortex.aquamarine[[i]] <- jaccard.Prefrontal.Cortex.aquamarine[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(prefrontal == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Prefrontal.Cortex.aquamarine.merged <- map_df(jaccard.Prefrontal.Cortex.aquamarine, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Prefrontal.Cortex.aquamarine.merged <- jaccard.Prefrontal.Cortex.aquamarine.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Prefrontal.Cortex.aquamarine.merged)
+```
+
+## Skeletal Muscle {.tabset .tabset-fade .tabset-pills}
+### Grey
+```{r Skeletal Muscle grey, echo=FALSE}
+jaccard.Skeletal.Muscle.grey <- filtered.pathways[which(str_detect(names(filtered.pathways),"Skeletal Muscle_grey"))
+]
+
+for(i in 1:length(jaccard.Skeletal.Muscle.grey)){
+  tissue <- str_split(names(jaccard.Skeletal.Muscle.grey), pattern = "_")[[i]][3]
+  muscle <- str_split(names(jaccard.Skeletal.Muscle.grey), pattern = "_")[[i]][1]
+  jaccard.Skeletal.Muscle.grey[[i]] <- jaccard.Skeletal.Muscle.grey[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue== "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(muscle == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(tissue == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Skeletal.Muscle.grey.merged <- map_df(jaccard.Skeletal.Muscle.grey, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Skeletal.Muscle.grey.merged <- jaccard.Skeletal.Muscle.grey.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Skeletal.Muscle.grey.merged)
+```
+
+## Small Intestine {.tabset .tabset-fade .tabset-pills}
+### Green4
+```{r Small Intestine green4, echo=FALSE}
+jaccard.Small.Intestine.green4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_green4"))
+]
+
+for(i in 1:length(jaccard.Small.Intestine.green4)){
+  tissue <- str_split(names(jaccard.Small.Intestine.green4), pattern = "_")[[i]][3]
+  intestine <- str_split(names(jaccard.Small.Intestine.green4), pattern = "_")[[i]][1]
+  jaccard.Small.Intestine.green4[[i]] <- jaccard.Small.Intestine.green4[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(intestine == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Small.Intestine.green4.merged <- map_df(jaccard.Small.Intestine.green4, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Small.Intestine.green4.merged <- jaccard.Small.Intestine.green4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Small.Intestine.green4.merged)
+```
+
+### Blue2
+```{r Small Intestine blue2, echo=FALSE}
+jaccard.Small.Intestine.blue2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_blue2"))
+]
+
+for(i in 1:length(jaccard.Small.Intestine.blue2)){
+  tissue <- str_split(names(jaccard.Small.Intestine.blue2), pattern = "_")[[i]][3]
+  intestine <- str_split(names(jaccard.Small.Intestine.blue2), pattern = "_")[[i]][1]
+  jaccard.Small.Intestine.blue2[[i]] <- jaccard.Small.Intestine.blue2[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(intestine == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Small.Intestine.blue2.merged <- map_df(jaccard.Small.Intestine.blue2, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Small.Intestine.blue2.merged <- jaccard.Small.Intestine.blue2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Small.Intestine.blue2.merged)
+```
+
+### Cornsilk
+```{r Small Intestine cornsilk, echo=FALSE}
+jaccard.Small.Intestine.cornsilk <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_cornsilk"))
+]
+
+for(i in 1:length(jaccard.Small.Intestine.cornsilk)){
+  tissue <- str_split(names(jaccard.Small.Intestine.cornsilk), pattern = "_")[[i]][3]
+  intestine <- str_split(names(jaccard.Small.Intestine.cornsilk), pattern = "_")[[i]][1]
+  jaccard.Small.Intestine.cornsilk[[i]] <- jaccard.Small.Intestine.cornsilk[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(intestine == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Small.Intestine.cornsilk.merged <- map_df(jaccard.Small.Intestine.cornsilk, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Small.Intestine.cornsilk.merged <- jaccard.Small.Intestine.cornsilk.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Small.Intestine.cornsilk.merged)
+```
+
+### Magenta2
+```{r Small Intestine magenta2, echo=FALSE}
+jaccard.Small.Intestine.magenta2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_magenta2"))
+]
+
+for(i in 1:length(jaccard.Small.Intestine.magenta2)){
+  tissue <- str_split(names(jaccard.Small.Intestine.magenta2), pattern = "_")[[i]][3]
+  intestine <- str_split(names(jaccard.Small.Intestine.magenta2), pattern = "_")[[i]][1]
+  jaccard.Small.Intestine.magenta2[[i]] <- jaccard.Small.Intestine.magenta2[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(intestine == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Small.Intestine.magenta2.merged <- map_df(jaccard.Small.Intestine.magenta2, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Small.Intestine.magenta2.merged <- jaccard.Small.Intestine.magenta2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Small.Intestine.magenta2.merged)
+```
+
+### Darkgoldenrod4
+```{r Small Intestine darkgoldenrod4, echo=FALSE}
+jaccard.Small.Intestine.darkgoldenrod4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_darkgoldenrod4"))
+]
+
+for(i in 1:length(jaccard.Small.Intestine.darkgoldenrod4)){
+  tissue <- str_split(names(jaccard.Small.Intestine.darkgoldenrod4), pattern = "_")[[i]][3]
+  intestine <- str_split(names(jaccard.Small.Intestine.darkgoldenrod4), pattern = "_")[[i]][1]
+  jaccard.Small.Intestine.darkgoldenrod4[[i]] <- jaccard.Small.Intestine.darkgoldenrod4[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(intestine == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Small.Intestine.darkgoldenrod4.merged <- map_df(jaccard.Small.Intestine.darkgoldenrod4, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Small.Intestine.darkgoldenrod4.merged <- jaccard.Small.Intestine.darkgoldenrod4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Small.Intestine.darkgoldenrod4.merged)
+```
+
+## Spleen {.tabset .tabset-fade .tabset-pills}
+### Tan4
+```{r Spleen tan4, echo=FALSE}
+jaccard.Spleen.tan4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_tan4"))
+]
+
+for(i in 1:length(jaccard.Spleen.tan4)){
+  tissue <- str_split(names(jaccard.Spleen.tan4), pattern = "_")[[i]][3]
+  spleen <- str_split(names(jaccard.Spleen.tan4), pattern = "_")[[i]][1]
+  jaccard.Spleen.tan4[[i]] <- jaccard.Spleen.tan4[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(spleen == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Spleen.tan4.merged <- map_df(jaccard.Spleen.tan4, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Spleen.tan4.merged <- jaccard.Spleen.tan4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Spleen.tan4.merged)
+```
+
+### Mediumpurple1
+```{r Spleen mediumpurple1, echo=FALSE}
+jaccard.Spleen.mediumpurple1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_mediumpurple1"))
+]
+
+for(i in 1:length(jaccard.Spleen.mediumpurple1)){
+  tissue <- str_split(names(jaccard.Spleen.mediumpurple1), pattern = "_")[[i]][3]
+  spleen <- str_split(names(jaccard.Spleen.mediumpurple1), pattern = "_")[[i]][1]
+  jaccard.Spleen.mediumpurple1[[i]] <- jaccard.Spleen.mediumpurple1[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(spleen == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Spleen.mediumpurple1.merged <- map_df(jaccard.Spleen.mediumpurple1, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Spleen.mediumpurple1.merged <- jaccard.Spleen.mediumpurple1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Spleen.mediumpurple1.merged)
+```
+
+### Palevioletred3
+```{r Spleen palevioletred3, echo=FALSE}
+jaccard.Spleen.palevioletred3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_palevioletred3"))
+]
+
+for(i in 1:length(jaccard.Spleen.palevioletred3)){
+  tissue <- str_split(names(jaccard.Spleen.palevioletred3), pattern = "_")[[i]][3]
+  spleen <- str_split(names(jaccard.Spleen.palevioletred3), pattern = "_")[[i]][1]
+  jaccard.Spleen.palevioletred3[[i]] <- jaccard.Spleen.palevioletred3[[i]] %>% 
+    mutate(Heart = if(tissue == "Heart") {"yes"} else {"no"}) %>% 
+    mutate(Hippocampus = if(tissue == "Hippocampus") {"yes"} else {"no"}) %>% 
+    mutate(Hypothalamus = if(tissue == "Hypothalamus") {"yes"} else {"no"}) %>%
+    mutate(Kidney = if(tissue == "Kidney") {"yes"} else {"no"}) %>%
+    mutate(Liver = if(tissue == "Liver") {"yes"} else {"no"}) %>%
+    mutate("Prefrontal_Cortex" = if(tissue == "Prefrontal Cortex") {"yes"} else {"no"})  %>%
+    mutate("Skeletal_Muscle" = if(tissue == "Skeletal Muscle") {"yes"} else {"no"}) %>%
+    mutate("Small_Intestine" = if(spleen == "Small Intestine") {"yes"} else {"no"}) %>%
+    mutate(Spleen = if(tissue == "Spleen") {"yes"} else {"no"}) 
+}
+
+jaccard.Spleen.palevioletred3.merged <- map_df(jaccard.Spleen.palevioletred3, ~as.data.frame(.)) %>% group_by(term_name, Heart, Hippocampus, Hypothalamus, Kidney, Liver, Prefrontal_Cortex, Skeletal_Muscle, Small_Intestine, Spleen) %>% summarise(count = n())
+
+jaccard.Spleen.palevioletred3.merged <- jaccard.Spleen.palevioletred3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
+
+```
+
+```{r, results='asis'}
+module.jaccard.pathways(jaccard.Spleen.palevioletred3.merged)
+```

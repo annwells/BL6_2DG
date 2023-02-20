@@ -1,0 +1,120 @@
+## Scree plot and Summary Statistics
+```{r PCA}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+pca <- prcomp(log.tdata.FPKM, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Tissue
+```{r PCA Tissue Type}
+Tissue_color <- as.factor(tdata.FPKM.sample.info$Tissue)
+Tissue_color <- as.data.frame(Tissue_color)
+col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[Tissue_color$Tissue_color]
+pca_tissue <- cbind(Tissue_color,pca$x[,1],pca$x[,2])
+pca_tissue <- as.data.frame(pca_tissue)
+
+p <- ggplot(pca_tissue,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_tissue$Tissue_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p+ xlab("PCA 1 (38.53%)") + ylab("PCA 2 (19.94%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Tissue_color, fill = as.factor(pca_tissue$Tissue_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#B15928", "#F88A89", "#F06C45", "#A6CEE3", "#52AF43", "#FE870D", "#C7B699", "#569EA4","#B294C7"),name="Tissue Type",
+                       breaks=c("Spleen", "Kidney","Liver","Heart","Hypothanamus","Pre-frontal Cortex","Small Intestine","Hippocampus","Skeletal Muscle"),
+                       labels=c("Spleen", "kidney","Liver","Heart","Hypothalamus","Pre-frontal Cortex","Small Intestine","Hippocampus","Skeletal Muscle")) +
+  scale_linetype_manual(values=c(1,2,1,2,1))
+print(p)
+```
+
+## Treatment
+```{r PCA Treatment}
+
+Treatment_color <- as.factor(tdata.FPKM.sample.info$Treatment)
+Treatment_color <- as.data.frame(Treatment_color)
+col_treatment <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Treatment_color$Treatment_color]
+pca_treatment <- cbind(Treatment_color,pca$x[,1],pca$x[,2])
+pca_treatment <- as.data.frame(pca_treatment)
+
+p <- ggplot(pca_treatment,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_treatment$Treatment_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (38.53%)") + ylab("PCA 2 (19.94%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Treatment_color, fill = as.factor(pca_treatment$Treatment_color)), geom="polygon",level=0.8,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Treatment Type",
+                       breaks=c("2DG", "None"),
+                       labels=c("2DG", "Control")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Time
+```{r PCA Time}
+
+Time_color <- as.factor(tdata.FPKM.sample.info$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (38.53%)") + ylab("PCA 2 (19.94%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## 3D PCA
+This plot is color coded by tissue, treatment, and time. To see each one click the names on the legend to make them disappear and click again to make them reappear.
+
+```{r 3D plot}
+Tissue_color <- as.factor(tdata.FPKM.sample.info$Tissue)
+Treatment_color <- as.factor(tdata.FPKM.sample.info$Treatment)
+Time_color <- as.factor(tdata.FPKM.sample.info$Time)
+all_color <- cbind(Tissue_color,Treatment_color,Time_color)
+all_color <- as.data.frame(all_color)
+
+col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[all_color$Tissue_color]
+col_treatment <- colorRampPalette(brewer.pal(n = 8, name = "Dark2"))(2)[all_color$Treatment_color]
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Set3"))(2)[all_color$Time_color]
+
+pca_all <- cbind(pca$x[,1],pca$x[,2],pca$x[,3],all_color)
+pca_all <- as.data.frame(pca_all)
+rownames(pca_all) <- rownames(tdata.FPKM.sample.info)
+
+p <- plot_ly(data=pca_all, x = pca_all$`pca$x[, 1]`, y = pca_all$`pca$x[, 2]`, z = pca_all$`pca$x[, 3]`, color = Tissue_color, colors = unique(col_tissue), text = rownames(pca_all)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 38.53%"),
+                     yaxis = list(title = "PC 2 19.94%"),
+                     zaxis = list(title = "PC 3 13.47%")))
+p1 <- plot_ly(data=pca_all, x = pca_all$`pca$x[, 1]`, y = pca_all$`pca$x[, 2]`, z = pca_all$`pca$x[, 3]`, color = Time_color, colors = unique(col_time), text = rownames(pca_all)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 38.53%"),
+                     yaxis = list(title = "PC 2 19.94%"),
+                     zaxis = list(title = "PC 3 13.47%")))
+
+p2 <- plot_ly(data=pca_all, x = pca_all$`pca$x[, 1]`, y = pca_all$`pca$x[, 2]`, z = pca_all$`pca$x[, 3]`, color = Treatment_color, colors = unique(col_treatment), text = rownames(pca_all)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 38.53%"),
+                     yaxis = list(title = "PC 2 19.94%"),
+                     zaxis = list(title = "PC 3 13.47%")))
+
+p3 <- subplot(p,p2,p1)
+p3
+```
+
+***

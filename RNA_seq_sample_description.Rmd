@@ -1,0 +1,26 @@
+---
+title: "RNAseq Sample Description"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Sample Description
+
+RNAseq was performed on four samples per tissue (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) and treatment (2DG or control). Pair-end sequencing was performed using novaseq platform. depth 20 million both ways. read length 150 bp both ways. 
+
+Library prep (Illumina Truseq stranded mRNA kit, stranded)
+NovaSeq
+Paired End
+40M reads in 2x150bp reads format

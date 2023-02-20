@@ -1,0 +1,117 @@
+---
+title: "Chang B6 96hr 4wk 2DG Eigenmetabolite Stratification Kidney"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each module identified, as well as the relationship of each gene within the module and its significance.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "pander", "kableExtra")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+source(here("source_files","plot_theme.R"))
+```
+
+```{r load data}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5] 
+
+log.tdata.FPKM.sample.info.subset <- cbind(log.tdata.FPKM.subset,tdata.FPKM.sample.info[,27238:27240])
+log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.kidney <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Kidney") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.kidney$Treatment[log.tdata.FPKM.sample.info.subset.kidney$Treatment=="None"] <- "Control"
+
+log.tdata.FPKM.sample.info.subset.kidney <- cbind(log.tdata.FPKM.sample.info.subset.kidney, Time.Treatment = paste(log.tdata.FPKM.sample.info.subset.kidney$Time, log.tdata.FPKM.sample.info.subset.kidney$Treatment))
+
+module.labels <- readRDS(here("Data","Kidney","log.tdata.FPKM.sample.info.subset.kidney.WGCNA.module.labels.RData"))
+module.eigens <- readRDS(here("Data","Kidney","log.tdata.FPKM.sample.info.subset.kidney.WGCNA.module.eigens.RData"))
+modules <- readRDS(here("Data","Kidney","log.tdata.FPKM.sample.info.subset.kidney.WGCNA.module.membership.RData"))
+net.deg <- readRDS(here("Data","Kidney","Chang_2DG_BL6_connectivity_kidney.RData"))
+ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
+```
+
+## Eigengene Stratification {.tabset .tabset-fade .tabset-pills}
+
+Eigengene were stratified by time and treatment. The heatmap is a matrix of the average eigengene value for each level of the trait.
+
+```{r, results='asis'}
+factors <- c("Time","Treatment","Time.Treatment")
+eigenmetabolite(factors,log.tdata.FPKM.sample.info.subset.kidney)
+```
+
+## ANOVA {.tabset .tabset-fade .tabset-pills}
+An ANOVA using aligned rank transformation was performed for each module. The full model is y ~ time + treatment + time:treatment.
+
+```{r, results='asis'}
+# Three-Way ANOVA for each Eigenmetabolite
+model.data = dplyr::bind_cols(module.eigens[rownames(log.tdata.FPKM.sample.info.subset.kidney),], log.tdata.FPKM.sample.info.subset.kidney[,c("Time","Treatment")])
+model.data$Time <- as.factor(model.data$Time)
+model.data$Treatment <- as.factor(model.data$Treatment)
+
+for (m in colnames(module.eigens)) {
+  a <- art(data = model.data, model.data[,m] ~ Time*Treatment)
+  model <- anova(a)
+  adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
+  
+  name <- sapply(strsplit(colnames(module.eigens[m]),"_"),"[",2)
+  cat("\n### Module", name, "\n")
+  print(knitr::kable(cbind(model,adjust)) %>% 
+          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
+
+  cat("\n \n")
+}
+```
+
+## Interaction plots {.tabset .tabset-fade .tabset-pills}
+Interaction plots were created to identify which modules have a potential interaction between time and treatment.
+
+```{r,results='asis'}
+for (m in module.labels) {
+  p = plot.interaction(model.data, "Time", "Treatment", resp = m)
+  name <- sapply(strsplit(m,"_"),"[",2)
+  cat("\n###",name,"\n")
+  print(p)
+  cat("\n \n")
+}
+```

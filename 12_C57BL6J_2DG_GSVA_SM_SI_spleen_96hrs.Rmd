@@ -1,0 +1,145 @@
+---
+title: "Chang B6 96hr 4wk 2DG Gene Set Variation Analysis Skeletal Muscle, Small Intestine, and Spleen 96hrs"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each pathway identified, across modules.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "pander", "GSVA", "kableExtra","downloadthis")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+source(here("source_files","plot_theme.R"))
+```
+
+```{r load data}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5] 
+
+log.tdata.FPKM.sample.info.subset <- cbind(log.tdata.FPKM.subset,tdata.FPKM.sample.info[,27238:27240])
+log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs <- log.tdata.FPKM.sample.info.subset %>% 
+  rownames_to_column() %>% 
+  filter(Tissue %in% c("Skeletal Muscle", "Small Intestine", "Spleen")) %>% 
+  filter(Time == "96 hrs") %>%
+  column_to_rownames()
+
+
+log.data.FPKM.subset.SM.SI.spleen.96hrs <- log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs %>%
+  dplyr::select(-c("Time", "Tissue", "Treatment")) %>%
+  t()
+```
+
+## Gene Set Variation Analysis
+
+Gene Set Variation Analysis is a non-parametric, unsupervised method that assesses gene set enrichment. The method is performed using the R package GSVA. It is performed without phenotypes, which allows for complex experimental studies to be assessed for pathway enrichment. Gene sets can be provided or pulled down from websites that store pre-defined gene sets. The gene sets used for this dataset were determined by assessing pathways present within each module through WGCNA. To obtain these pathways WGCNA was performed to cluster genes into modules. Overrepresented pathways were identified within each module using gProfiler2. To assess enrichment of pathways, Gene set variation analysis (GSVA) was performed. Genes of interest need to be compared to a gene set. To create this gene set, a complete ensembl gene list was assessed using gProfiler2 to identify pathways, regardless of significance. Each set of genes within each module was then assessed against the gene set to perform GSVA.
+
+```{r, cache=TRUE}
+
+modules<-read.csv(here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.membership.csv"), header=T)
+
+tES <- GSVA.modules(modules, log.data.FPKM.subset.SM.SI.spleen.96hrs)
+```
+
+## ANOVA {.tabset .tabset-fade .tabset-pills}
+
+Aligned rank transformation was used to determine which factors significantly altered each pathway. If a factor or interaction with more than two factors is identified as significant then contrast statements are performed using emmeans or testInteraction to identify which factors are significantly different.
+
+```{r, results='asis', cache=TRUE}
+log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs$Treatment)
+
+log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs$Tissue)
+
+for(j in 1:length(tES)){
+  
+  name <- str_split(names(tES)[j],"_")[[1]][2]
+  cat("\n###", name, "{.tabset .tabset-fade .tabset-pills}","\n")
+
+  for(i in 1:ncol(tES[[j]])){
+  m <- art(data = log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs, tES[[j]][,i] ~ Time*Treatment*Tissue)
+  
+  model <- anova(m)
+  adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
+  
+  pathway.name <- str_split(colnames(as.data.frame(tES[j]))[i],"_")[[1]][2]
+  
+  cat("\n####", pathway.name, "\n")
+  print(knitr::kable(cbind(model,adjust)[-1]) %>% 
+          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
+  cat("\n \n")
+  }
+    cat("\n \n")
+}
+```
+
+## Post-hoc Analysis {.tabset .tabset-fade .tabset-pills}
+
+### Treatment {.tabset .tabset-fade .tabset-pills}
+#### Contrast
+```{r}
+Treat.diff <- emmeans(artlm(m,"Treatment"), pairwise ~ Treatment)
+panderOptions('knitr.auto.asis', FALSE)
+knitr::kable(Treat.diff$emmeans)
+knitr::kable(Treat.diff$contrasts)
+plot(Treat.diff, comparisons = T, colors = "red")
+```
+#### Treatment bar plot
+```{r}
+p <- ggplot()
+```
+
+### Tissue {.tabset .tabset-fade .tabset-pills}
+#### Contrast
+```{r}
+Tissue.diff <- emmeans(artlm(m,"Tissue"), pairwise ~ Tissue)
+Tissue.pairs <- pairs(Tissue.diff, adjust = "Dunn")
+panderOptions('knitr.auto.asis', FALSE)
+knitr::kable(Tissue.pairs$emmeans)
+knitr::kable(Tissue.pairs$contrasts)
+plot(Tissue.diff, adjust = "Dunn", comparisons = T, colors = "red")
+```
+
+### Tissue bar plot
+```{r}
+
+```

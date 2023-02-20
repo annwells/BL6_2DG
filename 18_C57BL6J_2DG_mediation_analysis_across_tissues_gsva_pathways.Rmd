@@ -1,0 +1,119 @@
+---
+title: "Chang B6 96hr 4wk 2DG Mediation Analysis Across Tissues"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each pathway identified, across modules.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "kableExtra", "GSVA", "DT","mediation", "pander")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+source(here("source_files","plot_theme.R"))
+```
+
+```{r load data, eval=FALSE}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+tdata.FPKM.sample.info.pheno <- tdata.FPKM.sample.info[,c(27238:27240)] %>% rownames_to_column()
+
+small.intestine.gsva <- readRDS(here("Data","Small Intestine","GSVA.modules.small.intestine.RData")) 
+small.intestine.pathways <- readRDS(here("Data","Small Intestine","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_small_intestine_WGCNA.RData"))
+term.names <- small.intestine.pathways[[18]]$term_name
+small.intestine.green4 <- small.intestine.gsva$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4[,match(term.names, colnames(small.intestine.gsva$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4))]
+SI.gsva <- as.data.frame(small.intestine.green4) %>% rownames_to_column()
+SI.gsva.phenotypes <- left_join(SI.gsva, tdata.FPKM.sample.info.pheno, by = c("rowname" = "rowname"))
+SI.gsva.phenotypes <- SI.gsva.phenotypes %>% mutate("Module" = rep("Green4",16)) 
+
+heart.gsva <- readRDS(here("Data","Heart","GSVA.modules.heart.RData")) 
+heart.pathways <- readRDS(here("Data","Heart","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_heart_WGCNA.RData"))
+term.names <- heart.pathways[[4]]$term_name
+heart.darkgreen <- heart.gsva$log.tdata.FPKM.sample.info.subset.heart.WGCNA_darkgreen[,match(term.names,colnames(heart.gsva$log.tdata.FPKM.sample.info.subset.heart.WGCNA_darkgreen))]
+heart.gsva <- as.data.frame(heart.darkgreen) %>% rownames_to_column()
+heart.gsva.phenotypes <- left_join(heart.gsva, tdata.FPKM.sample.info.pheno, by = c("rowname" = "rowname"))
+heart.gsva.phenotypes <- heart.gsva.phenotypes %>% mutate("Module" = rep("darkgreen",16))
+
+SI.heart.gsva.phenotypes <- full_join(heart.gsva.phenotypes, SI.gsva.phenotypes, by = c("rowname")) %>% column_to_rownames()
+
+#write.csv(SI.heart.gsva.phenotypes,here("Data","SI.heart.gsva.for.mediation.analysis.csv"), row.names = T, col.names = T)
+
+prefrontal.cortex.gsva <- readRDS(here("Data","Prefrontal Cortex","GSVA.modules.prefrontal.cortex.RData")) 
+prefrontal.cortex.pathways <- readRDS(here("Data","Prefrontal Cortex","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_prefrontal_cortex_WGCNA.RData"))
+term.names <- prefrontal.cortex.pathways[[3]]$term_name
+prefrontal.cortex.bisque2 <- prefrontal.cortex.gsva$log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA_bisque2[,match(term.names, colnames(prefrontal.cortex.gsva$log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA_bisque2))][,-1]
+PC.gsva <- as.data.frame(prefrontal.cortex.bisque2) %>% rownames_to_column()
+PC.gsva.phenotypes <- left_join(PC.gsva, tdata.FPKM.sample.info.pheno, by = c("rowname" = "rowname"))
+PC.gsva.phenotypes <- PC.gsva.phenotypes %>% mutate("Module" = rep("Bisque2",16))
+
+hypothalamus.gsva <- readRDS(here("Data","Hypothalamus","GSVA.modules.hypothalamus.RData")) 
+hypothalamus.pathways <- readRDS(here("Data","Hypothalamus","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hypothalamus_WGCNA.RData"))
+term.names <- hypothalamus.pathways[[3]]$term_name
+hypothalamus.bisque4 <- hypothalamus.gsva$log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA_bisque4[,match(term.names,colnames(hypothalamus.gsva$log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA_bisque4))]
+hypothalamus.gsva <- as.data.frame(hypothalamus.bisque4) %>% rownames_to_column()
+hypothalamus.gsva.phenotypes <- left_join(hypothalamus.gsva, tdata.FPKM.sample.info.pheno, by = c("rowname" = "rowname"))
+hypothalamus.gsva.phenotypes <- hypothalamus.gsva.phenotypes %>% mutate("Module" = rep("Bisque4",16))
+
+PC.hyp.gsva.phenotypes <- full_join(hypothalamus.gsva.phenotypes, PC.gsva.phenotypes, by = c("rowname")) %>% column_to_rownames()
+
+#write.csv(PC.hyp.gsva.phenotypes,here("Data","PC.hyp.gsva.for.mediation.analysis.csv"), row.names = T, col.names = T)
+
+```
+
+```{r}
+SI.heart.gsva.phenotypes <- read.csv(here("Data","SI.heart.gsva.for.mediation.analysis.csv"), row.names = 1)
+```
+
+## Mediation analysis {.tabset .tabset-fade .tabset-pills}
+
+```{r, results='asis'}
+for(i in 1: 79){
+    cat("\n###",colnames(SI.heart.gsva.phenotypes)[i],"\n")
+med.fit <- lm(data = SI.heart.gsva.phenotypes, Valine..leucine.and.isoleucine.degradation ~ Treatment2*Time2)
+out.fit <- glm(data = SI.heart.gsva.phenotypes, SI.heart.gsva.phenotypes[,i] ~ Valine..leucine.and.isoleucine.degradation + Treatment2*Time2)
+
+med.out <- mediate(med.fit, out.fit, treat = "Treatment2", mediator = "Valine..leucine.and.isoleucine.degradation", sims = 1000)
+model <- summary(med.out)
+#panderOptions('knitr.auto.asis', FALSE)
+#      print(pander(model))
+print(model)
+cat("\n \n")
+}
+```
+
+```{r}
+PC.hyp <- read.csv(here("Data","PC.hyp.gsva.for.mediation.analysis.csv"), row.names = 1)
+
+```
+
+```{r, results='asis'}
+for(i in 1: 23){
+    cat("\n###",colnames(PC.hyp)[i],"\n")
+med.fit <- lm(data = PC.hyp, G2.M.DNA.damage.checkpoint ~ Treatment2*Time2)
+out.fit <- glm(data = PC.hyp, PC.hyp[,i] ~ G2.M.DNA.damage.checkpoint + Treatment2*Time2)
+
+med.out <- mediate(med.fit, out.fit, treat = "Treatment2", mediator = "G2.M.DNA.damage.checkpoint", sims = 1000)
+model <- summary(med.out)
+#panderOptions('knitr.auto.asis', FALSE)
+#      print(pander(model))
+print(model)
+cat("\n \n")
+}
+```

@@ -1,0 +1,413 @@
+## Scree plot and summary statistics Spleen
+```{r PCA spleen log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.spleen <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Spleen" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.spleen)
+
+log.tdata.FPKM.spleen <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.spleen <- log.tdata.FPKM.spleen %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.spleen, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time spleen
+```{r log spleen PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.spleen$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (40.33%)") + ylab("PCA 2 (22.27%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics kidney
+```{r PCA kidney log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.kidney <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Kidney" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.kidney)
+
+log.tdata.FPKM.kidney <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.kidney <- log.tdata.FPKM.kidney %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.kidney, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time kidney
+```{r log kidney PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.kidney$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (37.57%)") + ylab("PCA 2 (16.86%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics hypothalamus
+```{r PCA hypothalamus log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.hypothalamus <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Hypothanamus" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.hypothalamus)
+
+log.tdata.FPKM.hypothalamus <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.hypothalamus <- log.tdata.FPKM.hypothalamus %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.hypothalamus, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time hypothalamus
+```{r log hypothalamus PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.hypothalamus$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (39.5%)") + ylab("PCA 2 (17.46%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics hippocampus
+```{r PCA hippocampus log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.hippocampus <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Hippocampus" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.hippocampus)
+
+log.tdata.FPKM.hippocampus <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.hippocampus <- log.tdata.FPKM.hippocampus %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.hippocampus, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time hippocampus
+```{r log hippocampus PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.hippocampus$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (34.77%)") + ylab("PCA 2 (27.39%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics liver
+```{r PCA liver log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.liver <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Liver" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.liver)
+
+log.tdata.FPKM.liver <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.liver <- log.tdata.FPKM.liver %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.liver, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time liver
+```{r log liver PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.liver$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (36.92%)") + ylab("PCA 2 (16.83%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics heart
+```{r PCA heart log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.heart <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Heart" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.heart)
+
+log.tdata.FPKM.heart <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.heart <- log.tdata.FPKM.heart %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.heart, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time heart
+```{r log heart PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.heart$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (58.54%)") + ylab("PCA 2 (16.93%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics small intestine
+```{r PCA small.intestine log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.small.intestine <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Small Intestine" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.small.intestine)
+
+log.tdata.FPKM.small.intestine <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.small.intestine <- log.tdata.FPKM.small.intestine %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.small.intestine, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time small intestine
+```{r log small.intestine PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.small.intestine$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (29.67%)") + ylab("PCA 2 (22.16%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics skeletal muscle
+```{r PCA skeletal.muscle log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.skeletal.muscle <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Skeletal Muscle" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.skeletal.muscle)
+
+log.tdata.FPKM.skeletal.muscle <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.skeletal.muscle <- log.tdata.FPKM.skeletal.muscle %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.skeletal.muscle, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time skeletal muscle
+```{r log skeletal.muscle PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.skeletal.muscle$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (41.24%)") + ylab("PCA 2 (19.52%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## Scree plot and summary statistics prefrontal cortex
+```{r PCA prefrontal.cortex log 2DG}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.prefrontal.cortex <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Tissue=="Pre-frontal Cortex" & Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.prefrontal.cortex)
+
+log.tdata.FPKM.prefrontal.cortex <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.prefrontal.cortex <- log.tdata.FPKM.prefrontal.cortex %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.prefrontal.cortex, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Time prefrontal cortex
+```{r log prefrontal.cortex PCA Time 2DG}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.prefrontal.cortex$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (33.13%)") + ylab("PCA 2 (24.58%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```

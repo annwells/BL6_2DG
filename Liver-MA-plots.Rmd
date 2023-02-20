@@ -1,0 +1,104 @@
+## MA plot for Liver 2DG 4wks {.tabset .tabset-fade .tabset-pills}
+```{r Liver 2DG 4wks MA plot, results='asis'}
+subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Liver" & Treatment == "2DG" & Time == "4 wks") %>% column_to_rownames()
+subdata <- subdata[,-c(27237:27239)]
+log.data.FPKM.sample.info <- t(subdata)
+
+for(i in 1:ncol(log.data.FPKM.sample.info)){
+   for(j in 1:ncol(log.data.FPKM.sample.info)){
+x = log.data.FPKM.sample.info[,i]
+y = log.data.FPKM.sample.info[,j]
+## M-values
+M=x-y ## A-values
+A = (x + y)/2
+df = data.frame(A, M)
+
+cat('###',"MA plot", colnames(log.data.FPKM.sample.info)[[i]], "-", colnames(log.data.FPKM.sample.info)[[j]] ,' \n')
+
+p <- ggplot(df, aes(x = A, y = M)) + geom_point(size = 1.5, alpha = 1/5) +
+  geom_hline(color = "blue3", yintercept = 0) + stat_smooth(se = FALSE, method = "loess", color = "red3") + theme_bw()
+print(p)
+#print(htmltools::tagList(ggplotly(p)))
+  cat("\n \n")
+   }
+}
+```
+
+## MA plot for Liver control 4wks {.tabset .tabset-fade .tabset-pills}
+```{r Liver control 4wks MA plot, results='asis'}
+subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Liver" & Treatment == "None" & Time == "4 wks") %>% column_to_rownames()
+subdata <- subdata[,-c(27237:27239)]
+log.data.FPKM.sample.info <- t(subdata)
+
+for(i in 1:ncol(log.data.FPKM.sample.info)){
+   for(j in 1:ncol(log.data.FPKM.sample.info)){
+x = log.data.FPKM.sample.info[,i]
+y = log.data.FPKM.sample.info[,j]
+## M-values
+M=x-y ## A-values
+A = (x + y)/2
+df = data.frame(A, M)
+
+cat('###',"MA plot", colnames(log.data.FPKM.sample.info)[[i]], "-", colnames(log.data.FPKM.sample.info)[[j]] ,' \n')
+
+p <- ggplot(df, aes(x = A, y = M)) + geom_point(size = 1.5, alpha = 1/5) +
+  geom_hline(color = "blue3", yintercept = 0) + stat_smooth(se = FALSE, method = "loess", color = "red3") + theme_bw()
+print(p)
+#print(htmltools::tagList(ggplotly(p)))
+  cat("\n \n")
+   }
+}
+```
+
+## MA plot for Liver 2DG 96hrs {.tabset .tabset-fade .tabset-pills}
+```{r Liver 2DG 96hrs MA plot, results='asis'}
+subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Liver" & Treatment == "2DG" & Time == "96 hrs") %>% column_to_rownames()
+subdata <- subdata[,-c(27237:27239)]
+log.data.FPKM.sample.info <- t(subdata)
+
+for(i in 1:ncol(log.data.FPKM.sample.info)){
+   for(j in 1:ncol(log.data.FPKM.sample.info)){
+x = log.data.FPKM.sample.info[,i]
+y = log.data.FPKM.sample.info[,j]
+## M-values
+M=x-y ## A-values
+A = (x + y)/2
+df = data.frame(A, M)
+
+cat('###',"MA plot", colnames(log.data.FPKM.sample.info)[[i]], "-", colnames(log.data.FPKM.sample.info)[[j]] ,' \n')
+
+p <- ggplot(df, aes(x = A, y = M)) + geom_point(size = 1.5, alpha = 1/5) +
+  geom_hline(color = "blue3", yintercept = 0) + stat_smooth(se = FALSE, method = "loess", color = "red3") + theme_bw()
+print(p)
+#print(htmltools::tagList(ggplotly(p)))
+  cat("\n \n")
+   }
+}
+```
+
+## MA plot for Liver control 96hrs {.tabset .tabset-fade .tabset-pills}
+```{r Liver control 96hrs MA plot, results='asis'}
+subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Liver" & Treatment == "None" & Time == "96 hrs") %>% column_to_rownames()
+subdata <- subdata[,-c(27237:27239)]
+log.data.FPKM.sample.info <- t(subdata)
+
+for(i in 1:ncol(log.data.FPKM.sample.info)){
+   for(j in 1:ncol(log.data.FPKM.sample.info)){
+x = log.data.FPKM.sample.info[,i]
+y = log.data.FPKM.sample.info[,j]
+## M-values
+M=x-y ## A-values
+A = (x + y)/2
+df = data.frame(A, M)
+
+cat('###',"MA plot", colnames(log.data.FPKM.sample.info)[[i]], "-", colnames(log.data.FPKM.sample.info)[[j]] ,' \n')
+
+p <- ggplot(df, aes(x = A, y = M)) + geom_point(size = 1.5, alpha = 1/5) +
+  geom_hline(color = "blue3", yintercept = 0) + stat_smooth(se = FALSE, method = "loess", color = "red3") + theme_bw()
+print(p)
+#print(htmltools::tagList(ggplotly(p)))
+  cat("\n \n")
+   }
+}
+```
+

@@ -1,0 +1,175 @@
+---
+title: "B6 96hr and 4WK 2DG"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    keep_md: TRUE
+    code_folding: hide
+    collapsed: no
+    toc: yes
+    toc_float: yes
+    self_contained: no
+   
+---
+
+# Introduction and Data files
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+## Data and analysis description
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. This document specifically only calculates and plots principal component analysis for log transformed data. 
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore","plotly")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+```
+
+```{r read in data, eval=FALSE}
+setwd(here("Data","counts"))
+
+files <- dir(pattern = "*.txt")
+
+data <- files %>% map(read_table2) %>% reduce(full_join, by="gene_id")
+
+tdata <- t(sapply(data, as.numeric))
+
+tdata.FPKM <- grep("FPKM", rownames(tdata)) 
+
+tdata.FPKM <- tdata[tdata.FPKM,]
+
+colnames(tdata.FPKM) <- data$gene_id
+
+tdata.FPKM <-tdata.FPKM[,colSums(tdata.FPKM) > 0]
+
+# Read all the files and create a FileName column to store filenames
+DT <- rbindlist(sapply(files, fread, simplify = FALSE),
+                use.names = TRUE, idcol = "FileName")
+
+name <- strsplit(DT$FileName,"_")
+
+samples <-c()
+for(i in 1:length(name)){
+samples[[i]] <- as.list(paste(name[[i]][1],name[[i]][2], sep="_"))
+}
+
+sampleID <- unique(rapply(samples, function(x) head(x,c(1))))
+
+names <- unique(rapply(name, function(x) head(x,c(1))))
+#names.samples <- c(names, names[12], names[14], names[17], names[37], names[41], names[11], names[49])
+names.samples <- sort(names)
+tdata.FPKM.names.samples <- cbind(names.samples, tdata.FPKM)
+rownames(tdata.FPKM.names.samples) <- names
+rownames(tdata.FPKM) <- names
+#lengthID <- table(sampleID)
+
+sample.info <- read_csv(here("Data","Sample_layout_RNAseq_mouse_ID_B6_96hr_4wk.csv"))
+#sample.info.duplicated <- rbind(sample.info[16,], sample.info[17,], sample.info[21,], sample.info[27,], sample.info[54,],
+#                                sample.info[60,], sample.info[70,], sample.info)
+#sample.info.duplicated <- sample.info.duplicated %>% arrange(`Sample ID`)
+
+tdata.FPKM.names.samples <- rownames_to_column(as.data.frame(tdata.FPKM.names.samples)) # %>% mutate("Sample ID" = rownames(tdata.FPKM))
+
+tdata.FPKM.sample.info <- left_join(tdata.FPKM.names.samples, sample.info, by = c("names.samples" = "Sample ID"))
+
+rownames(tdata.FPKM.sample.info) <- names
+
+saveRDS(tdata.FPKM.sample.info[,-c(1:2)], here("Data", "20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+saveRDS(tdata.FPKM, here("Data", "20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+```
+
+***
+
+# PCA (logged all data) {.tabset .tabset-fade .tabset-pills}
+These plots contain all tissues, treatments, and times.
+
+```{r PCA logged all data, child='knitr-pca-logged-all-data.Rmd'}
+```
+
+***
+
+# PCA (log Time) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so all tissues and treatments are plotted for a single time point.
+
+```{r PCA logged time, child='knitr-pca-logged-single-timepoint.Rmd'}
+```
+
+***
+
+# PCA (log Treatment) {.tabset .tabset-fade .tabset-pills}
+These plots use subsetted data so the dataset plotted contains all tissues and time points per treatment type (2DG or control).
+
+```{r PCA logged time, child='knitr-pca-logged-single-treatment.Rmd'}
+```
+
+***
+
+# PCA (log Tissue) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains treatment and time for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-single-tissue.Rmd'}
+```
+
+***
+
+# PCA (log Tissue 96 hr 2DG) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice treated with 2DG for 96hrs for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-96hr-2DG-tissue.Rmd'}
+```
+
+***
+
+# PCA (log Tissue 96hr control) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice treated with nothing for 96hrs for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-96hr-control-tissue.Rmd'}
+```
+
+***
+
+# PCA (log Tissue 4wk control) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice treated with nothing for 4wks for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-4wk-control-tissue.Rmd'}
+```
+
+***
+
+# PCA (log Treatment by tissue 96 hr) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice that were treated or untreated for 9hrs for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-treatment-tissue-96hr.Rmd'}
+```
+
+***
+
+# PCA (log Treatment by tissue 4wk) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice that were treated or untreated for 4wks for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-treatment-tissue-4wk.Rmd'}
+```
+
+***
+
+# PCA (log Time by tissue 2DG) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice that were treated with 2DG for 96hrs or 4wks for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-time-tissue-2DG.Rmd'}
+```
+
+***
+
+# PCA (log Time by tissue control) {.tabset .tabset-fade .tabset-pills}
+These plots subset the data so each plot contains mice that were treated with nothing for 96hrs or 4wks for each tissue.
+
+```{r PCA logged time, child='knitr-pca-logged-time-tissue-control.Rmd'}
+```
+
+***

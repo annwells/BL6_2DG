@@ -1,0 +1,59 @@
+---
+title: "Chang B6 96hr 4wk 2DG Correlations Across Tissues Chosen for Manuscript"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+
+# Summary
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+There were 16 samples (4 per time and treatment). Mice were fed 2DG (6g/L) or nothing in their water for 96hrs or 2 weeks. WGCNA analysis was performed to determine gene clustering. A soft-thresholding power was chosen so that the scale-free topology correlation attempts to hit 0.9. The power chosen for kidney was 3, which allowed the correlations to hover around 0.90. This power clustered the genes into 24 modules originally, however, modules that were highly correlated (0.75 or higher) were further merged together to create 17 modules.
+
+```{r load data}
+heart <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.eigens.RData"))
+
+hypothalamus <- readRDS(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.eigens.RData"))
+
+liver <- readRDS(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.WGCNA.module.eigens.RData"))
+
+prefrontal.cortex <- readRDS(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA.module.eigens.RData"))
+
+muscle <- readRDS(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.eigens.RData"))
+
+small.intestine <- readRDS(here("Data","Small Intestine","log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA.module.eigens.RData"))
+```
+
+```{r}
+module.eigens <- cbind("Heart" = heart$log.tdata.FPKM.sample.info.subset.heart.WGCNA_darkgreen, "Hypothalamus" = hypothalamus$log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA_bisque4, 
+    "Liver" = liver$log.tdata.FPKM.sample.info.subset.liver.WGCNA_darkolivegreen, "Prefrontal Cortex" = prefrontal.cortex$log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA_bisque2,
+    "Muscle" = muscle$log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA_salmon2, "Small Intestine" = small.intestine$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4)
+
+cor(module.eigens)
+
+corr <- rcorr(module.eigens)
+
+p.adjust(corr$P, method = "BH")
+```

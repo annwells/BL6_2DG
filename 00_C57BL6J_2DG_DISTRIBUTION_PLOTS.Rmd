@@ -1,0 +1,230 @@
+---
+title: "Chang B6 96hr 4wk 2DG Distribution Analysis"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    keep_md: TRUE
+    code_folding: hide
+    collapsed: no
+    toc: yes
+    toc_float: yes
+    self_contained: no
+   
+---
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+## R Markdown
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. Organs from mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. This document specifically calculates and plots the distributions for log transformed data. The counts that were used were FPKM normalized before being log transformed.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+```
+
+## Read in data
+```{r read in data}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+```
+
+## Boxplots {.tabset .tabset-fade .tabset-pills}
+These plots will show the distribution of the data by displaying the variability or dispersion of the data.
+
+### Time
+This boxplot groups control and treated samples for each time point and tissue.
+
+```{r time boxplot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ggplot(melttissue, aes(x = Tissue, y = value, fill = Time)) + geom_boxplot() + xlab("") + ylab(expression(log(count + 1))) + scale_fill_manual(values = c("darkred", "dodgerblue")) + theme(axis.text.x = element_text(angle = 45))
+```
+
+### Tissue
+This boxplot groups control and treated samples for each time point and tissue but displays the data by timepoint.
+
+```{r tissue boxplot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ggplot(melttissue, aes(x = Time, y = value, fill = Tissue)) + geom_boxplot() + xlab("") + ylab(expression(log(count + 1))) + theme(axis.text.x = element_text(angle = 45))
+```
+
+### Treatment
+This boxplot groups timepoints for each treatment and tissue.
+```{r treatment boxplot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ggplot(melttissue, aes(x = Tissue, y = value, fill = Treatment)) + geom_boxplot() + xlab("") + ylab(expression(log(count + 1))) + scale_fill_manual(values = c("darkred", "dodgerblue")) + theme(axis.text.x = element_text(angle = 45))
+```
+
+### Treatment by tissue by time
+This boxplot displays treatment and time for each tissue.
+
+```{r treatment tissue time boxplot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ggplot(melttissue, aes(x = Tissue, y = value, fill = Tissue)) + geom_boxplot() + xlab("") + ylab(expression(log(count + 1)))  + theme(axis.text.x = element_text(angle = 45)) + facet_wrap(~ Time*Treatment) + theme_dark() + theme(strip.background = element_rect(color="black", size=1.5, linetype="solid")) + theme(axis.text.x = element_text(angle = 90, face = "bold", size = 8,hjust=0.95,vjust=0.2))
+```
+
+### Samples
+This boxplot displays all of the samples but they are colored by tissue.
+
+```{r sample boxplot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ggplot(melttissue, aes(x = rowname, y = value, fill = Tissue)) + geom_boxplot() + xlab("") + ylab(expression(log(count + 1))) + theme(legend.position='none') + theme(axis.text.x = element_text(angle = 90, face = "bold", size = 4))
+```
+
+## Density Plots {.tabset .tabset-fade .tabset-pills}
+Density plots show us the distribution of the data.
+
+### Time by treatment
+This plot displays treatment and time for each tissue.
+```{r time*treatment density plot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ ggplot(melttissue, aes(x = value, colour = rowname, fill = rowname)) + ylim(c(0, 0.5)) +
+  geom_density(alpha = 0.05, size = .5) + facet_wrap(~ Time*Treatment) + xlab(expression(log(count + 1))) + theme_dark() + theme(strip.background = element_rect(color="black", size=1.5, linetype="solid")) + theme(legend.position = "none")
+```
+
+### Tissue
+This plot groups treatment and timepoint for each tissue.
+
+```{r tissue density plot}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- rownames_to_column(as.data.frame(log.tdata.FPKM.sample.info))
+
+melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
+
+ ggplot(melttissue, aes(x = value, colour = Treatment, fill = Time)) + ylim(c(0, 0.5)) +
+  geom_density(alpha = 0.05, size = .5) + facet_wrap(~ Tissue) +           xlab(expression(log(count + 1))) + theme_dark() + theme(strip.background = element_rect(color="black", size=1.5, linetype="solid")) + theme(legend.position = "none")
+```
+
+## Clustering
+This heatmap clusters the data for each sample to determine, which samples are most closely related through their expression.
+
+```{r clustering, cache=TRUE}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.data.FPKM.sample.info <- t(sapply(log.tdata.FPKM.sample.info, as.numeric))
+colnames(log.data.FPKM.sample.info) <- rownames(log.tdata.FPKM.sample.info)
+
+mat.dist = log.data.FPKM.sample.info
+colnames(mat.dist) = paste(colnames(mat.dist), tdata.FPKM.sample.info$Time, tdata.FPKM.sample.info$Treatment, tdata.FPKM.sample.info$Tissue, sep = " : ")
+mat.dist = as.matrix(dist(t(mat.dist)))
+mat.dist = mat.dist/max(mat.dist)
+hmcol = colorRampPalette(brewer.pal(9, "GnBu"))(144)
+pheatmap::pheatmap(mat.dist, color = rev(hmcol), fontsize = 3)
+```
+
+# MA plots
+MA plots plot the log-fold change against the log average. The M in the plot is the log of the ratio of counts for each gene between two samples. The A in the plot is the average count for each gene across two samples. Each comparison below is only plotting like with like (i.e. spleen 2DG 4wks with spleen 2DG 4wks)
+
+```{r Spleen MA plots, child='Spleen-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Kidney MA plots, child='Kidney-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Hypothalamus MA plots, child='Hypothalamus-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Hippocampus MA plots, child='Hippocampus-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Liver MA plots, child='Liver-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Heart MA plots, child='Heart-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Small-intestine MA plots, child='Small-intestine-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Skeletal-muscle MA plots, child='Skeletal-muscle-MA-plots.Rmd', cache=TRUE}
+```
+
+```{r Prefrontal-cortex MA plots, child='Prefrontal-cortex-MA-plots.Rmd', cache=TRUE}
+```

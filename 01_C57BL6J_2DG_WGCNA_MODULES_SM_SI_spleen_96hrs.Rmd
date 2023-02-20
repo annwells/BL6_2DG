@@ -1,0 +1,172 @@
+---
+title: "Module Generation SM.SI.spleen.96hrs"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA", "xtable")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","plot_theme.R"))
+source(here("source_files","WGCNA_source.R"))
+```
+
+```{r load_data}
+log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA <- readRDS(here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.missing.WGCNA.RData"))
+```
+
+## Set Up Environment
+
+The WGCNA package requires some strict R session environment set up.
+
+```{r}
+options(stringsAsFactors=FALSE)
+
+# Run the following only if running from terminal
+# Does NOT work in RStudio
+#enableWGCNAThreads()
+```
+
+## Choosing Soft-Thresholding Power {.tabset .tabset-fade .tabset-pills}
+
+WGCNA uses a smooth softmax function to force a scale-free topology on the gene expression network. I cycled through a set of threshold power values to see which one is the best for the specific topology. As recommended by the authors, I choose the smallest power such that the scale-free topology correlation attempts to hit 0.9.
+
+```{r, results='asis', cache=TRUE}
+threshold <- softthreshold(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA)
+```
+
+### Pick Soft Threshold
+
+```{r}
+knitr::kable(threshold$fitIndices)
+```
+
+## Calculate Adjacency Matrix and Topological Overlap Matrix
+
+I generated a weighted adjacency matrix for the gene expression profile network using the softmax threshold I determined in the previous step. Then I generate the Topological Overlap Matrix (TOM) for the adjacency matrix. This reduces noise and spurious associations according to the authors.I use the TOM matrix to cluster the profiles of each metabolite based on their similarity. I use dynamic tree cutting to generate modules. 
+
+```{r}
+soft.power <- which(threshold$fitIndices$SFT.R.sq >= 0.88)[1]
+cat("\n", "Power chosen") 
+soft.power
+cat("\n \n")
+
+adj.mtx <- adjacency(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA, power=soft.power)
+
+TOM = TOMsimilarity(adj.mtx)
+diss.TOM = 1 - TOM
+
+metabolite.clust <- hclust(as.dist(diss.TOM), method="average")
+
+min.module.size <- 15
+
+modules <- cutreeDynamic(dendro=metabolite.clust, distM=diss.TOM, deepSplit=2, pamRespectsDendro=FALSE, minClusterSize=min.module.size)
+
+# Plot modules
+cols <- labels2colors(modules)
+table(cols)
+
+plotDendroAndColors(
+  metabolite.clust, cols, xlab="", sub="", main="Gene Clustering on TOM-based Similarity", 
+  dendroLabels=FALSE, hang=0.03, addGuide=TRUE, guideHang=0.05
+)
+```
+
+## Merging Related Modules
+
+Some modules might be highly correlated. The authors recommend merging modules with a correlation greater than 0.75.
+
+```{r}
+me.list <- moduleEigengenes(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA, colors=cols) 
+me <- me.list$eigengenes
+
+# Eigenmetabolite dissimilarity
+me.diss <- 1 - cor(me)
+
+h <- hclust(as.dist(me.diss), method="average")
+
+# Merge threshold = 1 - correlation threshold
+merge.thresh <- 0.25
+
+plot(h, main="Clustering of Module Eigengene", xlab="", sub="")
+abline(h=merge.thresh, col="red")
+
+merge <- mergeCloseModules(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA, cols, cutHeight=merge.thresh, verbose=0)
+merged.cols <- merge$colors
+merged.mes <- merge$newMEs
+
+  # Check how the merging changed the clustering of the metabolites
+plotDendroAndColors(
+  metabolite.clust, cbind(cols, merged.cols), c("Dynamic Tree Cut", "Merged Dynamic"), xlab="", sub="", 
+  main="Gene Clustering on TOM-based Similarity", 
+  dendroLabels=FALSE, hang=0.03, addGuide=TRUE, guideHang=0.05
+  )
+```
+
+## Calculating Intramodular Connectivity
+
+This function in WGCNA calculates the total connectivity of a node (metabolite) in the network. The kTotal column specifies this connectivity. The kWithin column specifies the node connectivity within its module. The kOut column specifies the difference between kTotal and kWithin. Generally, the out degree should be lower than the within degree, since the WGCNA procedure groups similar metabolite profiles together.
+
+```{r}
+net.deg <- intramodularConnectivity(adj.mtx, merged.cols)
+saveRDS(net.deg,here("Data","SM.SI.spleen.96hrs","Chang_2DG_BL6_connectivity_SM_SI_spleen_96hrs.RData"))
+head(net.deg)
+```
+
+## Summary
+
+
+The dataset generated coexpression modules of the following sizes. The grey submodule represents metabolites that did not fit well into any of the modules. 
+
+```{r}
+table(merged.cols)
+```
+
+```{r}
+# Module names in descending order of size
+module.labels <- names(table(merged.cols))[order(table(merged.cols), decreasing=T)]
+# Order eigenmetabolites by module labels
+merged.mes <- merged.mes[,paste0("ME", module.labels)]
+colnames(merged.mes) <- paste0("log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA_", module.labels)
+module.eigens <- merged.mes
+# Add log.tdata.FPKM.sample.info.subset.WGCNA tag to labels
+module.labels <- paste0("log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA_", module.labels)
+
+# Generate and store metabolite membership
+module.membership <- data.frame(
+  Gene=colnames(log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA),
+  Module=paste0("log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA_", merged.cols)
+)
+
+saveRDS(module.labels, here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.labels.RData"))
+saveRDS(module.eigens, here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.eigens.RData"))
+saveRDS(module.membership, here("Data","SM.SI.spleen.96hrs", "log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.membership.RData"))
+
+write.table(module.labels, here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.labels.csv"), row.names=F, col.names=F, sep=",")
+write.csv(module.eigens, here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.eigens.csv"))
+write.csv(module.membership, here("Data","SM.SI.spleen.96hrs","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.96hrs.WGCNA.module.membership.csv"), row.names=F)
+```
+

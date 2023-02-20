@@ -1,0 +1,201 @@
+## Scree plot and summary statistics 2DG
+```{r PCA 2DG log}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.2DG <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Treatment=="2DG") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.2DG)
+
+log.tdata.FPKM.2DG <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.2DG <- log.tdata.FPKM.2DG %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.2DG, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Tissue 2DG
+```{r PCA 2DG log Tissue Type}
+
+Tissue_color <- as.factor(tdata.FPKM.sample.info.2DG$Tissue)
+Tissue_color <- as.data.frame(Tissue_color)
+col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[Tissue_color$Tissue_color]
+pca_tissue <- cbind(Tissue_color,pca$x[,1],pca$x[,2])
+pca_tissue <- as.data.frame(pca_tissue)
+
+p <- ggplot(pca_tissue,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_tissue$Tissue_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p+ xlab("PCA 1 (39.03%)") + ylab("PCA 2 (19.74%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Tissue_color, fill = as.factor(pca_tissue$Tissue_color)), geom="polygon",level=0.95,alpha=0.2) +
+  scale_fill_manual(values=c("#B15928", "#F88A89", "#F06C45", "#A6CEE3", "#52AF43", "#FE870D", "#C7B699", "#569EA4","#B294C7"),name="Tissue Type",
+                       breaks=c("Spleen", "Kidney","Liver","Heart","Hypothanamus","Pre-frontal Cortex","Small Intestine","Hippocampus","Skeletal Muscle"),
+                       labels=c("Spleen", "kidney","Liver","Heart","Hypothalamus","Pre-frontal Cortex","Small Intestine","Hippocampus","Skeletal Muscle")) +
+  scale_linetype_manual(values=c(1,2,1,2,1))
+print(p)
+```
+
+## Time 2DG
+```{r log 2DG PCA Time}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.2DG$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (39.03%)") + ylab("PCA 2 (19.74%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## 3D Tissue 2DG
+This plot is color coded by tissue and time for 2DG. To see each one click the names on the legend to make them disappear and click again to make them reappear.
+
+```{r 3D Tissue 2DG}
+Tissue_color <- as.factor(tdata.FPKM.sample.info.2DG$Tissue)
+Tissue_color <- as.data.frame(Tissue_color)
+col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[Tissue_color$Tissue_color]
+pca_tissue <- cbind(Tissue_color,pca$x[,1],pca$x[,2],pca$x[,3])
+pca_tissue <- as.data.frame(pca_tissue)
+rownames(pca_tissue) <- rownames(tdata.FPKM.sample.info.2DG)
+
+p <- plot_ly(pca_tissue, x = pca_tissue$`pca$x[, 1]`, y = pca_tissue$`pca$x[, 2]`, z = pca_tissue$`pca$x[, 3]`, color = pca_tissue$Tissue_color, colors = c("#B15928", "#F88A89", "#F06C45", "#A6CEE3", "#52AF43", "#FE870D", "#C7B699", "#569EA4","#B294C7"), text = rownames(pca_tissue)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 39.03%"),
+                     yaxis = list(title = "PC 2 19.74%"),
+                     zaxis = list(title = "PC 3 13.58%")))
+
+Time_color <- as.factor(tdata.FPKM.sample.info.2DG$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2],pca$x[,3])
+pca_time <- as.data.frame(pca_time)
+rownames(pca_tissue) <- rownames(tdata.FPKM.sample.info.2DG)
+
+p1 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z = pca_time$`pca$x[, 3]`, color = pca_time$Time_color, colors = c("#A6CEE3", "#B15928"), text = rownames(pca_time)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 39.03%"),
+                     yaxis = list(title = "PC 2 19.74%"),
+                     zaxis = list(title = "PC 3 13.58%")))
+p2 <- subplot(p,p1)
+p2
+```
+
+## Scree plot and summary statistics control
+```{r PCA control log}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM.sample.info.control <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Treatment=="None") %>% column_to_rownames('rowname')
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+rows <- rownames(tdata.FPKM.sample.info.control)
+
+log.tdata.FPKM.control <- rownames_to_column(log.tdata.FPKM) 
+
+log.tdata.FPKM.control <- log.tdata.FPKM.control %>% filter(rowname %in% rows) %>% column_to_rownames('rowname')
+
+pca <- prcomp(log.tdata.FPKM.control, center = T)
+
+screeplot(pca,type = "lines")
+
+summary(pca)
+```
+
+## Tissue control
+```{r PCA control log Tissue Type}
+
+Tissue_color <- as.factor(tdata.FPKM.sample.info.control$Tissue)
+Tissue_color <- as.data.frame(Tissue_color)
+col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[Tissue_color$Tissue_color]
+pca_tissue <- cbind(Tissue_color,pca$x[,1],pca$x[,2])
+pca_tissue <- as.data.frame(pca_tissue)
+
+p <- ggplot(pca_tissue,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_tissue$Tissue_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p+ xlab("PCA 1 (38.37%)") + ylab("PCA 2 (20.33%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Tissue_color, fill = as.factor(pca_tissue$Tissue_color)), geom="polygon",level=0.95,alpha=0.2) +
+  scale_fill_manual(values=c("#B15928", "#F88A89", "#F06C45", "#A6CEE3", "#52AF43", "#FE870D", "#C7B699", "#569EA4","#B294C7"),name="Tissue Type",
+                       breaks=c("Spleen", "Kidney","Liver","Heart","Hypothanamus","Pre-frontal Cortex","Small Intestine","Hippocampus","Skeletal Muscle"),
+                       labels=c("Spleen", "kidney","Liver","Heart","Hypothalamus","Pre-frontal Cortex","Small Intestine","Hippocampus","Skeletal Muscle")) +
+  scale_linetype_manual(values=c(1,2,1,2,1))
+print(p)
+```
+
+## Time control
+```{r log control PCA Time}
+
+Time_color <- as.factor(tdata.FPKM.sample.info.control$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2])
+pca_time <- as.data.frame(pca_time)
+
+p <- ggplot(pca_time,aes(pca$x[,1], pca$x[,2]))
+p <- p + geom_point(aes(fill = as.factor(pca_time$Time_color)), shape=21, size=4) + theme_bw()
+p <- p + theme(legend.title = element_text(size=10,face="bold")) + 
+  theme(legend.text = element_text(size=10, face="bold"))
+p <- p + xlab("PCA 1 (38.37%)") + ylab("PCA 2 (20.33%)") + theme(axis.title = element_text(face="bold"))
+p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Time_color, fill = as.factor(pca_time$Time_color)), geom="polygon",level=0.95,alpha=0.4) +
+  scale_fill_manual(values=c("#A6CEE3", "#B15928"),name="Time",
+                       breaks=c("4 wks", "96 hrs"),
+                       labels=c("4 wks", "96 hrs")) +
+  scale_linetype_manual(values=c(1,2))
+print(p)
+```
+
+## 3D Tissue control
+This plot is color coded by tissue and time for control. To see each one click the names on the legend to make them disappear and click again to make them reappear.
+
+```{r 3D Tissue control}
+Tissue_color <- as.factor(tdata.FPKM.sample.info.control$Tissue)
+Tissue_color <- as.data.frame(Tissue_color)
+col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[Tissue_color$Tissue_color]
+pca_tissue <- cbind(Tissue_color,pca$x[,1],pca$x[,2],pca$x[,3])
+pca_tissue <- as.data.frame(pca_tissue)
+rownames(pca_tissue) <- rownames(tdata.FPKM.sample.info.control)
+
+p <- plot_ly(pca_tissue, x = pca_tissue$`pca$x[, 1]`, y = pca_tissue$`pca$x[, 2]`, z = pca_tissue$`pca$x[, 3]`, color = pca_tissue$Tissue_color, colors = c("#B15928", "#F88A89", "#F06C45", "#A6CEE3", "#52AF43", "#FE870D", "#C7B699", "#569EA4","#B294C7"), text = rownames(pca_tissue)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 38.37%"),
+                     yaxis = list(title = "PC 2 20.33%"),
+                     zaxis = list(title = "PC 3 13.52%")))
+
+Time_color <- as.factor(tdata.FPKM.sample.info.control$Time)
+Time_color <- as.data.frame(Time_color)
+col_time <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(2)[Time_color$Time_color]
+pca_time <- cbind(Time_color,pca$x[,1],pca$x[,2],pca$x[,3])
+pca_time <- as.data.frame(pca_time)
+rownames(pca_tissue) <- rownames(tdata.FPKM.sample.info.control)
+
+p1 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z = pca_time$`pca$x[, 3]`, color = pca_time$Time_color, colors = c("#A6CEE3", "#B15928") , text = rownames(pca_time)) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC 1 38.37%"),
+                     yaxis = list(title = "PC 2 20.33%"),
+                     zaxis = list(title = "PC 3 13.52%")))
+p2 <- subplot(p,p1)
+p2
+```

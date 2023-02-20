@@ -1,0 +1,97 @@
+---
+title: "Chang B6 96hr 4wk 2DG Pathway Analysis Kidney"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","downloadthis")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+## Module Bar plot
+This bar plot shows the number of genes in each module.
+
+```{r}
+modules<-read.csv(here("Data","Kidney","log.tdata.FPKM.sample.info.subset.kidney.WGCNA.module.membership.csv"), header=T)
+
+module_barplot(modules)
+```
+
+# Pathway Analysis {.tabset .tabset-fade .tabset-pills}
+Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases.
+
+## Pathway plots {.tabset .tabset-fade .tabset-pills}
+```{r}
+WGCNA<-read.table(here("Data","Kidney","log.tdata.FPKM.sample.info.subset.kidney.WGCNA.module.membership.csv"), header=T)
+
+Data_setup(WGCNA, file = "Annotated_genes_in_kidney_WGCNA_Chang_B6_96hr_4wk.RData", folder="Kidney")
+
+Matched<-readRDS(here("Data","Kidney","Annotated_genes_in_kidney_WGCNA_Chang_B6_96hr_4wk.RData"))
+  
+pathways(Matched, pathwayfile = "Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_kidney_WGCNA.RData", genefile = "Chang_B6_96hr_4wk_gprofiler_gene_annotation_list_kidney_WGCNA.RData", folder = "Kidney")
+  
+WGCNA.pathway <-readRDS(here("Data","Kidney","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_kidney_WGCNA.RData"))
+```
+
+```{r, results='asis', echo=FALSE}
+gost.plot(Matched)
+```
+
+## Table of Pathways {.tabset .tabset-fade .tabset-pills}
+
+```{r, results='asis'}
+WGCNA.pathway <- readRDS(here("Data","Kidney","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_kidney_WGCNA.RData"))
+
+pathways.list(WGCNA.pathway, Matched)
+
+```
+
+## Pathway Frequency {.tabset .tabset-fade .tabset-pills}
+
+```{r, results='asis'}
+WGCNA.pathway <- readRDS(here("Data","Kidney","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_kidney_WGCNA.RData"))
+
+#pdf("Counts_of_each_pathway_identified_within_kidney.pdf")
+count.pathways(WGCNA.pathway)
+#dev.off()
+```
+
+```{r, include=FALSE}
+ p <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length)
+
+p
+```

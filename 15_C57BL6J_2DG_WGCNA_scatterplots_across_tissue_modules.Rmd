@@ -1,0 +1,191 @@
+---
+title: "Chang_B6_96hr_4wk 2DG Scatterplots Across Tissue Modules for Chosen Modules"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+# Introduction
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","pheatmap","Hmisc")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+```{r load initial data}
+heart <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.eigens.RData"))
+
+hypothalamus <- readRDS(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.eigens.RData"))
+
+liver <- readRDS(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.WGCNA.module.eigens.RData"))
+
+prefrontal.cortex <- readRDS(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA.module.eigens.RData"))
+
+skeletal.muscle <- readRDS(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.eigens.RData"))
+
+small.intestine <- readRDS(here("Data","Small Intestine", "log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA.module.eigens.RData"))
+
+```
+
+```{r relabel columns for files}
+## heart
+modulenames <- c()
+  for(i in 1:length(heart)){
+    name <- strsplit(colnames(heart),"_")
+    modulenames[i] <- name[[i]][2]
+  }
+
+colnames(heart) <- modulenames
+
+## hypothalamus
+modulenames <- c()
+  for(i in 1:length(hypothalamus)){
+    name <- strsplit(colnames(hypothalamus),"_")
+    modulenames[i] <- name[[i]][2]
+  }
+
+colnames(hypothalamus) <- modulenames
+
+## liver
+modulenames <- c()
+  for(i in 1:length(liver)){
+    name <- strsplit(colnames(liver),"_")
+    modulenames[i] <- name[[i]][2]
+  }
+
+colnames(liver) <- modulenames
+
+## muscle
+modulenames <- c()
+  for(i in 1:length(skeletal.muscle)){
+    name <- strsplit(colnames(skeletal.muscle),"_")
+    modulenames[i] <- name[[i]][2]
+  }
+
+colnames(skeletal.muscle) <- modulenames
+
+## prefrontal cortex
+modulenames <- c()
+  for(i in 1:length(prefrontal.cortex)){
+    name <- strsplit(colnames(prefrontal.cortex),"_")
+    modulenames[i] <- name[[i]][2]
+  }
+
+colnames(prefrontal.cortex) <- modulenames
+
+## small intestine
+modulenames <- c()
+  for(i in 1:length(small.intestine)){
+    name <- strsplit(colnames(small.intestine),"_")
+    modulenames[i] <- name[[i]][2]
+  }
+
+names(small.intestine) <- modulenames
+
+modules.sig <- cbind(heart$darkgreen, hypothalamus$bisque4, prefrontal.cortex$bisque2, small.intestine$green4, skeletal.muscle$salmon2, liver$darkolivegreen)
+colnames(modules.sig) <- c("Heart","Hypothalamus", "Prefrontal Cortex","Small Intestine","Skeletal Muscle","Liver")
+rownames(modules.sig) <- rownames(prefrontal.cortex)
+```
+
+```{r load data}
+heart.gsva <- readRDS(here("Data","Heart","GSVA.modules.heart.RData"))
+heart.pathways <- readRDS(here("Data","Heart","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_heart_WGCNA.RData"))
+term.names <- heart.pathways[[4]]$term_name
+heart.darkgreen <- heart.gsva$log.tdata.FPKM.sample.info.subset.heart.WGCNA_darkgreen[,match(term.names,colnames(heart.gsva$log.tdata.FPKM.sample.info.subset.heart.WGCNA_darkgreen))]
+heart.darkgreen <- heart.darkgreen[, colSums(is.na(heart.darkgreen)) != nrow(heart.darkgreen)]
+
+hypothalamus.gsva <- readRDS(here("Data","Hypothalamus","GSVA.modules.hypothalamus.RData"))
+hypothalamus.pathways <- readRDS(here("Data","Hypothalamus","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hypothalamus_WGCNA.RData"))
+term.names <- hypothalamus.pathways[[3]]$term_name
+hypothalamus.bisque4 <- hypothalamus.gsva$log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA_bisque4[,match(term.names,colnames(hypothalamus.gsva$log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA_bisque4))]
+hypothalamus.bisque4 <- hypothalamus.bisque4[, colSums(is.na(hypothalamus.bisque4)) != nrow(hypothalamus.bisque4)]
+  
+
+liver.gsva <- readRDS(here("Data","Liver","GSVA.modules.liver.RData"))
+liver.pathways <- readRDS(here("Data","Liver","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_liver_WGCNA.RData"))
+term.names <- liver.pathways[[8]]$term_name
+liver.darkolivegreen <- liver.gsva$log.tdata.FPKM.sample.info.subset.liver.WGCNA_darkolivegreen[,match(term.names,colnames(liver.gsva$log.tdata.FPKM.sample.info.subset.liver.WGCNA_darkolivegreen))]
+
+prefrontal.cortex.gsva <- readRDS(here("Data","Prefrontal Cortex","GSVA.modules.prefrontal.cortex.RData"))
+prefrontal.cortex.pathways <- readRDS(here("Data","Prefrontal Cortex","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_prefrontal_cortex_WGCNA.RData"))
+term.names <- prefrontal.cortex.pathways[[3]]$term_name
+prefrontal.cortex.bisque2 <- prefrontal.cortex.gsva$log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA_bisque2[,match(term.names,colnames(prefrontal.cortex.gsva$log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA_bisque2))]
+prefrontal.cortex.bisque2 <- prefrontal.cortex.bisque2[, colSums(is.na(prefrontal.cortex.bisque2)) != nrow(prefrontal.cortex.bisque2)]
+
+skeletal.muscle.gsva <- readRDS(here("Data","Skeletal Muscle","GSVA.modules.skeletal.muscle.RData"))
+skeletal.muscle.pathways <- readRDS(here("Data","Skeletal Muscle","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_skeletal_muscle_WGCNA.RData"))
+term.names <- skeletal.muscle.pathways[[35]]$term_name
+skeletal.muscle.salmon2 <- skeletal.muscle.gsva$log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA_salmon2[,match(term.names,colnames(skeletal.muscle.gsva$log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA_salmon2))]
+skeletal.muscle.salmon2 <- skeletal.muscle.salmon2[, colSums(is.na(skeletal.muscle.salmon2)) != nrow(skeletal.muscle.salmon2)]
+
+small.intestine.gsva <- readRDS(here("Data","Small Intestine","GSVA.modules.small.intestine.RData"))
+small.intestine.pathways <- readRDS(here("Data","Small Intestine","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_small_intestine_WGCNA.RData"))
+term.names <- small.intestine.pathways[[18]]$term_name
+small.intestine.green4 <- small.intestine.gsva$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4[,match(term.names, colnames(small.intestine.gsva$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4))]
+small.intestine.green4 <- small.intestine.green4[, colSums(is.na(small.intestine.green4)) != nrow(small.intestine.green4)]
+
+modules.tissue <- list(heart.darkgreen, hypothalamus.bisque4, prefrontal.cortex.bisque2, small.intestine.green4)
+
+names(modules.tissue) <- c("heart.darkgreen", "hypothalamus.bisque4", "prefrontal.cortex.bisque2", "small.intestine.green4")
+```
+
+## Correlations {.tabset .tabset-fade .tabset-pills}
+
+```{r corr loop, results='asis'}
+correlations <- list()
+pvalue <- list()
+#names.correlations <- list()
+for(i in 1:length(modules.tissue)){
+  for(j in 1:length(modules.tissue)){
+    cat("\n###",paste(names(modules.tissue[i]), "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
+    correlations <- cor(modules.tissue[[i]], modules.tissue[[j]])
+    #pvalue[[i]] <- rcorr(modules.tissue[[i]], modules.tissue[[j]])$P
+    #names.correlations[[i]] <- paste(names(modules.tissue[i]), "vs", names(modules.tissue[j]))
+    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 8, fontsize_row = 8, color = colorRampPalette(rev(brewer.pal(n = 12, name =
+  "Paired")))(100))
+    cat("\n \n")
+  }
+}
+#names.correlations <- unlist(names.correlations)
+#names(correlations) <- names.correlations
+#names(pvalue) <- names.correlations
+```
+
+```{r corr loop liver, results='asis'}
+  for(j in 1:length(modules.tissue)){
+    cat("\n###",paste("liver.darkolivegreen", "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
+    correlations <- cor(liver.darkolivegreen, modules.tissue[[j]])
+    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 4, color = colorRampPalette(rev(brewer.pal(n = 12, name =
+  "Paired")))(100), cluster_rows = F)
+    cat("\n \n")
+  }
+
+```
+
+```{r corr}
+# correlations <- cor(heart.darkgreen,small.intestine.green4)
+# breaks <- seq(-.65,.61,length.out = 100)
+# pdf("Heatmap of small intestine green4 and heart darkgreen correlations GSVA pathways.pdf")
+# pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 8, fontsize_row = 8, color = colorRampPalette(rev(brewer.pal(n = 11, name =
+#   "Spectral")))(100), breaks = breaks)
+# dev.off()
+```

@@ -1,0 +1,88 @@
+---
+title: "Chang B6 96hr 4wk 2DG Gene Set Variation Analysis Heart"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each pathway identified, across modules.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "kableExtra", "GSVA", "DT","downloadthis")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+source(here("source_files","plot_theme.R"))
+```
+
+```{r load data}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,c(27238:27240)])
+
+log.tdata.FPKM.sample.info <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5] 
+
+log.tdata.FPKM.sample.info.subset <- cbind(log.tdata.FPKM.subset,tdata.FPKM.sample.info[,c(27238:27240)])
+log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.heart <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Heart") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.heart <- cbind(log.tdata.FPKM.sample.info.subset.heart, Time.Treat = paste(log.tdata.FPKM.sample.info.subset.heart$Time, log.tdata.FPKM.sample.info.subset.heart$Treatment))
+
+log.data.FPKM.subset.heart <- log.tdata.FPKM.sample.info.subset.heart %>%
+  dplyr::select(-c("Time", "Tissue", "Treatment","Time.Treat")) %>%
+  t()
+```
+
+## Gene Set Variation Analysis
+
+Gene Set Variation Analysis is a non-parametric, unsupervised method that assesses gene set enrichment. The method is performed using the R package GSVA. It is performed without phenotypes, which allows for complex experimental studies to be assessed for pathway enrichment. Gene sets can be provided or pulled down from websites that store pre-defined gene sets. The gene sets used for this dataset were determined by assessing pathways present within each module through WGCNA. To obtain these pathways WGCNA was performed to cluster genes into modules. Overrepresented pathways were identified within each module using gProfiler2. To assess enrichment of pathways, Gene set variation analysis (GSVA) was performed. Genes of interest need to be compared to a gene set. To create this gene set, a complete ensembl gene list was assessed using gProfiler2 to identify pathways, regardless of significance. Each set of genes within each module was then assessed against the gene set to perform GSVA.
+
+```{r, cache=TRUE}
+
+modules<-read.csv(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.membership.csv"), header=T)
+
+tES <- GSVA.modules(modules, log.data.FPKM.subset.heart)
+
+#saveRDS(tES, here("Data","Heart","GSVA.modules.heart.RData"))
+```
+
+```{r echo=FALSE, include = FALSE}
+# Why, oh why do I need this chunk?
+DT::datatable(matrix())
+```
+
+## ANOVA Table{.tabset .tabset-fade .tabset-pills}
+
+Aligned rank transformation was used to determine which factors significantly altered each pathway.
+
+```{r, results='asis', cache = TRUE}
+log.tdata.FPKM.sample.info.subset.heart$Time <- as.factor(log.tdata.FPKM.sample.info.subset.heart$Time)
+
+log.tdata.FPKM.sample.info.subset.heart$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.heart$Treatment)
+
+GSVA.table(log.tdata.FPKM.sample.info.subset.heart, tES)
+```

@@ -1,0 +1,252 @@
+---
+title: "Comparing Significant Overlaps (Jaccard) for Modules Related to Traits through shared genes"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+
+```
+
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlaped.
+
+## Load in Packages and read in files
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "clusterProfiler", "rlist")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+```{r, read in data}
+Matched<-readRDS(here("Data","Chang_2DG_BL6_Matched_annotation_intersection_modules.RData"))
+```
+
+# Tissue {.tabset .tabset-fade .tabset-pills}
+Each tissue module was compared to the traits in the experiment. The modules that were significantly correlated for a trait were then compared within the jaccard index across all other tissues. The significant overlaps were then summarized to determine which pathways were most common. Below are the pathway lists and their frequency for each module within a tissue that was also correlated to a trait and their frequency bar plots.
+
+## Heart {.tabset .tabset-fade .tabset-pills}
+
+### Darkgreen
+```{r, results='asis'}
+genes.heart.darkgreen <- genes.jaccard.pathways(Matched, "Heart_darkgreen")
+  
+```
+### Darkgrey
+```{r, results='asis'}
+genes.heart.darkgrey <- genes.jaccard.pathways(Matched, "Heart_darkgrey")
+  
+```
+### Darkorange
+```{r, results='asis'}
+genes.heart.darkorange <- genes.jaccard.pathways(Matched, "Heart_darkorange")
+  
+```
+### Plum1
+```{r, results='asis'}
+genes.heart.plum1 <- genes.jaccard.pathways(Matched, "Heart_plum1")
+  
+```
+
+## Hippocampus {.tabset .tabset-fade .tabset-pills}
+
+### Green
+```{r, results='asis'}
+genes.hippocampus.green <- genes.jaccard.pathways(Matched, "Hippocampus_green")
+  
+```
+### Coral1
+```{r, results='asis'}
+genes.hippocampus.coral1 <- genes.jaccard.pathways(Matched, "Hippocampus_coral1")
+  
+```
+### Darkslateblue
+```{r, results='asis'}
+genes.hippocampus.darkslateblue <- genes.jaccard.pathways(Matched, "Hippocampus_darkslateblue")
+  
+```
+### Darkolivegreen
+```{r, results='asis'}
+genes.hippocampus.darkolivegreen <- genes.jaccard.pathways(Matched, "Hippocampus_darkolivegreen")
+  
+```
+### Khaki3
+```{r, results='asis'}
+genes.hippocampus.khaki3 <- genes.jaccard.pathways(Matched, "Hippocampus_khaki3")
+  
+```
+
+## Hypothalamus {.tabset .tabset-fade .tabset-pills}
+
+### midnightblue
+```{r, results='asis'}
+genes.hypothalamus.midnightblue <- genes.jaccard.pathways(Matched, "Hypothalamus_midnightblue")
+  
+```
+### Bisque4
+```{r, results='asis'}
+genes.hypothalamus.bisque4 <- genes.jaccard.pathways(Matched, "Hypothalamus_bisque4")
+  
+```
+
+## Kidney {.tabset .tabset-fade .tabset-pills}
+
+### Lightyellow
+```{r, results='asis'}
+genes.kidney.lightyellow <- genes.jaccard.pathways(Matched, "Kidney_lightyellow")
+  
+```
+### Purple
+```{r, results='asis'}
+genes.kidney.purple <- genes.jaccard.pathways(Matched, "Kidney_purple")
+  
+```
+### Lightcyan
+```{r, results='asis'}
+genes.kidney.lightcyan <- genes.jaccard.pathways(Matched, "Kidney_lightcyan")
+  
+```
+### Blue
+```{r, results='asis'}
+genes.kidney.blue <- genes.jaccard.pathways(Matched, "Kidney_blue")
+  
+```
+### Pink
+```{r, results='asis'}
+genes.kidney.pink <- genes.jaccard.pathways(Matched, "Kidney_pink")
+  
+```
+
+## Liver {.tabset .tabset-fade .tabset-pills}
+
+### Darkturquoise
+```{r, results='asis'}
+genes.liver.darkturquoise <- genes.jaccard.pathways(Matched, "Liver_darkturquoise")
+  
+```
+### Darkolivegreen
+```{r, results='asis'}
+genes.liver.darkolivegreen <- genes.jaccard.pathways(Matched, "Liver_darkolivegreen")
+  
+```
+### Skyblue3
+```{r, results='asis'}
+genes.liver.skyblue3 <- genes.jaccard.pathways(Matched, "Liver_skyblue3")
+  
+```
+
+## Prefrontal Cortex {.tabset .tabset-fade .tabset-pills}
+
+### Limegreen
+```{r, results='asis'}
+genes.prefrontal.limegreen <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_limegreen")
+  
+```
+### Rosybrown2
+```{r, results='asis'}
+genes.prefrontal.rosybrown2 <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_rosybrown2")
+  
+```
+### Lavenderblush2
+```{r, results='asis'}
+genes.prefrontal.lavenderblush2 <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_lavenderblush2")
+  
+```
+### Antiquewhite
+```{r, results='asis'}
+genes.prefrontal.antiquewhite <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_antiquewhite")
+  
+```
+### Pink
+```{r, results='asis'}
+genes.prefrontal.pink <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_pink")
+  
+```
+### Goldenrod3
+```{r, results='asis'}
+genes.prefrontal.goldenrod3 <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_goldenrod3")
+  
+```
+### Aquamarine
+```{r, results='asis'}
+genes.prefrontal.aquamarine <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_aquamarine")
+  
+```
+
+## Skeletal Muscle {.tabset .tabset-fade .tabset-pills}
+
+### Grey
+```{r, results='asis'}
+genes.skeletal.grey <- genes.jaccard.pathways(Matched, "Skeletal Muscle_grey")
+  
+```
+
+## Small Intestine {.tabset .tabset-fade .tabset-pills}
+
+### Green4
+```{r, results='asis'}
+genes.intestine.green4 <- genes.jaccard.pathways(Matched, "Small Intestine_green4")
+  
+```
+### Blue2
+```{r, results='asis'}
+genes.intestine.blue2 <- genes.jaccard.pathways(Matched, "Small Intestine_blue2")
+  
+```
+### Cornsilk
+```{r, results='asis'}
+genes.intestine.cornsilk <- genes.jaccard.pathways(Matched, "Small Intestine_cornsilk")
+  
+```
+### Magenta2
+```{r, results='asis'}
+genes.intestine.Magenta2 <- genes.jaccard.pathways(Matched, "Small Intestine_magenta2")
+  
+```
+### Darkgoldenrod4
+```{r, results='asis'}
+genes.intestine.darkgoldenrod4 <- genes.jaccard.pathways(Matched, "Small Intestine_darkgoldenrod4")
+  
+```
+
+## Spleen {.tabset .tabset-fade .tabset-pills}
+
+### Tan4
+```{r, results='asis'}
+genes.spleen.tan4 <- genes.jaccard.pathways(Matched, "Spleen_tan4")
+  
+```
+### Mediumpurple1
+```{r, results='asis'}
+genes.spleen.mediumpurple1 <- genes.jaccard.pathways(Matched, "Spleen_mediumpurple1")
+  
+```
+### Palevioletred3
+```{r, results='asis'}
+genes.spleen.palevioletred3 <- genes.jaccard.pathways(Matched, "Spleen_palevioletred3")
+  
+```

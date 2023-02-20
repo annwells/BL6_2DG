@@ -1,0 +1,162 @@
+---
+title: "Chang B6 96hr 4wk 2DG contribution Hypothalamus"
+author: Ann Wells
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+ html_document:
+   keep_md: TRUE
+   code_folding: hide
+   collapsed: no
+   toc: yes
+   toc_float: yes
+   self_contained: no
+   
+---
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
+# Introduction and Data files
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+options(stringsAsFactors = F)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_knit$set(progress=FALSE)
+```
+
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each module identified, as well as the relationship of each gene within the module and its significance.
+
+```{r load packages}
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap","ppcor","pander","downloadthis")
+for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
+
+source(here("source_files","WGCNA_source.R"))
+```
+
+```{r}
+tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
+
+tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
+
+log.tdata.FPKM <- log(tdata.FPKM + 1)
+log.tdata.FPKM <- as.data.frame(log.tdata.FPKM)
+
+log.tdata.FPKM.sample.info <- cbind(log.tdata.FPKM, tdata.FPKM.sample.info[,27238:27240])
+
+log.tdata.FPKM.sample.info <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5] 
+
+log.tdata.FPKM.subset <- log.tdata.FPKM.subset %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
+
+log.tdata.FPKM.sample.info.subset.hypothalamus <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue == "Hypothanamus") %>% column_to_rownames()
+
+log.tdata.FPKM.subset <- subset(log.tdata.FPKM.sample.info.subset.hypothalamus, select = -c(Time,Treatment,Tissue))
+  
+WGCNA.pathway <-readRDS(here("Data","Hypothalamus","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hypothalamus_WGCNA.RData"))
+
+Matched<-readRDS(here("Data","Hypothalamus","Annotated_genes_in_hypothalamus_WGCNA_Chang_B6_96hr_4wk.RData"))
+
+
+module.names <- Matched$X..Module.
+name <- strsplit(module.names,"_")
+samples <-c()
+for(i in 1:length(name)){
+samples[[i]] <- name[[i]][2]
+}  
+name <- strsplit(samples,"\"")
+name <- unlist(name)
+
+Treatment <- unclass(as.factor(log.tdata.FPKM.sample.info.subset.hypothalamus[,27238]))
+Time <- unclass(as.factor(log.tdata.FPKM.sample.info.subset.hypothalamus[,27237]))
+Treat.Time <- paste0(Treatment, Time)
+phenotype <- data.frame(cbind(Treatment, Time, Treat.Time))
+
+nSamples <- nrow(log.tdata.FPKM.sample.info.subset.hypothalamus)
+
+MEs0 <- read.csv(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.eigens.csv"),header = T, row.names = 1)
+name <- strsplit(names(MEs0),"_")
+samples <-c()
+for(i in 1:length(name)){
+samples[[i]] <- name[[i]][2]
+}  
+name <- strsplit(samples,"\"")
+name <- unlist(name)
+colnames(MEs0) <-name
+MEs <- orderMEs(MEs0)
+moduleTraitCor <- cor(MEs, phenotype, use = "p");
+moduleTraitPvalue <- corPvalueStudent(moduleTraitCor, nSamples)
+```
+
+# Relationship between Modules and Traits
+```{r, results='asis'}
+#sizeGrWindow(10,6)
+# Will display correlations and their p-values
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
+                        signif(moduleTraitPvalue, 1), ")", sep = "");
+dim(textMatrix) = dim(moduleTraitCor)
+
+# Display the correlation values within a heatmap plot
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat
+
+knitr::kable(moduleTraitPvalue, format = "markdown")
+
+moduleTraitPvalue %>%
+  download_this(
+    output_name = "Hypothalamus Module-Trait Relationship",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+
+# Partial Correlation {.tabset .tabset-fade .tabset-pills}
+
+```{r, results='asis'}
+phenotype$Treatment <- as.numeric(phenotype$Treatment)
+phenotype$Time <- as.numeric(phenotype$Time)
+phenotype$Treat.Time <- as.numeric(phenotype$Treat.Time)
+
+Sigmodules <- as.data.frame(cbind(MEs$midnightblue,MEs$bisque4,MEs$navajowhite2))
+colnames(Sigmodules) <- c("midnightblue","bisque4","navajowhite2")
+
+for(i in 1:length(Sigmodules)){
+   cat("\n##",colnames(Sigmodules[i]),"{.tabset .tabset-fade .tabset-pills}","\n")
+   for(j in 1:length(phenotype)){
+      cat("\n###", colnames(phenotype[j]),"{.tabset .tabset-fade .tabset-pills}","\n")
+      for(k in 1:length(phenotype)){
+         cat("\n####", "Partial Correlation", colnames(phenotype[k]),"\n")
+         partial <- pcor.test(Sigmodules[,i], phenotype[,j],phenotype[,k])
+         panderOptions('knitr.auto.asis', FALSE)
+         print(pander(partial))
+         cat("\n \n")
+      }
+      cat("\n \n")
+   }
+   cat("\n \n")
+}
+```
+
+# Scatterplots Module membership vs. Gene significance {.tabset .tabset-fade .tabset-pills}
+
+## Treatment {.tabset .tabset-fade .tabset-pills}
+```{r, child="knitr-WGCNA-contribution-treatment.Rmd"}
+```
+
+## Time {.tabset .tabset-fade .tabset-pills}
+```{r, child="knitr-WGCNA-contribution-time.Rmd"}
+```
+
+## Treatment by Time {.tabset .tabset-fade .tabset-pills}
+```{r, child="knitr-WGCNA-contribution-treat-time.Rmd"}
+```
