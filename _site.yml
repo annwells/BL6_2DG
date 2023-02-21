@@ -804,10 +804,10 @@ navbar:
   right:
     - icon: fa-connectdevelop
       href: http://carterdev:3838/2DG_SLE/
-    - icon: fa-bitbucket
-      href: https://bitbucket.jax.org/projects/CB/repos/sle_b6_2dg_aew/browse
-    - icon: fa-dropbox
-      href: https://www.dropbox.com/home/Chang_20190406_RNAseq_B6_96hr_4wk_2DG
+    - icon: fa-github
+      href: https://github.com/annwells/BL6_2DG/tree/main
+    - icon: fa-database
+      href: 10.6084/m9.figshare.22134095
     - icon: fa-paper-plane
       href: mailto:<ann.wells@jax.org, lucas.chang@jax.org>
       
