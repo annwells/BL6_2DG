@@ -264,12 +264,17 @@ eigen.expression <-function(eigens, expression){
     expression2 <- expression %>%
       dplyr::select(match(module.genes$Gene,colnames(expression)))
     
-    expression$Treatment <- gsub("ctrl", "Control", expression$Treatment)
+    expression$Treatment <- gsub("None", "Control", expression$Treatment)
+    expression$Tissue<- gsub("Pre-frontal Cortex", "Prefrontal Cortex", expression$Tissue)
+    expression$Tissue<- gsub("Hypothanamus","Hypothalamus", expression$Tissue)
     
     cat("\n###",name[[i]], "Module","\n")
     breaks<-seq(0,11,length.out = 50)
+    expression2 <- t(expression2)
+    anno <- as.data.frame(expression[,c("Time", "Treatment", "Tissue")])  
+    rownames(anno) <- colnames(expression2)
     colors <- list(Tissue = c("Spleen" = "coral3", "Kidney" = "deeppink4", "Liver" = "palegreen3", "Prefrontal Cortex" = "royalblue4", "Heart" = "darkorange", "Hippocampus" = "darkgoldenrod3", "Hypothalamus" = "thistle3", "Skeletal Muscle" = "firebrick", "Small Intestine" = "sienna3"), Treatment = c("Control" = "aquamarine3", "2DG" = "darkolivegreen"), Time = c("4 wks" = "orchid4", "96 hrs" = "deepskyblue2"))
-    g <- pheatmap(t(expression2), cluster_rows = T, cluster_cols = T, show_rownames = F, scale = "none", breaks = breaks, color = colorRampPalette(brewer.pal(12, "Paired"))(50), annotation_col = expression[,c("Treatment","Time","Tissue")], annotation_colors = colors, fontsize_col = 8)
+    g <- pheatmap(expression2, cluster_rows = T, cluster_cols = T, show_rownames = F, scale = "none", breaks = breaks, color = colorRampPalette(brewer.pal(12, "Paired"))(50), annotation_col = anno, annotation_colors = colors, fontsize_col = 8)
     p <- ggplot(eigens) + geom_bar(aes(eigens$X,unlist(eigens[i+1])), stat = "identity", color=name[[i]], fill = name[[i]]) + basic_theme + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) + labs(x = "Samples", y = "Module Summary Eigengene") + geom_hline(yintercept = 0, color = "black", size = .25)
     print(g)
     print(p)
@@ -766,32 +771,27 @@ Pathway.gene.ANOVA <- function(modules, WGCNA.gene) {
 
 ## Run GSVA
 
-GSVA.modules <- function(modules, logdata){
+GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
   gene.pathway <- readRDS(here("Data","gene_set_from_ensembl_gprofiler_KEGG_REACTOME_gene_annotation.RData"))
 
   Matched.module <- split(modules$Gene, modules$Module)
   module.gene <- list()
   for(i in 1:length(Matched.module)){
     module <- as.vector(Matched.module[[i]])
-    module.gene[[i]] <- logdata %>% 
-      subset(rownames(logdata) %in% module)
+    module.gene[[i]] <- logdata[match(module,rownames(logdata)),] #%>% 
+      #select(one_of(module))
     }
   names(module.gene) <- names(Matched.module)
-  
+
   tES <- list()
   for(s in 1:length(module.gene)){
-    flattened <- purrr::flatten(gene.pathway)
-    ES <- gsva(module.gene[[s]], gset.idx.list = gene.pathway, method = "plage", verbose = F)
+    ES <- gsva(as.matrix(module.gene[[s]]), gset.idx.list = gene.pathway, method = "plage", verbose = F)
     tES1 <- t(ES)
     tES[[s]] <- tES1[,colMeans(tES1) < 1]
     }
   names(tES) <- names(module.gene)
-  return(tES)
-}
 
-## GSVA table with expression direction
-GSVA.table <- function(data, tES){for(j in 1:length(tES)){
-  
+  for(j in 1:length(tES)){
   name <- str_split(names(tES)[j],"_")[[1]][2]
   cat("\n###", name, "{.tabset .tabset-fade .tabset-pills}","\n")
   
@@ -919,6 +919,54 @@ GSVA.table <- function(data, tES){for(j in 1:length(tES)){
             has_icon = TRUE,
             icon = "fa fa-save"
           ))
+  cat("\n \n")
+}
+}
+
+## ANOVA for genes within WGCNA pathways
+
+ANOVA.gene.pathways <- function(WGCNA.gene, logdata, tissuedata){
+  ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
+
+  for (i in 1:length(WGCNA.gene)){
+  cat("\n###",modules[i],"\n \n")
+  for(j in 1:length(WGCNA.gene[[i]])){
+    cat("\n####",names(WGCNA.gene[[i]])[j])
+    frame <- matrix(data = NA, nrow = length(WGCNA.gene[[i]][[j]]), ncol = 8)
+    
+    for(k in 1:length(WGCNA.gene[[i]][[j]])){
+      gene <- WGCNA.gene[[i]][[j]][k]
+      if(is_an_integer(which(names(logdata)==gene))==FALSE){
+        frame[k,] <- c(gene, "NA","NA","NA","NA","NA","NA","NA")}
+      else{
+        m <- art(data = tissuedata, logdata[,gene] ~ Time*Treatment)
+        
+        model <- anova(m)
+        adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
+        num <- which(names(log.tdata.FPKM.subset)==gene)
+        gene2 <- ensembl.location$external_gene_name[match(names(logdata)[num],ensembl.location$ensembl_gene_id)]
+        
+        frame[k,] <- c(gene2, names(logdata)[num], model[,7][2], adjust[2], model[,7][1], adjust[1], model[,7][3],adjust[3])
+      }
+    }
+    
+    frame <- as.data.frame(frame)
+    
+    print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", "Treatment by time", "BH Treatment by time")))
+    
+    output_name <- paste("Genes in", names(WGCNA.gene[[i]])[j], " pathway for Heart", modules[i])
+    
+    print(frame %>%
+            download_this(
+              output_name = output_name,
+              output_extension = ".csv",
+              button_label = "Download data as csv",
+              button_type = "info",
+              has_icon = TRUE,
+              icon = "fa fa-save"
+            ))
+    cat("\n \n")
+  }             
   cat("\n \n")
 }
 }
