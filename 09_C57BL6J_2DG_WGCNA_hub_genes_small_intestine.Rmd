@@ -78,7 +78,7 @@ log.tdata.FPKM.sample.info.subset.small.intestine$Time <- as.factor(log.tdata.FP
 log.tdata.FPKM.sample.info.subset.small.intestine$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.small.intestine$Treatment)
 
 for(m in module.labels) {
-    name <- strsplit(m,"_")[[1]][2]
+    name <- str_split(m,"_")[[1]][2]
     hub.met <- net.deg[modules$Gene,] %>%
       dplyr::mutate(Gene=modules$Gene) %>%
       dplyr::filter(modules$Module == m) %>%

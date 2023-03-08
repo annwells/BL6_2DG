@@ -53,7 +53,7 @@ log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rowna
 
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue %in% c("Hippocampus", "Hypothanamus","Pre-frontal Cortex")) %>% column_to_rownames()
 
-log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment[log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment=="None"] <- "Control"
+#log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment[log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment=="None"] <- "Control"
 
 modules <- read.csv(here("Data","Brain","log.tdata.FPKM.sample.info.subset.hip.hyp.cortex.WGCNA.module.membership.csv"), header=T)
 eigens <- read.csv(here("Data","Brain","log.tdata.FPKM.sample.info.subset.hip.hyp.cortex.WGCNA.module.eigens.csv"), header=T)

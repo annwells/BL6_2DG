@@ -66,12 +66,12 @@ Matched<-readRDS(here("Data","Brain","Annotated_genes_in_hip_hyp_cortex_WGCNA_Ch
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
 }  
-name <- strsplit(samples,"\"")
+name <- str_split(samples,"\"")
 name <- unlist(name)
 
 Treatment <- unclass(as.factor(log.tdata.FPKM.sample.info.subset.hip.hypo.cortex[,27238]))
@@ -86,12 +86,12 @@ phenotype <- data.frame(cbind(Tissue, Treatment, Time, Treat.Tissue, Treat.Time,
 nSamples <- nrow(log.tdata.FPKM.sample.info.subset.hip.hypo.cortex)
 
 MEs0 <- read.csv(here("Data","Brain","log.tdata.FPKM.sample.info.subset.hip.hyp.cortex.WGCNA.module.eigens.csv"),header = T, row.names = 1)
-name <- strsplit(names(MEs0),"_")
+name <- str_split(names(MEs0),"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
 }  
-name <- strsplit(samples,"\"")
+name <- str_split(samples,"\"")
 name <- unlist(name)
 colnames(MEs0) <-name
 MEs <- orderMEs(MEs0)
@@ -113,12 +113,12 @@ heat
 
 knitr::kable(moduleTraitPvalue)
 
-moduleTraitPvalue %>%
+as.data.frame(moduleTraitPvalue) %>%
   download_this(
     output_name = "Brain Module-Trait Relationship",
     output_extension = ".csv",
     button_label = "Download data as csv",
-    button_type = "default",
+    button_type = "info",
     has_icon = TRUE,
     icon = "fa fa-save"
   )

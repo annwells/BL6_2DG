@@ -53,8 +53,6 @@ log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rowna
 
 log.tdata.FPKM.sample.info.subset.spleen <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Spleen") %>% column_to_rownames()
 
-log.tdata.FPKM.sample.info.subset.spleen$Treatment[log.tdata.FPKM.sample.info.subset.spleen$Treatment=="None"] <- "Control"
-
 modules <- read.csv(here("Data","Spleen","log.tdata.FPKM.sample.info.subset.spleen.WGCNA.module.membership.csv"), header=T)
 eigens <- read.csv(here("Data","Spleen","log.tdata.FPKM.sample.info.subset.spleen.WGCNA.module.eigens.csv"), header=T)
 ```

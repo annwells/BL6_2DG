@@ -66,7 +66,7 @@ Matched<-readRDS(here("Data","Liver","Annotated_genes_in_liver_WGCNA_Chang_B6_96
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -82,7 +82,7 @@ phenotype <- data.frame(cbind(Treatment, Time, Treat.Time))
 nSamples <- nrow(log.tdata.FPKM.sample.info.subset.liver)
 
 MEs0 <- read.csv(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.WGCNA.module.eigens.csv"),header = T, row.names = 1)
-name <- strsplit(names(MEs0),"_")
+name <- str_split(names(MEs0),"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -109,7 +109,7 @@ heat
 
 knitr::kable(moduleTraitPvalue)
 
-moduleTraitPvalue %>%
+as.data.frame(moduleTraitPvalue) %>%
   download_this(
     output_name = "Liver Module-Trait Relationship",
     output_extension = ".csv",

@@ -61,7 +61,7 @@ WGCNA.pathway <-readRDS(here("Data","Chang_B6_96hr_4wk_gprofiler_pathway_annotat
 Matched<-readRDS(here("Data","Annotated_genes_in_WGCNA_Chang_B6_96hr_4wk.RData"))
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -81,7 +81,7 @@ phenotype <- data.frame(cbind(Tissue, Treatment, Time, Treat.Tissue, Treat.Time,
 nSamples <- nrow(log.tdata.FPKM.sample.info)
 
 MEs0 <- read.csv(here("Data","log.tdata.FPKM.sample.info.subset.WGCNA.module.eigens.csv"),header = T, row.names = 1)
-name <- strsplit(names(MEs0),"_")
+name <- str_split(names(MEs0),"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -110,7 +110,7 @@ heat
 ```{r, results='asis'}
 print(knitr::kable(moduleTraitPvalue))
 
-moduleTraitPvalue %>%
+as.data.frame(moduleTraitPvalue) %>%
   download_this(
     output_name = "Module-Trait Relationship All Data",
     output_extension = ".csv",

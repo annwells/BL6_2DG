@@ -34,7 +34,7 @@ knitr::opts_knit$set(progress=FALSE)
 This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each pathway identified, across modules.
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "pander", "GSVA", "kableExtra","downloadthis")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "pander", "GSVA", "kableExtra","downloadthis","DT")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -66,46 +66,34 @@ log.data.FPKM.subset.hip.hyp.cortex <- log.tdata.FPKM.sample.info.subset.hip.hyp
   t()
 
 genes.pathway <- readRDS(here("Data", "Brain", "Chang_B6_96hr_4wk_gprofiler_gene_annotation_list_hip_hyp_cortex_WGCNA.RData"))
+
+modules <- readRDS(here("Data","Brain","log.tdata.FPKM.sample.info.subset.hip.hyp.cortex.WGCNA.module.membership.RData"))
 ```
 
 ## Gene Set Variation Analysis
 
 Gene Set Variation Analysis is a non-parametric, unsupervised method that assesses gene set enrichment. The method is performed using the R package GSVA. It is performed without phenotypes, which allows for complex experimental studies to be assessed for pathway enrichment. Gene sets can be provided or pulled down from websites that store pre-defined gene sets. The gene sets used for this dataset were determined by assessing pathways present within each module through WGCNA. To obtain these pathways WGCNA was performed to cluster genes into modules. Pathways were identified within each module using gProfiler2. The pathways for each module were then used as the gene set for GSVA to determine gene expression within each pathway identified. 
 
-```{r, results='asis',cache=TRUE}
-flattened <- purrr::flatten(genes.pathway)
-ES <- gsva(log.data.FPKM.subset.hip.hyp.cortex, gset.idx.list = flattened)
-tES <- t(ES)
+```{r echo=FALSE, include = FALSE}
+# Why, oh why do I need this chunk?
+DT::datatable(matrix())
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
 
 Aligned rank transformation was used to determine which factors significantly altered each pathway. If a factor or interaction with more than two factors is identified as significant then contrast statements are performed using emmeans or testInteraction to identify which factors are significantly different.
 
-```{r, results='asis'}
+```{r, results='asis',cache=TRUE}
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Time <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Time)
 
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment)
 
-log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Tissue)
-
-for(i in 1:ncol(tES)){
-  m <- art(data = log.tdata.FPKM.sample.info.subset.hip.hyp.cortex, tES[,i] ~ Time*Treatment*Tissue)
-  model <- anova(m)
-  adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-  
-  cat("\n###", colnames(tES)[i], "\n")
-  print(knitr::kable(cbind(model,adjust)) %>% 
-          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-  cat("\n \n")
-}
-```
+GSVA.modules(modules, log.data.FPKM.subset.hip.hyp.cortex, log.tdata.FPKM.sample.info.subset.hip.hyp.cortex)
 
 
-## Post-hoc Analysis
-```{r}
-Tissue.diff <- emmeans(artlm(m,"Tissue"), pairwise ~ Tissue)
-panderOptions('knitr.auto.asis', FALSE)
-knitr::kable(Tissue.diff$emmeans)
-knitr::kable(Tissue.diff$contrasts)
+
+#GSVA.table(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex, tES)
+#flattened <- purrr::flatten(genes.pathway)
+#ES <- gsva(log.data.FPKM.subset.hip.hyp.cortex, gset.idx.list = flattened)
+#tES <- t(ES)
 ```

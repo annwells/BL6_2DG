@@ -71,7 +71,7 @@ Matched<-readRDS(here("Data","Brain","Annotated_genes_in_hip_hyp_cortex_WGCNA_Ch
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -87,40 +87,9 @@ modules <- unlist(modules)
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
-```{r}
+```{r ANOVA, cache=TRUE}
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Time <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Time)
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment)
-log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Tissue)
 
-genes <- unlist(WGCNA.gene)
-```
-
-```{r, results='asis', cache=TRUE, eval=FALSE}
-
-cl <- makeCluster(40)
-registerDoParallel(cl)
-
-stat.table <- foreach(i = 1:length(genes),.packages = c("ARTool","tidyverse","kableExtra")) %dopar% {
-   m2 <- art(data = log.tdata.FPKM.sample.info.subset.hip.hyp.cortex, log.tdata.FPKM.sample.info.subset.hip.hyp.cortex[,genes[i]] ~ Time*Treatment*Tissue)
-
-   model <- anova(m2)
-
-   adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-
-   return(cbind(model,adjust))
-}
-
-stopCluster(cl)
-
-saveRDS(stat.table,here("Data","Brain","Chang_B6_96hr_4wk_WGCNA_gene_ANOVA_ART_brain.RData"))
-```
-
-```{r, results='asis', cache = TRUE}
-
-stat.table <- readRDS(here("Data","Brain","Chang_B6_96hr_4wk_WGCNA_gene_ANOVA_ART_brain.RData"))
-
-external.gene.name <- ensembl.location$external_gene_name[match(genes,ensembl.location$ensembl_gene_id)] 
-names(stat.table) <- external.gene.name
-
-system.time(Pathway.gene.ANOVA(modules, WGCNA.gene))
+ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.hip.hyp.cortex)
 ```

@@ -70,67 +70,22 @@ Matched<-readRDS(here("Data","Skeletal Muscle","Annotated_genes_in_skeletal_musc
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
 }  
-name <- strsplit(samples,"\"")
+name <- str_split(samples,"\"")
 name <- unlist(name)
 modules <- unique(name)
 modules <- c(modules)
 ```
 
 ## ANOVA
-```{r, results='asis'}
+```{r ANOVA, cache=TRUE}
 log.tdata.FPKM.sample.info.subset.skeletal.muscle$Time <- as.factor(log.tdata.FPKM.sample.info.subset.skeletal.muscle$Time)
 log.tdata.FPKM.sample.info.subset.skeletal.muscle$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.skeletal.muscle$Treatment)
 
-genes <- unlist(WGCNA.gene)
+ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.muscle)
 
-genes <- unique(genes)[-2710]
-
-genes.identified <- log.tdata.FPKM.sample.info.subset.skeletal.muscle[,c(genes,"Time","Treatment")]
-
-gene.name <- ensembl.location$external_gene_name[match(names(genes.identified),ensembl.location$ensembl_gene_id)]
-gene.name[length(gene.name)-1] <- "Time"
-gene.name[length(gene.name)] <- "Treatment"
-
-stat.table <- list()
-
-for(i in 1:(length(genes.identified)-2)){
-print(i)   
-m2 <- art(data = genes.identified, genes.identified[,i] ~ Time*Treatment)
-
-model <- anova(m2)
-
-adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-
-stat.table[[i]] <- cbind(model,adjust)
-}
-
-names(stat.table) <- gene.name
-   
-for(m in 1:length(modules)) {
-    cat("\n###",modules[m], "{.tabset .tabset-fade .tabset-pills}","\n")
-   
-          for(j in 1:length(WGCNA.gene[[m]])){
-             
-             
-            cat("\n####",names(WGCNA.gene[[m]][j]),"{.tabset .tabset-fade .tabset-pills}","\n")
-             
-            for(k in 1:length(WGCNA.gene[[m]][[j]])){
-              if(WGCNA.gene[[m]][[j]] == 0) {"NA"}
-              else{
-              
-                cat("\n#####",gene.name[k],"{.tabset .tabset-fade .tabset-pills}","\n")
-                
-                print(knitr::kable(stat.table[[gene.name[k]]]) %>%
-                        column_spec(8, color = "white", background = spec_color(stat.table[[gene.name[k]]]$adjust, end = 0.05, scale_from = c(0,0.05))))
-             cat("\n \n")
-             }
-          cat("\n \n")
-          }
-    cat("\n \n")}
-}
 ```

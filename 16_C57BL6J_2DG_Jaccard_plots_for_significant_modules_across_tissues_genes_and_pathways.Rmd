@@ -72,7 +72,7 @@ Matched.module.heart <- split(heart$Gene, heart$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.heart)){
     modules <- unique(heart$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -88,7 +88,7 @@ Matched.module.hip <- split(hip$Gene, hip$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.hip)){
     modules <- unique(hip$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -104,7 +104,7 @@ Matched.module.hyp <- split(hyp$Gene, hyp$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.hyp)){
     modules <- unique(hyp$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -120,7 +120,7 @@ Matched.module.kidney <- split(kidney$Gene, kidney$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.kidney)){
     modules <- unique(kidney$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -136,7 +136,7 @@ Matched.module.liver <- split(liver$Gene, liver$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.liver)){
     modules <- unique(liver$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -152,7 +152,7 @@ Matched.module.cortex <- split(cortex$Gene, cortex$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.cortex)){
     modules <- unique(cortex$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -168,7 +168,7 @@ Matched.module.muscle <- split(muscle$Gene, muscle$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.muscle)){
     modules <- unique(muscle$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -184,7 +184,7 @@ Matched.module.small.intestine <- split(small.intestine$Gene, small.intestine$Mo
 modulenames <- c()
   for(i in 1:length(Matched.module.small.intestine)){
     modules <- unique(small.intestine$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])
@@ -200,7 +200,7 @@ Matched.module.spleen <- split(spleen$Gene, spleen$Module)
 modulenames <- c()
   for(i in 1:length(Matched.module.spleen)){
     modules <- unique(spleen$Module)
-    name <- strsplit(modules,"_")
+    name <- str_split(modules,"_")
     modulenames[i] <- name[[i]][2]
     
     #gene <- as.vector(Matched.module[[i]])

@@ -81,7 +81,7 @@ log.tdata.FPKM.sample.info.subset$Treatment <- as.factor(log.tdata.FPKM.sample.i
 log.tdata.FPKM.sample.info.subset$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset$Tissue)
 
 for(m in module.labels) {
-    name <- strsplit(m,"_")[[1]][2]
+    name <- str_split(m,"_")[[1]][2]
     hub.met <- net.deg[modules$Gene,] %>%
       dplyr::mutate(Gene=modules$Gene) %>%
       dplyr::filter(modules$Module == m) %>%

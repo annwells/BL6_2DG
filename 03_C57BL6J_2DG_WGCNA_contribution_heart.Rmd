@@ -109,7 +109,7 @@ heat
 
 knitr::kable(moduleTraitPvalue) 
 
-moduleTraitPvalue %>%
+as.data.frame(moduleTraitPvalue) %>%
   download_this(
     output_name = "Heart Module-Trait Relationship",
     output_extension = ".csv",

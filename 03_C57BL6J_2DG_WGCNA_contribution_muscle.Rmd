@@ -82,7 +82,7 @@ phenotype <- data.frame(cbind(Treatment, Time, Treat.Time))
 nSamples <- nrow(log.tdata.FPKM.sample.info.subset.skeletal.muscle)
 
 MEs0 <- read.csv(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.eigens.csv"),header = T, row.names = 1)
-name <- strsplit(names(MEs0),"_")
+name <- str_split(names(MEs0),"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -109,7 +109,7 @@ heat
 
 knitr::kable(moduleTraitPvalue)
 
-moduleTraitPvalue %>%
+as.data.frame(moduleTraitPvalue) %>%
   download_this(
     output_name = "Skeletal Muscle Module-Trait Relationship",
     output_extension = ".csv",

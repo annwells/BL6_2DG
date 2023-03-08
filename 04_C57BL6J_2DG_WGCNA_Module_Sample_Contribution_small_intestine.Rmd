@@ -53,8 +53,6 @@ log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rowna
 
 log.tdata.FPKM.sample.info.subset.small.intestine <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Small Intestine") %>% column_to_rownames()
 
-log.tdata.FPKM.sample.info.subset.small.intestine$Treatment[log.tdata.FPKM.sample.info.subset.small.intestine$Treatment=="None"] <- "Control"
-
 modules <- read.csv(here("Data","Small Intestine","log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA.module.membership.csv"), header=T)
 eigens <- read.csv(here("Data","Small Intestine","log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA.module.eigens.csv"), header=T)
 ```

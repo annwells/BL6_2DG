@@ -25,7 +25,7 @@ knitr::opts_knit$set(progress=FALSE)
 This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","pheatmap","Hmisc")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","pheatmap")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -151,31 +151,23 @@ names(modules.tissue) <- c("heart.darkgreen", "hypothalamus.bisque4", "prefronta
 ## Correlations {.tabset .tabset-fade .tabset-pills}
 
 ```{r corr loop, results='asis'}
-correlations <- list()
-pvalue <- list()
-#names.correlations <- list()
 for(i in 1:length(modules.tissue)){
   for(j in 1:length(modules.tissue)){
     cat("\n###",paste(names(modules.tissue[i]), "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
     correlations <- cor(modules.tissue[[i]], modules.tissue[[j]])
-    #pvalue[[i]] <- rcorr(modules.tissue[[i]], modules.tissue[[j]])$P
-    #names.correlations[[i]] <- paste(names(modules.tissue[i]), "vs", names(modules.tissue[j]))
-    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 8, fontsize_row = 8, color = colorRampPalette(rev(brewer.pal(n = 12, name =
-  "Paired")))(100))
+    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 2, color = colorRampPalette(rev(brewer.pal(n = 11, name =
+  "Spectral")))(100))
     cat("\n \n")
   }
 }
-#names.correlations <- unlist(names.correlations)
-#names(correlations) <- names.correlations
-#names(pvalue) <- names.correlations
 ```
 
 ```{r corr loop liver, results='asis'}
   for(j in 1:length(modules.tissue)){
     cat("\n###",paste("liver.darkolivegreen", "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
     correlations <- cor(liver.darkolivegreen, modules.tissue[[j]])
-    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 4, color = colorRampPalette(rev(brewer.pal(n = 12, name =
-  "Paired")))(100), cluster_rows = F)
+    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 4, color = colorRampPalette(rev(brewer.pal(n = 11, name =
+  "Spectral")))(100), cluster_rows = F)
     cat("\n \n")
   }
 

@@ -51,8 +51,6 @@ log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5]
 log.tdata.FPKM.sample.info.subset <- cbind(log.tdata.FPKM.subset,tdata.FPKM.sample.info[,27238:27240])
 log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(rowname != "A113") %>% column_to_rownames()
 
-log.tdata.FPKM.sample.info.subset$Treatment[log.tdata.FPKM.sample.info.subset$Treatment=="None"] <- "Control"
-
 modules <- read.csv(here("Data","log.tdata.FPKM.sample.info.subset.WGCNA.module.membership.csv"), header=T)
 eigens <- read.csv(here("Data","log.tdata.FPKM.sample.info.subset.WGCNA.module.eigens.csv"), header=T)
 ```

@@ -67,106 +67,20 @@ log.data.FPKM.subset <- log.tdata.FPKM.sample.info.subset %>%
 
 Gene Set Variation Analysis is a non-parametric, unsupervised method that assesses gene set enrichment. The method is performed using the R package GSVA. It is performed without phenotypes, which allows for complex experimental studies to be assessed for pathway enrichment. Gene sets can be provided or pulled down from websites that store pre-defined gene sets. The gene sets used for this dataset were determined by assessing pathways present within each module through WGCNA. To obtain these pathways WGCNA was performed to cluster genes into modules. Overrepresented pathways were identified within each module using gProfiler2. To assess enrichment of pathways, Gene set variation analysis (GSVA) was performed. Genes of interest need to be compared to a gene set. To create this gene set, a complete ensembl gene list was assessed using gProfiler2 to identify pathways, regardless of significance. Each set of genes within each module was then assessed against the gene set to perform GSVA.
 
-```{r, cache=TRUE}
 
-modules<-read.csv(here("Data","log.tdata.FPKM.sample.info.subset.WGCNA.module.membership.csv"), header=T)
-
-tES <- GSVA.modules(modules, log.data.FPKM.subset)
+```{r echo=FALSE, include = FALSE}
+# Why, oh why do I need this chunk?
+DT::datatable(matrix())
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
-```{r, results='asis', cache=TRUE}
+
+Aligned rank transformation was used to determine which factors significantly altered each pathway. If a factor or interaction with more than two factors is identified as significant then contrast statements are performed using emmeans or testInteraction to identify which factors are significantly different.
+
+```{r, results='asis',cache=TRUE}
 log.tdata.FPKM.sample.info.subset$Time <- as.factor(log.tdata.FPKM.sample.info.subset$Time)
 
 log.tdata.FPKM.sample.info.subset$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset$Treatment)
 
-log.tdata.FPKM.sample.info.subset$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset$Tissue)
-
-for(j in 1:length(tES)){
-  
-  name <- str_split(names(tES)[j],"_")[[1]][2]
-  cat("\n###", name, "{.tabset .tabset-fade .tabset-pills}","\n")
-
-  for(i in 1:ncol(tES[[j]])){
-  m <- art(data = log.tdata.FPKM.sample.info.subset, tES[[j]][,i] ~ Time*Treatment*Tissue)
-  
-  model <- anova(m)
-  adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-  
-  pathway.name <- str_split(colnames(as.data.frame(tES[j]))[i],"_")[[1]][2]
-  
-  cat("\n####", pathway.name, "\n")
-  print(knitr::kable(cbind(model,adjust)[-1]) %>% 
-          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-  cat("\n \n")
-  }
-    cat("\n \n")
-}
-```
-
-## Post-hoc Analysis {.tabset .tabset-fade .tabset-pills}
-
-### Treatment {.tabset .tabset-fade .tabset-pills}
-#### Contrast
-```{r}
-Treat.diff <- emmeans(artlm(m,"Treatment"), pairwise ~ Treatment)
-panderOptions('knitr.auto.asis', FALSE)
-knitr::kable(Treat.diff$emmeans)
-knitr::kable(Treat.diff$contrasts)
-```
-
-#### Bar plot
-```{r}
-bar.data <- as.data.frame(cbind(tES,Time = log.tdata.FPKM.sample.info.subset$Time, Treatment = log.tdata.FPKM.sample.info.subset$Treatment,Tissue = log.tdata.FPKM.sample.info.subset$Tissue))
-p <- ggplot(bar.data,aes(x = Treatment, y = V1, fill = Treatment)) + geom_bar(stat = "identity") +
-   geom_errorbar()
-```
-
-### Tissue {.tabset .tabset-fade .tabset-pills}
-#### Contrast
-```{r}
-Tissue.diff <- emmeans(artlm(m,"Tissue"), pairwise ~ Tissue)
-panderOptions('knitr.auto.asis', FALSE)
-knitr::kable(Tissue.diff$emmeans)
-knitr::kable(Tissue.diff$contrasts)
-```
-
-#### Bar plot
-```{r}
-```
-
-### Time by treatment {.tabset .tabset-fade .tabset-pills}
-#### Contrast
-```{r, results='asis'}
-TI <- testInteractions(artlm(m,"Time:Treatment"), pairwise = c("Time", 'Treatment'), adjustment = "BH")
-panderOptions('knitr.auto.asis', FALSE)
-print(pander(TI))
-```
-
-#### Bar plot
-```{r}
-```
-
-### Time by tissue {.tabset .tabset-fade .tabset-pills}
-#### Contrast
-```{r, results='asis'}
-TI <- testInteractions(artlm(m,"Time:Tissue"), pairwise = c("Time", 'Tissue'), adjustment = "BH")
-panderOptions('knitr.auto.asis', FALSE)
-print(pander(TI))
-```
-
-#### Bar plot
-```{r}
-```
-
-### Treatment by tissue {.tabset .tabset-fade .tabset-pills}
-#### Contrast
-```{r, results='asis'}
-TI <- testInteractions(artlm(m,"Treatment:Tissue"), pairwise = c('Treatment', 'Tissue'), adjustment = "BH")
-panderOptions('knitr.auto.asis', FALSE)
-print(pander(TI))
-```
-
-#### Bar plot
-```{r}
+GSVA.modules(modules, log.data.FPKM.subset, log.tdata.FPKM.sample.info.subset)
 ```

@@ -53,6 +53,8 @@ log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rowna
 
 log.tdata.FPKM.sample.info.subset.hypothalamus <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Hypothanamus") %>% column_to_rownames()
 
+log.tdata.FPKM.sample.info.subset.hypothalamus$Tissue <- gsub("Hypothanamus","Hypothalamus",log.tdata.FPKM.sample.info.subset.hypothalamus$Tissue)
+
 modules <- read.csv(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.membership.csv"), header=T)
 eigens <- read.csv(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.eigens.csv"), header=T)
 ```

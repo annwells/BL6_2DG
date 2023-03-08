@@ -95,7 +95,7 @@ for (m in colnames(module.eigens)) {
   model <- anova(a)
   adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
   
-  name <- sapply(strsplit(colnames(module.eigens[m]),"_"),"[",2)
+  name <- sapply(str_split(colnames(module.eigens[m]),"_"),"[",2)
   cat("\n### Module", name, "\n")
   print(knitr::kable(cbind(model,adjust)) %>% 
           column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
@@ -110,7 +110,7 @@ Interaction plots were created to identify which modules have a potential intera
 ```{r,results='asis'}
 for (m in module.labels) {
   p = plot.interaction(model.data, "Time", "Treatment", "Tissue", resp = m)
-  name <- sapply(strsplit(m,"_"),"[",2)
+  name <- sapply(str_split(m,"_"),"[",2)
   cat("\n###",name,"\n")
   print(p)
   cat("\n \n")

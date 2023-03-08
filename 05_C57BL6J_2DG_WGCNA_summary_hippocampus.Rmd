@@ -155,12 +155,12 @@ Matched<-readRDS(here("Data","Hippocampus","Annotated_genes_in_hippocampus_WGCNA
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
 }  
-name <- strsplit(samples,"\"")
+name <- str_split(samples,"\"")
 name <- unlist(name)
 
 Treatment <- unclass(as.factor(log.tdata.FPKM.sample.info.subset.hippocampus[,27238]))
@@ -171,12 +171,12 @@ phenotype <- data.frame(cbind(Treatment, Time, Treat.Time))
 nSamples <- nrow(log.tdata.FPKM.sample.info.subset.hippocampus)
 
 MEs0 <- read.csv(here("Data","Hippocampus","log.tdata.FPKM.sample.info.subset.hippocampus.WGCNA.module.eigens.csv"),header = T, row.names = 1)
-name <- strsplit(names(MEs0),"_")
+name <- str_split(names(MEs0),"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
 }  
-name <- strsplit(samples,"\"")
+name <- str_split(samples,"\"")
 name <- unlist(name)
 colnames(MEs0) <-name
 MEs <- orderMEs(MEs0)

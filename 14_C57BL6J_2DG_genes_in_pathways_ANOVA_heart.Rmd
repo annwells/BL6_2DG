@@ -35,7 +35,7 @@ knitr::opts_knit$set(progress=FALSE)
 This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","downloadthis")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","downloadthis","assertive")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -65,13 +65,17 @@ log.tdata.FPKM.sample.info <- log.tdata.FPKM.sample.info %>% rownames_to_column(
 
 log.tdata.FPKM.sample.info.subset.heart <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Heart") %>% column_to_rownames()
 
+log.tdata.FPKM.subset <- subset(log.tdata.FPKM.sample.info.subset.heart, select = -c(Time,Treatment,Tissue))
+
+log.tdata.FPKM.subset <- log.tdata.FPKM.subset[,colMeans(log.tdata.FPKM.subset != 0) > 0.5] 
+
 ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
 
 Matched<-readRDS(here("Data","Heart","Annotated_genes_in_heart_WGCNA_Chang_B6_96hr_4wk.RData"))
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -87,42 +91,9 @@ modules <- unlist(modules)
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
-```{r}
+```{r ANOVA, cache=TRUE}
 log.tdata.FPKM.sample.info.subset.heart$Time <- as.factor(log.tdata.FPKM.sample.info.subset.heart$Time)
 log.tdata.FPKM.sample.info.subset.heart$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.heart$Treatment)
-log.tdata.FPKM.sample.info.subset.heart$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.heart$Tissue)
 
-genes <- unlist(WGCNA.gene)
-```
-
-```{r, results='asis', cache=TRUE}
-
-frame <- matrix(data = NA, nrow = length(log.tdata.FPKM.subset), ncol = 8)
-
-for(i in 1:length(log.tdata.FPKM.subset)){
-  m <- art(data = log.tdata.FPKM.sample.info.subset.heart, log.tdata.FPKM.subset[,i] ~ Time*Treatment)
-  
-  model <- anova(m)
-  adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-  
-  gene <- ensembl.location$external_gene_name[match(names(log.tdata.FPKM.subset)[i],ensembl.location$ensembl_gene_id)]
-
-  frame[i,] <- c(gene, names(log.tdata.FPKM.subset)[i], model[,7][2], adjust[2], model[,7][1], adjust[1], model[,7][3],adjust[3])
-}
-
-colnames(frame) <- c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", " Treatment by time", "BH Treatment by time")
-
-frame <- as.data.frame(frame)
-
-saveRDS(frame, here("Data","Heart","Chang_B6_96hr_4wk_WGCNA_gene_ANOVA_ART_heart.RData"))
-```
-
-```{r, results='asis', cache = TRUE}
-
-stat.table <- readRDS(here("Data","Heart","Chang_B6_96hr_4wk_WGCNA_gene_ANOVA_ART_heart.RData"))
-
-external.gene.name <- ensembl.location$external_gene_name[match(genes,ensembl.location$ensembl_gene_id)] 
-names(stat.table) <- external.gene.name
-
-system.time(Pathway.gene.ANOVA(modules, WGCNA.gene))
+ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.heart)
 ```

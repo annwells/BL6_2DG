@@ -53,8 +53,6 @@ log.tdata.FPKM.sample.info.subset <- log.tdata.FPKM.sample.info.subset %>% rowna
 
 log.tdata.FPKM.sample.info.subset.hippocampus <- log.tdata.FPKM.sample.info.subset %>% rownames_to_column() %>% filter(Tissue == "Hippocampus") %>% column_to_rownames()
 
-log.tdata.FPKM.sample.info.subset.hippocampus$Treatment[log.tdata.FPKM.sample.info.subset.hippocampus$Treatment=="None"] <- "Control"
-
 modules <- read.csv(here("Data","Hippocampus","log.tdata.FPKM.sample.info.subset.hippocampus.WGCNA.module.membership.csv"), header=T)
 eigens <- read.csv(here("Data","Hippocampus","log.tdata.FPKM.sample.info.subset.hippocampus.WGCNA.module.eigens.csv"), header=T)
 ```

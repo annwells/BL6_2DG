@@ -69,54 +69,20 @@ log.data.FPKM.subset.SM.SI.spleen <- log.tdata.FPKM.sample.info.subset.SM.SI.spl
 
 Gene Set Variation Analysis is a non-parametric, unsupervised method that assesses gene set enrichment. The method is performed using the R package GSVA. It is performed without phenotypes, which allows for complex experimental studies to be assessed for pathway enrichment. Gene sets can be provided or pulled down from websites that store pre-defined gene sets. The gene sets used for this dataset were determined by assessing pathways present within each module through WGCNA. To obtain these pathways WGCNA was performed to cluster genes into modules. Overrepresented pathways were identified within each module using gProfiler2. To assess enrichment of pathways, Gene set variation analysis (GSVA) was performed. Genes of interest need to be compared to a gene set. To create this gene set, a complete ensembl gene list was assessed using gProfiler2 to identify pathways, regardless of significance. Each set of genes within each module was then assessed against the gene set to perform GSVA.
 
-```{r, cache=TRUE}
 
-modules<-read.csv(here("Data","SM.SI.spleen","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.WGCNA.module.membership.csv"), header=T)
-
-tES <- GSVA.modules(modules, log.data.FPKM.subset.SM.SI.spleen)
+```{r echo=FALSE, include = FALSE}
+# Why, oh why do I need this chunk?
+DT::datatable(matrix())
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
 
 Aligned rank transformation was used to determine which factors significantly altered each pathway. If a factor or interaction with more than two factors is identified as significant then contrast statements are performed using emmeans or testInteraction to identify which factors are significantly different.
 
-```{r, results='asis', cache=TRUE}
+```{r, results='asis',cache=TRUE}
 log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Time <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Time)
 
 log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Treatment)
 
-log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Tissue)
-
-for(j in 1:length(tES)){
-  
-  name <- str_split(names(tES)[j],"_")[[1]][2]
-  cat("\n###", name, "{.tabset .tabset-fade .tabset-pills}","\n")
-
-  for(i in 1:ncol(tES[[j]])){
-  m <- art(data = log.tdata.FPKM.sample.info.subset.SM.SI.spleen, tES[[j]][,i] ~ Time*Treatment*Tissue)
-  
-  model <- anova(m)
-  adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-  
-  pathway.name <- str_split(colnames(as.data.frame(tES[j]))[i],"_")[[1]][2]
-  
-  cat("\n####", pathway.name, "\n")
-  print(knitr::kable(cbind(model,adjust)[-1]) %>% 
-          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-  cat("\n \n")
-  }
-    cat("\n \n")
-}
-```
-
-## Post-hoc Analysis
-```{r}
-Tissue.diff <- emmeans(artlm(m,"Tissue"), pairwise ~ Tissue)
-panderOptions('knitr.auto.asis', FALSE)
-knitr::kable(Tissue.diff$emmeans)
-knitr::kable(Tissue.diff$contrasts)
-```
-
-## Tissue bar plot
-```{r}
+GSVA.modules(modules, log.data.FPKM.subset.SM.SI.spleen, log.tdata.FPKM.sample.info.subset.SM.SI.spleen)
 ```

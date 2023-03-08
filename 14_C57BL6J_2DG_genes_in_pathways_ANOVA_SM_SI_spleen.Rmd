@@ -67,7 +67,7 @@ Matched<-readRDS(here("Data","SM.SI.spleen","Annotated_genes_in_SM_SI_spleen_WGC
 
 
 module.names <- Matched$X..Module.
-name <- strsplit(module.names,"_")
+name <- str_split(module.names,"_")
 samples <-c()
 for(i in 1:length(name)){
 samples[[i]] <- name[[i]][2]
@@ -83,41 +83,9 @@ modules <- unlist(modules)
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
-```{r}
+```{r ANOVA, cache=TRUE}
 log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Time <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Time)
 log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Treatment)
-log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Tissue)
 
-genes <- unlist(WGCNA.gene)
-genes <- genes[-c(9870,25160)]
-```
-
-```{r, results='asis', cache=TRUE, eval=FALSE}
-
-cl <- makeCluster(30)
-registerDoParallel(cl)
-
-stat.table <- foreach(i = 1:length(genes),.packages = c("ARTool","tidyverse","kableExtra")) %dopar% {
-   m2 <- art(data = log.tdata.FPKM.sample.info.subset.SM.SI.spleen, log.tdata.FPKM.sample.info.subset.SM.SI.spleen[,genes[i]] ~ Time*Treatment*Tissue)
-
-   model <- anova(m2)
-
-   adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-
-   return(cbind(model,adjust))
-}
-
-stopCluster(cl)
-
-saveRDS(stat.table,here("Data","SM.SI.spleen","Chang_B6_96hr_4wk_WGCNA_gene_ANOVA_ART.RData"))
-```
-
-```{r, results='asis', cache = TRUE}
-
-stat.table <- readRDS(here("Data","SM.SI.spleen","Chang_B6_96hr_4wk_WGCNA_gene_ANOVA_ART.RData"))
-
-external.gene.name <- ensembl.location$external_gene_name[match(genes,ensembl.location$ensembl_gene_id)] 
-names(stat.table) <- external.gene.name
-
-system.time(Pathway.gene.ANOVA(modules, WGCNA.gene))
+ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.SM.SI.spleen)
 ```

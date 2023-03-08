@@ -89,7 +89,6 @@ colnames(frame) <- c("External Gene Name", "Gene ID", "Treatment", "BH Treatment
 
 frame <- as.data.frame(frame)
 
-#Treatment.sig.only <- 
 ```
 
 ```{r}
