@@ -210,8 +210,9 @@ genes.pathways.list <-function(pathways, matched){
 }
 
 ## Plot Module membership vs. Gene significance
-MMvGS <- function(modulename, geneModuleMembership, geneTraitSignificance){
+MMvGS <- function(modulename, geneModuleMembership, geneTraitSignificance, MEs){
   module <- modulename
+  modNames <- substring(names(MEs), 1)
   column <- match(module, modNames)
   moduleGenes = name==module
   external_gene <- Matched %>% 
@@ -236,12 +237,12 @@ MMvGS <- function(modulename, geneModuleMembership, geneTraitSignificance){
   }
   sizeGrWindow(7, 7)
   par(mfrow = c(1,1))
-  p <- plot_ly(scattermembershiptrait, x = scattermembershiptrait[,3], y = scattermembershiptrait[,4]) %>% 
-    add_trace(marker = list(size = 5, color = module2, line = list(color = "grey50", width = 1)), type = "scatter", mode = "markers", text = scattermembershiptrait[,2], hovertext = scattermembershiptrait[,1], hovertemplate = paste('Gene name: %{text}',
+  p <- plotly::plot_ly(scattermembershiptrait, x = scattermembershiptrait[,3], y = scattermembershiptrait[,4]) %>% 
+    plotly::add_trace(marker = list(size = 5, color = module2, line = list(color = "grey50", width = 1)), type = "scatter", mode = "markers", text = scattermembershiptrait[,2], hovertext = scattermembershiptrait[,1], hovertemplate = paste('Gene name: %{text}',
                                                                                                                                                                                                                                        '<br>Gene: %{hovertext}',
                                                                                                                                                                                                                                        '<br>MM: %{x}<br>',
                                                                                                                                                                                                                                        'P-value: %{y}')) %>%
-    layout(title = paste("Module membership vs. gene significance\n"), xaxis = list(title = paste("Module Membership in", module, "module")), yaxis = list( title = paste("Gene significance for", names(geneTraitSignificance))), showlegend =FALSE)
+    plotly::layout(title = paste("Module membership vs. gene significance\n"), xaxis = list(title = paste("Module Membership in", module, "module")), yaxis = list( title = paste("Gene significance for", names(geneTraitSignificance))), showlegend =FALSE)
   return(p)
 }
 
@@ -797,14 +798,14 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
   
   table.df <- data.frame(matrix(NA, 0, 5))
   
-  for(i in 1:ncol(tES[[j]])){
-    m <- art(data = data, tES[[j]][,i] ~ Time*Treatment)
+  for(f in 1:ncol(tES[[j]])){
+    m <- art(data = data, tES[[j]][,f] ~ Time*Treatment)
     model <- anova(m)
     adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
     
-    pathway.name <- str_split(colnames(as.data.frame(tES[j]))[i],"_")[[1]][2]
+    pathway.name <- str_split(colnames(as.data.frame(tES[j]))[f],"_")[[1]][2]
     
-    avg <- as.data.frame(cbind("Treatment" = as.factor(data$Treatment), tES[[j]][,i])) %>%
+    avg <- as.data.frame(cbind("Treatment" = as.factor(data$Treatment), tES[[j]][,f])) %>%
       group_by(Treatment) %>%
       summarise(median(V2))
     
@@ -814,7 +815,7 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
     expression <- if(DG < control) { "down"
     } else {"up"}
     
-    table.df[i,] <- cbind(pathway.name, adjust[1], adjust[2], adjust[3], expression)
+    table.df[f,] <- cbind(pathway.name, adjust[1], adjust[2], adjust[3], expression)
     
   }
   
@@ -825,7 +826,7 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
   table.df$`Time by Treatment` <- as.numeric(table.df$`Time by Treatment`)
   
   if(length(unique(table.df$`2DG expression compared to Control`)) == 2){ 
-    knitr::knit_print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
                   rownames = FALSE, 
                   filter="top",
                   options = list(dom = 'Blfrtip',
@@ -923,27 +924,36 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
 }
 }
 
-## ANOVA for genes within WGCNA pathways
+## ANOVA for genes within WGCNA pathways time and treatment
 
-ANOVA.gene.pathways <- function(WGCNA.gene, logdata, tissuedata){
+ANOVA.gene.pathways <- function(WGCNA.gene, logdata){
   ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
-
+  
+  logdata$Time <- as.factor(logdata$Time)
+  logdata$Treatment <- as.factor(logdata$Treatment)
+  logdata$Tissue <- as.factor(logdata$Tissue)
+  
   for (i in 1:length(WGCNA.gene)){
-  cat("\n###",modules[i],"\n \n")
+  cat("\n###",modules[i],"{.tabset .tabset-fade .tabset-pills}"," \n")
+    if(is.list(WGCNA.gene[[i]])==FALSE){next}
+    else{
   for(j in 1:length(WGCNA.gene[[i]])){
-    cat("\n####",names(WGCNA.gene[[i]])[j])
+
+    cat("\n####",names(WGCNA.gene[[i]])[j]," \n")
     frame <- matrix(data = NA, nrow = length(WGCNA.gene[[i]][[j]]), ncol = 8)
     
     for(k in 1:length(WGCNA.gene[[i]][[j]])){
       gene <- WGCNA.gene[[i]][[j]][k]
-      if(is_an_integer(which(names(logdata)==gene))==FALSE){
+      column <- which(names(logdata)==gene)
+      if(is.integer(which(names(logdata)==gene))==FALSE){
         frame[k,] <- c(gene, "NA","NA","NA","NA","NA","NA","NA")}
-      else{
-        m <- art(data = tissuedata, logdata[,gene] ~ Time*Treatment)
+      else if(length(logdata[gene][,1])==0){next}
+        else {
+        m <- art(data = logdata, unlist(logdata[gene][,1]) ~ Time*Treatment)
         
         model <- anova(m)
         adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
-        num <- which(names(log.tdata.FPKM.subset)==gene)
+        num <- which(names(logdata)==gene)
         gene2 <- ensembl.location$external_gene_name[match(names(logdata)[num],ensembl.location$ensembl_gene_id)]
         
         frame[k,] <- c(gene2, names(logdata)[num], model[,7][2], adjust[2], model[,7][1], adjust[1], model[,7][3],adjust[3])
@@ -969,4 +979,63 @@ ANOVA.gene.pathways <- function(WGCNA.gene, logdata, tissuedata){
   }             
   cat("\n \n")
 }
+  }
+}
+
+## ANOVA for genes within WGCNA pathways tissue, time, and treatment
+
+ANOVA.gene.tissues.pathways <- function(WGCNA.gene, logdata){
+  ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
+  
+  logdata$Time <- as.factor(logdata$Time)
+  logdata$Treatment <- as.factor(logdata$Treatment)
+  logdata$Tissue <- as.factor(logdata$Tissue)
+  
+  for (i in 1:length(WGCNA.gene)){
+    cat("\n###",modules[i],"{.tabset .tabset-fade .tabset-pills}"," \n")
+    if(is.list(WGCNA.gene[[i]])==FALSE){next}
+    else{
+      for(j in 1:length(WGCNA.gene[[i]])){
+        
+        cat("\n####",names(WGCNA.gene[[i]])[j]," \n")
+        frame <- matrix(data = NA, nrow = length(WGCNA.gene[[i]][[j]]), ncol = 16)
+        
+        for(k in 1:length(WGCNA.gene[[i]][[j]])){
+          gene <- WGCNA.gene[[i]][[j]][k]
+          column <- which(names(logdata)==gene)
+          if(is.integer(which(names(logdata)==gene))==FALSE){
+            frame[k,] <- c(gene, "NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA")}
+          else if(length(logdata[gene][,1])==0){next}
+          else {
+            m <- art(data = logdata, unlist(logdata[gene][,1]) ~ Time*Treatment*Tissue)
+            
+            model <- anova(m)
+            adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
+            num <- which(names(logdata)==gene)
+            gene2 <- ensembl.location$external_gene_name[match(names(logdata)[num],ensembl.location$ensembl_gene_id)]
+            
+            frame[k,] <- c(gene2, names(logdata)[num], model[,7][2], adjust[2], model[,7][1], adjust[1], model[,7][3],adjust[3], model[,7][4], adjust[4],model[,7][5], adjust[5],model[,7][6], adjust[6],model[,7][7], adjust[7])
+          }
+        }
+        
+        frame <- as.data.frame(frame)
+        
+        print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", "Tissue", "BH Tissue", "Treatment by time", "BH Treatment by time", "Time by Tissue","BH Time by Tissue", "Treatment by Tissue", "BH Treatment by Tissue", "Time by Treatment by Tissue", "BH Time by Treatment by Tissue")))
+        
+        output_name <- paste("Genes in", names(WGCNA.gene[[i]])[j], " pathway for Heart", modules[i])
+        
+        print(frame %>%
+                download_this(
+                  output_name = output_name,
+                  output_extension = ".csv",
+                  button_label = "Download data as csv",
+                  button_type = "info",
+                  has_icon = TRUE,
+                  icon = "fa fa-save"
+                ))
+        cat("\n \n")
+      }             
+      cat("\n \n")
+    }
+  }
 }
