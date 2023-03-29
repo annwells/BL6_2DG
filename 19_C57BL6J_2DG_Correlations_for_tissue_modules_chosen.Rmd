@@ -13,8 +13,11 @@ output:
    
 ---
 
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal liver, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. 
 
 # Summary
+
+Modules chosen according to the filtering criteria described in the paper were assessed for their correlation to one another.
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
@@ -24,13 +27,11 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap","Hmisc")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
 ```
-
-There were 16 samples (4 per time and treatment). Mice were fed 2DG (6g/L) or nothing in their water for 96hrs or 2 weeks. WGCNA analysis was performed to determine gene clustering. A soft-thresholding power was chosen so that the scale-free topology correlation attempts to hit 0.9. The power chosen for kidney was 3, which allowed the correlations to hover around 0.90. This power clustered the genes into 24 modules originally, however, modules that were highly correlated (0.75 or higher) were further merged together to create 17 modules.
 
 ```{r load data}
 heart <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.eigens.RData"))
@@ -55,5 +56,7 @@ cor(module.eigens)
 
 corr <- rcorr(module.eigens)
 
-p.adjust(corr$P, method = "BH")
+padjust <- p.adjust(corr$P, method = "BH")
+colnames(padjust) <- names(module.eigens)
+rownames(padjust) <- names(module.eigens)
 ```

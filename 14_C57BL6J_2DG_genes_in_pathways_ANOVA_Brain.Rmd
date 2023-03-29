@@ -87,9 +87,10 @@ modules <- unlist(modules)
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
-```{r ANOVA, cache=TRUE}
+```{r ANOVA,results='asis',cache=TRUE}
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Time <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Time)
+log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Tissue <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Tissue)
 log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex$Treatment)
 
-ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.hip.hyp.cortex)
+ANOVA.gene.tissues.pathways(WGCNA.gene, log.tdata.FPKM.sample.info.subset.hip.hyp.cortex)
 ```

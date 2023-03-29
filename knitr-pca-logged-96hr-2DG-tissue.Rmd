@@ -1,4 +1,4 @@
-##Scree plot and summary statistics
+## Scree plot and summary statistics
 ```{r PCA tissue.2DG.96hr log scree}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
@@ -22,7 +22,7 @@ screeplot(pca,type = "lines")
 summary(pca)
 ```
 
-##Tissue
+## Tissue
 ```{r PCA tissue.2DG.96hr log}
 Tissue_color <- as.factor(tdata.FPKM.sample.info.tissue.2DG.96hr$Tissue)
 Tissue_color <- as.data.frame(Tissue_color)
@@ -43,7 +43,7 @@ p <- p + stat_ellipse(aes(pca$x[,1], pca$x[,2], group = Tissue_color, fill = as.
 print(p)
 ```
 
-##3D Tissue 2DG 96 hrs
+## 3D Tissue 2DG 96 hrs
 ```{r 3D tissue 2DG 96 hrs}
 Tissue_color <- as.factor(tdata.FPKM.sample.info.tissue.2DG.96hr$Tissue)
 Tissue_color <- as.data.frame(Tissue_color)
@@ -61,7 +61,7 @@ p
 ```
 
 # PCA (log Tissue 4wk 2DG) {.tabset .tabset-fade .tabset-pills}
-##Scree plot and summary statistics
+## Scree plot and summary statistics
 ```{r PCA tissue.2DG.4wk log scree}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
@@ -85,7 +85,7 @@ screeplot(pca,type = "lines")
 summary(pca)
 ```
 
-##Tissue
+## Tissue
 ```{r PCA tissue.2DG.4wk log}
 Tissue_color <- as.factor(tdata.FPKM.sample.info.tissue.2DG.4wk$Tissue)
 Tissue_color <- as.data.frame(Tissue_color)

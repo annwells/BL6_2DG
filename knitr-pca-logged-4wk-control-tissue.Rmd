@@ -1,4 +1,4 @@
-##Scree plot and summary statistics
+## Scree plot and summary statistics
 ```{r PCA tissue.control.4wk log scree}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
@@ -22,7 +22,7 @@ screeplot(pca,type = "lines")
 summary(pca)
 ```
 
-##Tissue
+## Tissue
 ```{r PCA tissue.control.4wk log}
 Tissue_color <- as.factor(tdata.FPKM.sample.info.tissue.control.4wk$Tissue)
 Tissue_color <- as.data.frame(Tissue_color)

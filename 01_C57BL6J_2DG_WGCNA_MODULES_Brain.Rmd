@@ -78,7 +78,7 @@ threshold$fitIndices %>%
 
 I generated a weighted adjacency matrix for the gene expression profile network using the softmax threshold I determined in the previous step. Then I generate the Topological Overlap Matrix (TOM) for the adjacency matrix. This reduces noise and spurious associations according to the authors. I use the TOM matrix to cluster the profiles of each metabolite based on their similarity. I use dynamic tree cutting to generate modules. 
 
-```{r}
+```{r adjacency matrix, cache=TRUE, cache.lazy=FALSE}
 soft.power <- which(threshold$fitIndices$SFT.R.sq >= 0.88)[1]
 cat("\n", "Power chosen") 
 soft.power

@@ -85,7 +85,7 @@ In a weighted network, the concept of connectivity (k) for any given gene is the
 
 All this information is graphed together in the following graphs.
 
-```{r, results='asis', fig.height=15,fig.width=12}
+```{r, results='asis', fig.height=15,fig.width=12, cache=TRUE}
 factors <- c("Time","Treatment","Time.Treat")
 gene.significance(factors,log.tdata.FPKM.sample.info.subset.liver, modules)
 ```

@@ -155,7 +155,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 29.34%"),
                      yaxis = list(title = "PC 2 16.76%"),
                      zaxis = list(title = "PC 3 13.97%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -315,7 +315,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 32.09%"),
                      yaxis = list(title = "PC 2 12.96%"),
                      zaxis = list(title = "PC 3 9.51%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -474,7 +474,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 27.09%"),
                      yaxis = list(title = "PC 2 16.01%"),
                      zaxis = list(title = "PC 3 6.69%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -632,7 +632,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 29.38%"),
                      yaxis = list(title = "PC 2 15.89%"),
                      zaxis = list(title = "PC 3 12.02%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -790,7 +790,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 29.79%"),
                      yaxis = list(title = "PC 2 11.75%"),
                      zaxis = list(title = "PC 3 8.01%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -948,7 +948,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 42.9%"),
                      yaxis = list(title = "PC 2 12.54%"),
                      zaxis = list(title = "PC 3 10.69%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -1108,7 +1108,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 19.41%"),
                      yaxis = list(title = "PC 2 16.59%"),
                      zaxis = list(title = "PC 3 12.42%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -1267,7 +1267,7 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 40.12%"),
                      yaxis = list(title = "PC 2 12.94%"),
                      zaxis = list(title = "PC 3 8.81%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```
 
@@ -1426,6 +1426,6 @@ p2 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 26.4%"),
                      yaxis = list(title = "PC 2 17.7%"),
                      zaxis = list(title = "PC 3 12.46%")))
-p3 <- subplot(p,p1,p2)
+p3 <- plotly::subplot(p,p1,p2)
 p3
 ```

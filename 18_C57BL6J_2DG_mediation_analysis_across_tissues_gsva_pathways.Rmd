@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 knitr::opts_knit$set(progress=FALSE)
 ```
 
-This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the contribution of each main effect or their combination to each pathway identified, across modules.
+This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. 
 
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "kableExtra", "GSVA", "DT","mediation", "pander")
@@ -39,7 +39,7 @@ small.intestine.gsva <- readRDS(here("Data","Small Intestine","GSVA.modules.smal
 small.intestine.pathways <- readRDS(here("Data","Small Intestine","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_small_intestine_WGCNA.RData"))
 term.names <- small.intestine.pathways[[18]]$term_name
 small.intestine.green4 <- small.intestine.gsva$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4[,match(term.names, colnames(small.intestine.gsva$log.tdata.FPKM.sample.info.subset.small.intestine.WGCNA_green4))]
-SI.gsva <- as.data.frame(small.intestine.green4) %>% rownames_to_column()
+SI.gsva <- as.data.frame(small.intestine.green4)[,-27] %>% rownames_to_column()
 SI.gsva.phenotypes <- left_join(SI.gsva, tdata.FPKM.sample.info.pheno, by = c("rowname" = "rowname"))
 SI.gsva.phenotypes <- SI.gsva.phenotypes %>% mutate("Module" = rep("Green4",16)) 
 
@@ -82,12 +82,15 @@ SI.heart.gsva.phenotypes <- read.csv(here("Data","SI.heart.gsva.for.mediation.an
 ```
 
 ## Mediation analysis {.tabset .tabset-fade .tabset-pills}
+To determine if any of the correlations between heart and small intestine could be explained more definitively causal mediation analysis was performed. The total effect is the summation of the causal mediated effect and the directed effect. The causal mediated effect is the indirect effect of the independent variable on the dependent variable that goes through the mediator. The directed effect is the direct effect of the independent variable on the dependent variable.
 
-```{r, results='asis'}
+### Heart and Small Intestine {.tabset .tabset-fade .tabset-pills}
+We assessed whether BCAA degradation in the heart mediated the pathways identified in the small intestine.
+```{r, results='asis', cache=TRUE}
 for(i in 1: 79){
-    cat("\n###",colnames(SI.heart.gsva.phenotypes)[i],"\n")
-med.fit <- lm(data = SI.heart.gsva.phenotypes, Valine..leucine.and.isoleucine.degradation ~ Treatment2*Time2)
-out.fit <- glm(data = SI.heart.gsva.phenotypes, SI.heart.gsva.phenotypes[,i] ~ Valine..leucine.and.isoleucine.degradation + Treatment2*Time2)
+    cat("\n####",colnames(SI.heart.gsva.phenotypes)[i],"\n")
+med.fit <- lm(data = SI.heart.gsva.phenotypes, Valine..leucine.and.isoleucine.degradation ~ Treatment2 + Time2 + Treatment2:Time2)
+out.fit <- glm(data = SI.heart.gsva.phenotypes, SI.heart.gsva.phenotypes[,i] ~ Valine..leucine.and.isoleucine.degradation + Treatment2 + Time2 + Treatment2:Time2 + Valine..leucine.and.isoleucine.degradation*Treatment2)
 
 med.out <- mediate(med.fit, out.fit, treat = "Treatment2", mediator = "Valine..leucine.and.isoleucine.degradation", sims = 1000)
 model <- summary(med.out)
@@ -98,16 +101,18 @@ cat("\n \n")
 }
 ```
 
+### Prefrontal Cortex and Hypothalamus {.tabset .tabset-fade .tabset-pills}
+We assessed whether G2/M DNA damage checkpoint in the hypothalamus mediated any of the pathways identified in the prefrontal cortex.
 ```{r}
 PC.hyp <- read.csv(here("Data","PC.hyp.gsva.for.mediation.analysis.csv"), row.names = 1)
 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 for(i in 1: 23){
-    cat("\n###",colnames(PC.hyp)[i],"\n")
-med.fit <- lm(data = PC.hyp, G2.M.DNA.damage.checkpoint ~ Treatment2*Time2)
-out.fit <- glm(data = PC.hyp, PC.hyp[,i] ~ G2.M.DNA.damage.checkpoint + Treatment2*Time2)
+    cat("\n####",colnames(PC.hyp)[i],"\n")
+med.fit <- lm(data = PC.hyp, G2.M.DNA.damage.checkpoint ~ Treatment2 + Time2 + Treatment2:Time2)
+out.fit <- glm(data = PC.hyp, PC.hyp[,i] ~ G2.M.DNA.damage.checkpoint + Treatment2 + Time2 + Treatment2:Time2 + G2.M.DNA.damage.checkpoint*Treatment2)
 
 med.out <- mediate(med.fit, out.fit, treat = "Treatment2", mediator = "G2.M.DNA.damage.checkpoint", sims = 1000)
 model <- summary(med.out)

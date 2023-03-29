@@ -61,7 +61,7 @@ threshold <- softthreshold(log.tdata.FPKM.sample.info.subset.heart.WGCNA)
 
 ### Pick Soft Threshold
 
-```{r}
+```{r adjacency matrix, cache=TRUE, cache.lazy=FALSE}
 knitr::kable(threshold$fitIndices)
 
 threshold$fitIndices %>%

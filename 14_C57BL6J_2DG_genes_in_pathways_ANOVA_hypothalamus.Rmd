@@ -87,9 +87,9 @@ modules <- unlist(modules)
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
-```{r ANOVA, cache=TRUE}
+```{r ANOVA,results='asis',cache=TRUE}
 log.tdata.FPKM.sample.info.subset.hypothalamus$Time <- as.factor(log.tdata.FPKM.sample.info.subset.hypothalamus$Time)
 log.tdata.FPKM.sample.info.subset.hypothalamus$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.hypothalamus$Treatment)
 
-ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.hypothalamus)
+ANOVA.gene.pathways(WGCNA.gene, log.tdata.FPKM.sample.info.subset.hypothalamus)
 ```

@@ -1,6 +1,6 @@
 ## MA plot for Spleen 2DG 4wks {.tabset .tabset-fade .tabset-pills}
 
-```{r Spleen 2DG 4wks MA plot, results='asis'}
+```{r Spleen 2DG 4wks MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Spleen" & Treatment == "2DG" & Time == "4 wks") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)
@@ -56,7 +56,7 @@ print(p)
 
 ## MA plot for Spleen 2DG 96hrs {.tabset .tabset-fade .tabset-pills}
 
-```{r Spleen 2DG 96hrs MA plot, results='asis'}
+```{r Spleen 2DG 96hrs MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Spleen" & Treatment == "2DG" & Time == "96 hrs") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)
@@ -83,7 +83,7 @@ print(p)
 
 ## MA plot for Spleen control 96hrs {.tabset .tabset-fade .tabset-pills}
 
-```{r Spleen control 96hrs MA plot, results='asis'}
+```{r Spleen control 96hrs MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Spleen" & Treatment == "None" & Time == "96 hrs") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)

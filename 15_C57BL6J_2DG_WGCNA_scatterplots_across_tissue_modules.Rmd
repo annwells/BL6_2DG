@@ -155,8 +155,8 @@ for(i in 1:length(modules.tissue)){
   for(j in 1:length(modules.tissue)){
     cat("\n###",paste(names(modules.tissue[i]), "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
     correlations <- cor(modules.tissue[[i]], modules.tissue[[j]])
-    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 2, color = colorRampPalette(rev(brewer.pal(n = 11, name =
-  "Spectral")))(100))
+    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 2, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  "BuPu")))(100))
     cat("\n \n")
   }
 }
@@ -166,8 +166,8 @@ for(i in 1:length(modules.tissue)){
   for(j in 1:length(modules.tissue)){
     cat("\n###",paste("liver.darkolivegreen", "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
     correlations <- cor(liver.darkolivegreen, modules.tissue[[j]])
-    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 4, color = colorRampPalette(rev(brewer.pal(n = 11, name =
-  "Spectral")))(100), cluster_rows = F)
+    pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 4, fontsize_row = 4, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  "BuPu")))(100), cluster_rows = F)
     cat("\n \n")
   }
 

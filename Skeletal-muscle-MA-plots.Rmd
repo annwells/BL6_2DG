@@ -1,5 +1,5 @@
 ## MA plot for Skeletal Muscle 2DG 4wks {.tabset .tabset-fade .tabset-pills}
-```{r Skeletal Muscle 2DG 4wks MA plot, results='asis'}
+```{r Skeletal Muscle 2DG 4wks MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Skeletal Muscle" & Treatment == "2DG" & Time == "4 wks") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)
@@ -25,7 +25,7 @@ print(p)
 ```
 
 ## MA plot for Skeletal Muscle control 4wks {.tabset .tabset-fade .tabset-pills}
-```{r Skeletal Muscle control 4wks MA plot, results='asis'}
+```{r Skeletal Muscle control 4wks MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Skeletal Muscle" & Treatment == "None" & Time == "4 wks") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)
@@ -51,7 +51,7 @@ print(p)
 ```
 
 ## MA plot for Skeletal Muscle 2DG 96hrs {.tabset .tabset-fade .tabset-pills}
-```{r Skeletal Muscle 2DG 96hrs MA plot, results='asis'}
+```{r Skeletal Muscle 2DG 96hrs MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Skeletal Muscle" & Treatment == "2DG" & Time == "96 hrs") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)
@@ -77,7 +77,7 @@ print(p)
 ```
 
 ## MA plot for Skeletal Muscle control 96hrs {.tabset .tabset-fade .tabset-pills}
-```{r Skeletal Muscle control 96hrs MA plot, results='asis'}
+```{r Skeletal Muscle control 96hrs MA plot, results='asis',cache=TRUE}
 subdata <- log.tdata.FPKM.sample.info %>% rownames_to_column() %>% filter(Tissue =="Skeletal Muscle" & Treatment == "None" & Time == "96 hrs") %>% column_to_rownames()
 subdata <- subdata[,-c(27237:27239)]
 log.data.FPKM.sample.info <- t(subdata)

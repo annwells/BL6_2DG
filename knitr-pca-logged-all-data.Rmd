@@ -1,5 +1,6 @@
 ## Scree plot and Summary Statistics
 ```{r PCA}
+
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
 tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
@@ -113,7 +114,7 @@ p2 <- plot_ly(data=pca_all, x = pca_all$`pca$x[, 1]`, y = pca_all$`pca$x[, 2]`, 
                      yaxis = list(title = "PC 2 19.94%"),
                      zaxis = list(title = "PC 3 13.47%")))
 
-p3 <- subplot(p,p2,p1)
+p3 <- plotly::subplot(p,p2,p1)
 p3
 ```
 

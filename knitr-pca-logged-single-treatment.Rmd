@@ -95,7 +95,7 @@ p1 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 39.03%"),
                      yaxis = list(title = "PC 2 19.74%"),
                      zaxis = list(title = "PC 3 13.58%")))
-p2 <- subplot(p,p1)
+p2 <- plotly::subplot(p,p1)
 p2
 ```
 
@@ -196,6 +196,6 @@ p1 <- plot_ly(pca_time, x = pca_time$`pca$x[, 1]`, y = pca_time$`pca$x[, 2]`, z 
   layout(scene = list(xaxis = list(title = "PC 1 38.37%"),
                      yaxis = list(title = "PC 2 20.33%"),
                      zaxis = list(title = "PC 3 13.52%")))
-p2 <- subplot(p,p1)
+p2 <- plotly::subplot(p,p1)
 p2
 ```

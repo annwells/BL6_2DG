@@ -22,6 +22,8 @@ output:
          } );
 </script>
 
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal liver, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed.
+
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -53,29 +55,46 @@ cibersort.all.phenotypes <- cibersort.all.phenotypes %>% mutate("Module" = rep("
 cibersort.compare <- rbind(cibersort.phenotypes,cibersort.all.phenotypes)
 ```
 
-## Check Distribution
+## Check Distribution {.tabset .tabset-fade .tabset-pills}
+
+### Raw Percentages {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 for(i in 1: length(cibersort[-1])){
-  hist(cibersort[,i+1])
-}
-
-log.cibersort <- log(cibersort[,2:26])
-
-for(i in 1: length(log.cibersort[-1])){
-  hist(log.cibersort[,i+1])
+  cat("\n####", names(cibersort[i+1]), "\n")
+  hist(cibersort[,i+1],xlab = "Percentage of cells", main = names(cibersort[i+1]))
+  cat("\n \n")
 }
 ```
 
+### Logged Percentages {.tabset .tabset-fade .tabset-pills}
+
+```{r}
+log.cibersort <- log(cibersort[,2:26])
+
+for(i in 1: length(log.cibersort[-1])){
+    cat("\n####", names(log.cibersort[i+1]), "\n")
+  hist(log.cibersort[,i+1], xlab = "Percentage of cells",main = names(log.cibersort[i+1]))
+  cat("\n \n")
+}
+```
+
+## Density Plots {.tabset .tabset-fade .tabset-pills}
+
+### Green4 module {.tabset .tabset-fade .tabset-pills}
 ```{r}
 process <- preProcess(as.data.frame(cibersort), method=c("range"))
 
 norm_scale <- predict(process, as.data.frame(cibersort))
 
 for(i in 1: length(norm_scale[-1])){
-  d <- density(norm_scale[,i+1])
-  plot(d)
+  cat("\n####", names(norm_scale[i+1]), "\n")
+  plot(density(norm_scale[,i+1]), main = names(norm_scale[,i+1]))
+  cat("\n \n")
 }
+```
 
+```{r}
 norm_scale_phenotypes <- left_join(norm_scale, tdata.FPKM.sample.info.pheno, by = c("Mixture" = "rowname"))
 norm_scale_phenotypes <- norm_scale_phenotypes %>% column_to_rownames(var = "Mixture")
 
@@ -86,8 +105,8 @@ model <- list()
 adjust <- list()
 
 for(i in 1:length(norm_scale[-1])) {
-   print(i)
     name <- colnames(norm_scale_phenotypes[,i])
+    
     #m <- art(data = cibersort.all.phenotypes, cibersort.all.phenotypes[,i] ~ Time*Treatment)
     m <- lm(data = norm_scale_phenotypes, norm_scale_phenotypes[,i] ~ Time*Treatment)
              model[[i]] <- anova(m)
@@ -97,16 +116,21 @@ names(model) <- colnames(norm_scale[-1])
 names(adjust) <- colnames(norm_scale[-1])
 ```
 
+### All genes in Small Intestine {.tabset .tabset-fade .tabset-pills}
 ```{r}
 process <- preProcess(as.data.frame(cibersort.all), method=c("range"))
 
 norm_scale_all <- predict(process, as.data.frame(cibersort))
 
 for(i in 1: length(norm_scale_all[-1])){
+    cat("\n####", names(norm_scale_all[i+1]), "\n")
   d <- density(norm_scale_all[,i+1])
   plot(d)
+  cat("\n \n")
 }
+```
 
+```{r}
 norm_scale_all_phenotypes <- left_join(norm_scale_all, tdata.FPKM.sample.info.pheno, by = c("Mixture" = "rowname"))
 norm_scale_all_phenotypes <- norm_scale_all_phenotypes %>% column_to_rownames(var = "Mixture")
 
@@ -133,7 +157,7 @@ names(adjust) <- colnames(norm_scale_all[-1])
 
 To perform analysis of variance Aligned Rank Transformation was performed, which is designed to handle non-parametric multi-factorial experiments. P-value was adjusted using Benjamini-hochberg procedure.
 
-## Green4 Module
+### Green4 Module
 ```{r, results='asis'}
 cibersort.phenotypes$Time <- as.factor(cibersort.phenotypes$Time)
 cibersort.phenotypes$Treatment <- as.factor(cibersort.phenotypes$Treatment)
@@ -162,7 +186,7 @@ cibersort.matrix <- as.data.frame(cibersort.matrix)
                       #column_spec(2:4, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
 ```
 
-## All Small Intestine Genes
+### All Small Intestine Genes
 ```{r, results='asis'}
 cibersort.all.phenotypes$Time <- as.factor(cibersort.all.phenotypes$Time)
 cibersort.all.phenotypes$Treatment <- as.factor(cibersort.all.phenotypes$Treatment)
@@ -193,7 +217,7 @@ cibersort.all.matrix <- as.data.frame(cibersort.all.matrix)
                       #column_spec(2:4, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
 ```
 
-## Compare module to all genes in small intestine
+### Compare module to all genes in small intestine
 ```{r, results='asis'}
 cibersort.compare$Time <- as.factor(cibersort.compare$Time)
 cibersort.compare$Treatment <- as.factor(cibersort.compare$Treatment)

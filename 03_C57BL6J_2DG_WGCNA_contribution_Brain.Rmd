@@ -38,6 +38,8 @@ needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "Gene
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
+source(here("source_files","WGCNA_contribution_source.R"))
+
 ```
 
 ```{r}
@@ -184,4 +186,3 @@ for(i in 1:length(Sigmodules)){
 ## Treatment by Time by Tissue {.tabset .tabset-fade .tabset-pills}
 ```{r, child="knitr-WGCNA-contribution-treat-tissue-time.Rmd"}
 ```
-

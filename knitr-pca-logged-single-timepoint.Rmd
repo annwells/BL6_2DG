@@ -95,7 +95,7 @@ p1 <- plot_ly(pca_treatment, x = pca_treatment$`pca$x[, 1]`, y = pca_treatment$`
   layout(scene = list(xaxis = list(title = "PC 1 39.07%"),
                      yaxis = list(title = "PC 2 20.56%"),
                      zaxis = list(title = "PC 3 13.34%")))
-p2 <-subplot(p,p1)
+p2 <-plotly::subplot(p,p1)
 p2
 ```
 
@@ -196,7 +196,7 @@ p1 <- plot_ly(pca_treatment, x = pca_treatment$`pca$x[, 1]`, y = pca_treatment$`
   layout(scene = list(xaxis = list(title = "PC 1 39.07%"),
                      yaxis = list(title = "PC 2 20.56%"),
                      zaxis = list(title = "PC 3 13.34%")))
-p2 <-subplot(p,p1)
+p2 <-plotly::subplot(p,p1)
 p2
 ```
 

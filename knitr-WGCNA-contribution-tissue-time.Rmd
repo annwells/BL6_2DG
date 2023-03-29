@@ -22,7 +22,7 @@ modulename <- modNames
 for(i in 1:length(modulename)){
   module <- modulename[i]
     cat("###", modulename[i],"\n")
-    print(htmltools::tagList(MMvGS(module, geneModuleMembership, geneTraitSignificance)))
+    print(htmltools::tagList(MMvGS(module, geneModuleMembership, geneTraitSignificance, MEs)))
     cat("\n \n")
 }
 ```

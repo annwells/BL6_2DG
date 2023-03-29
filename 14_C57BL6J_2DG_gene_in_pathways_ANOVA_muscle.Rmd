@@ -82,10 +82,10 @@ modules <- c(modules)
 ```
 
 ## ANOVA
-```{r ANOVA, cache=TRUE}
+```{r ANOVA,results='asis',cache=TRUE}
 log.tdata.FPKM.sample.info.subset.skeletal.muscle$Time <- as.factor(log.tdata.FPKM.sample.info.subset.skeletal.muscle$Time)
 log.tdata.FPKM.sample.info.subset.skeletal.muscle$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.skeletal.muscle$Treatment)
 
-ANOVA.gene.pathways(WGCNA.gene,log.tdata.FPKM.subset, log.tdata.FPKM.sample.info.subset.muscle)
+ANOVA.gene.pathways(WGCNA.gene, log.tdata.FPKM.sample.info.subset.muscle)
 
 ```
