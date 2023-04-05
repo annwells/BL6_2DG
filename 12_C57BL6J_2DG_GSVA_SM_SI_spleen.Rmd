@@ -63,6 +63,8 @@ log.tdata.FPKM.sample.info.subset.SM.SI.spleen <- log.tdata.FPKM.sample.info.sub
 log.data.FPKM.subset.SM.SI.spleen <- log.tdata.FPKM.sample.info.subset.SM.SI.spleen %>%
   dplyr::select(-c("Time", "Tissue", "Treatment")) %>%
   t()
+
+modules <- readRDS(here("Data","SM.SI.spleen","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.WGCNA.module.membership.RData"))
 ```
 
 ## Gene Set Variation Analysis

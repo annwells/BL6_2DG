@@ -127,29 +127,41 @@ as.data.frame(moduleTraitPvalue) %>%
 
 # Scatterplots Module membership vs. Gene significance {.tabset .tabset-fade .tabset-pills}
 ## Tissue {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-tissue.Rmd"}
+```{r, results='asis'}
+tissue.contribution(phenotype, log.tdata.FPKM.subset, MEs)
 ```
 
 ## Treatment {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-treatment.Rmd"}
+```{r, results='asis'}
+treat.contribution(phenotype, log.tdata.FPKM.subset, MEs)
 ```
 
 ## Time {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-time.Rmd"}
+```{r, results='asis'}
+time.contribution(phenotype, log.tdata.FPKM.subset, MEs)
 ```
 
 ## Treatment by Time {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-treat-time.Rmd"}
+```{r, results='asis'}
+treat.time.contribution(phenotype, log.tdata.FPKM.subset, MEs)
 ```
 
 ## Treatment by Tissue {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-treat-tissue.Rmd"}
+```{r, results='asis'}
+treat.tissue.contribution(phenotype, log.tdata.FPKM.subset, MEs)
 ```
 
 ## Time by Tissue {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-tissue-time.Rmd"}
+```{r, results='asis'}
+tissue.time.contribution(phenotype, log.tdata.FPKM.subset, MEs)
 ```
 
 ## Treatment by Time by Tissue {.tabset .tabset-fade .tabset-pills}
-```{r, child="knitr-WGCNA-contribution-treat-tissue-time.Rmd"}
+```{r, results='asis'}
+time.treat.tissue.contribution(phenotype, log.tdata.FPKM.subset, MEs)
+```
+
+```{r, include=FALSE}
+p <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length)
+p
 ```

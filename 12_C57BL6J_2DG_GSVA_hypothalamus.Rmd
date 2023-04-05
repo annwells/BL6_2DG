@@ -65,6 +65,9 @@ log.tdata.FPKM.sample.info.subset.hypothalamus <- cbind(log.tdata.FPKM.sample.in
 log.data.FPKM.subset.hypothalamus <- log.tdata.FPKM.sample.info.subset.hypothalamus %>%
   dplyr::select(-c("Time", "Tissue", "Treatment","Time.Treat")) %>%
   t()
+
+modules <- readRDS(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.hypothalamus.WGCNA.module.membership.RData"))
+
 ```
 
 ## Gene Set Variation Analysis

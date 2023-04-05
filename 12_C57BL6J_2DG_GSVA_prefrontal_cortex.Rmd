@@ -63,6 +63,8 @@ log.tdata.FPKM.sample.info.subset.prefrontal.cortex <- log.tdata.FPKM.sample.inf
 log.data.FPKM.subset.prefrontal.cortex <- log.tdata.FPKM.sample.info.subset.prefrontal.cortex %>%
   dplyr::select(-c("Time", "Tissue", "Treatment")) %>%
   t()
+
+modules <- readRDS(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA.module.membership.RData"))
 ```
 
 ## Gene Set Variation Analysis

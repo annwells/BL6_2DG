@@ -65,6 +65,8 @@ log.data.FPKM.subset.hippocampus <- log.tdata.FPKM.sample.info.subset.hippocampu
   dplyr::select(-c("Time", "Tissue", "Treatment")) %>%
   t()
 
+modules <- readRDS(here("Data","Hippocampus","log.tdata.FPKM.sample.info.subset.hippocampus.WGCNA.module.membership.RData"))
+
 ```
 
 ## Gene Set Variation Analysis

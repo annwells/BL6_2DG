@@ -55,6 +55,9 @@ log.tdata.FPKM.sample.info.subset.heart <- cbind(log.tdata.FPKM.sample.info.subs
 log.data.FPKM.subset.heart <- log.tdata.FPKM.sample.info.subset.heart %>%
   dplyr::select(-c("Time", "Tissue", "Treatment","Time.Treat")) %>%
   t()
+
+modules <- readRDS(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.membership.RData"))
+
 ```
 
 ## Gene Set Variation Analysis
