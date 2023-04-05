@@ -791,8 +791,14 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
     tES[[s]] <- tES1[,colMeans(tES1) < 1]
     }
   names(tES) <- names(module.gene)
+  
+  
 
   for(j in 1:length(tES)){
+    name.tES <- colnames(tES[[j]])
+    tES[[j]] <- as.data.frame(tES[[j]])
+    colnames(tES[[j]]) <- name.tES
+    
   name <- str_split(names(tES)[j],"_")[[1]][2]
   cat("\n###", name, "{.tabset .tabset-fade .tabset-pills}","\n")
   
@@ -825,7 +831,64 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
   table.df$Treatment <- as.numeric(table.df$Treatment)
   table.df$`Time by Treatment` <- as.numeric(table.df$`Time by Treatment`)
   
-  if(length(unique(table.df$`2DG expression compared to Control`)) == 2){ 
+  if(length(unique(table.df$`2DG expression compared to Control`)) == 1 && unique(table.df$`2DG expression compared to Control`) == "up"){ 
+    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+                                           rownames = FALSE, 
+                                           filter="top",
+                                           options = list(dom = 'Blfrtip',
+                                                          buttons = c('copy', 'csv', 'excel'),
+                                                          lengthMenu = list(c(10,25,50,-1),
+                                                                            c(10,25,50,"All")), 
+                                                          scrollX= TRUE), class = "display") %>%
+                               formatStyle(
+                                 'Time',
+                                 color = styleInterval(c(0,0.05), c('white',"white","black")),
+                                 backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
+                               
+                               formatStyle(
+                                 'Treatment',
+                                 color = styleInterval(c(0,0.05), c('white',"white","black")),
+                                 backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
+                               
+                               formatStyle(
+                                 'Time by Treatment',
+                                 color = styleInterval(c(0,0.05), c('white',"white","black")),
+                                 backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
+                               
+                               formatStyle(
+                                 '2DG expression compared to Control',
+                                 color = "white",
+                                 backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), c("#CDB1AD")))))
+  } else if(length(unique(table.df$`2DG expression compared to Control`)) == 1 && unique(table.df$`2DG expression compared to Control`) == 
+            "down"){ 
+    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+                                           rownames = FALSE, 
+                                           filter="top",
+                                           options = list(dom = 'Blfrtip',
+                                                          buttons = c('copy', 'csv', 'excel'),
+                                                          lengthMenu = list(c(10,25,50,-1),
+                                                                            c(10,25,50,"All")), 
+                                                          scrollX= TRUE), class = "display") %>%
+                               formatStyle(
+                                 'Time',
+                                 color = styleInterval(c(0,0.05), c('white',"white","black")),
+                                 backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
+                               
+                               formatStyle(
+                                 'Treatment',
+                                 color = styleInterval(c(0,0.05), c('white',"white","black")),
+                                 backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
+                               
+                               formatStyle(
+                                 'Time by Treatment',
+                                 color = styleInterval(c(0,0.05), c('white',"white","black")),
+                                 backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
+                               
+                               formatStyle(
+                                 '2DG expression compared to Control',
+                                 color = "white",
+                                 backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), c("#2A385B")))))
+  } else if(length(unique(table.df$`2DG expression compared to Control`)) == 2){ 
     print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
                   rownames = FALSE, 
                   filter="top",
