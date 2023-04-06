@@ -60,7 +60,7 @@ threshold <- softthreshold(log.tdata.FPKM.sample.info.subset.hip.hyp.cortex.WGCN
 
 ### Pick Soft Threshold
 
-```{r}
+```{r, results='asis'}
 knitr::kable(threshold$fitIndices)
 
 threshold$fitIndices %>%

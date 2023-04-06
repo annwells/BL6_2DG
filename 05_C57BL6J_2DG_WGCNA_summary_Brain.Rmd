@@ -51,7 +51,7 @@ Pathways were assessed for each module. Out of 41 modules, only 28 modules had p
 
 ## Brown3
 
-38 pathways were identified for the **brown3** module. The pathways identified were involved in metabolism (macronutrients, TCA cycle, mitochondrial metabolism, respiratory electron transport), thermogenesis, and neurodegenerative diseases.
+38 pathways were identified for the **brown3** module. The pathways identified were involved in metabolism (macro-nutrients, TCA cycle, mitochondrial metabolism, respiratory electron transport), thermogenesis, and neurodegenerative diseases.
 
 ## Cyan
 
@@ -64,10 +64,6 @@ Pathways were assessed for each module. Out of 41 modules, only 28 modules had p
 ## Darkseagreen
 
 52 pathways were identified for the **darkseagreen** module. The pathways were related to cAMP, insulin signaling, interleukin-17, cell-cell interactions, MAPK, MyD88, p53, T cell receptor signaling, and TLR cascades.
-
-## Darkslateblue
-
-1 pathway (arrythmogenis right ventricular cardiomyopathy) was identified for the **darkslateblue** module.
 
 ## Deeppink2
 
@@ -91,11 +87,11 @@ Pathways were assessed for each module. Out of 41 modules, only 28 modules had p
 
 ## Lavenderblush1
 
-183 pathways were identified in the **lavenderblush1** module. The pathways related to APC, cellular responses, antigen processing-cross presentation, MHC I mediated antigen processing and presentation, DNA, metabolism, mitochrondrial metabolism, nonsense mediated decay, p53, RNA polymerase I and II, RUNX3, rRNA, transcriptional regulation, thermogenesis, and TCR signaling.
+183 pathways were identified in the **lavenderblush1** module. The pathways related to APC, cellular responses, antigen processing-cross presentation, MHC I mediated antigen processing and presentation, DNA, metabolism, mitochondrial metabolism, nonsense mediated decay, p53, RNA polymerase I and II, RUNX3, rRNA, transcriptional regulation, thermogenesis, and TCR signaling.
 
 ## Lavenderblush2
 
-3 pathways were identified in the **lavenderblush2** module: fatty acids; incretin synthesis, secretion, and activation: and sythesis, secretion and inactivation of glucagon-like peptide-1 (GLP-1)
+3 pathways were identified in the **lavenderblush2** module: fatty acids; incretin synthesis, secretion, and activation: and synthesis, secretion and inactivation of glucagon-like peptide-1 (GLP-1)
 
 ## Lavenderblush3
 
@@ -147,11 +143,11 @@ Pathways were assessed for each module. Out of 41 modules, only 28 modules had p
 
 ## Royalblue
 
-62 pathways were identified in the **royalblue** module. The pathwayd were related to adaptive immunity, B cell receptor signaling, chemokine receptors, complement, cytokine-cytokine, NF-kappa B, NOD-like receptor signaling, TLR cascade, natural killer cells, and autoimmune disease.
+62 pathways were identified in the **royalblue** module. The pathways were related to adaptive immunity, B cell receptor signaling, chemokine receptors, complement, cytokine-cytokine, NF-kappa B, NOD-like receptor signaling, TLR cascade, natural killer cells, and autoimmune disease.
 
 ## Thistle3
 
-14 pathways were identified in the **thistle3** module. The pathways were related to defensins, digestion, immune system, neutrophil degranulation, NOD-like receptor signaling, and pancreatice secretion.
+14 pathways were identified in the **thistle3** module. The pathways were related to defensins, digestion, immune system, neutrophil degranulation, NOD-like receptor signaling, and pancreatic secretion.
 
 ```{r}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
@@ -240,19 +236,6 @@ The top 10 genes that were significant for tissue within the **lavenderblush3** 
 9. Gm6981
 10. ENSMUSG00000086732
 
-The top 10 genes that were significant for tissue within the **darkslateblue** module and had the highest correlation with darkslateblue were:
-
-1. Micall2
-2. Celf2
-3. Pygl
-4. Rufy4
-5. Nos1ap
-6. Brinp1
-7. Nfe2l3
-8. ENSMUSG00000026805
-9. Gm3604
-10. Gm8237
-
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkslateblue** all hippocampus had a positive effect while hypothalamus and prefrontal cortex had a negative effect. Hypothalumus and prefrontal cortex had under-expressed genes while hippocampus had over-expressed genes.
 
 The top 10 genes that were significant for tissue within the **chocolate3** module and had the highest correlation with chocolate3 were:
@@ -337,21 +320,6 @@ The top 10 genes that were significant for tissue by time within the **lavenderb
 8. Map3k19
 9. Mlc1
 10. Amer2
-
-The top 10 genes that were significant for tissue by time within the **darkslateblue** module and had the highest correlation with darkslateblue were:
-
-1. Micall2
-2. Celf2
-3. Anks1b
-4. ENSMUSG00000097393
-5. Pygl
-6. Rufy4
-7. Nos1ap
-8. Brinp1
-9. Nfe2l3
-10. ENSMUSG00000026805
-
-When assessing the overall sample contribution through their summary eigengenes it appears that for **darkslateblue** all hippocampus had a positive effect while hypothalamus and prefrontal cortex had a negative effect, all independent of time. Hypothalumus and prefrontal cortex had under-expressed genes while hippocampus had over-expressed genes.
 
 The top 10 genes that were significant for tissue by time within the **chocolate3** module and had the highest correlation with chocolate3 were:
 

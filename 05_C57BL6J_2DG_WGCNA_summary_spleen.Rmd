@@ -74,11 +74,11 @@ Pathways were assessed for each module. Out of 31 modules, only 28 modules had p
 
 ## Indiandred1
 
-2 pathways were identified in the **Indianred1** module. The pathways were FMO oxidises nucleophiles and regulation of insulin-like growth factor transport and uptake by insulin-like growth factor binding proteins.
+2 pathways were identified in the **Indianred1** module. The pathways were FMO oxidizes nucleophiles and regulation of insulin-like growth factor transport and uptake by insulin-like growth factor binding proteins.
 
 ## Indianred4
 
-64 pathways were identified in the **Indianred4** module. The pathways were related to chromatin, B cell receptor signaling, autoimmune disease, immunity, insulin resistance, interleukins, natural killer cells, NF-kappa B signaling, Notch signaling, T cel receptor signaling, Th1 and 2 differentiation, and Th17 differentiation.
+64 pathways were identified in the **Indianred4** module. The pathways were related to chromatin, B cell receptor signaling, autoimmune disease, immunity, insulin resistance, interleukins, natural killer cells, NF-kappa B signaling, Notch signaling, T cell receptor signaling, Th1 and 2 differentiation, and Th17 differentiation.
 
 ## Lightblue2
 
@@ -138,7 +138,7 @@ Pathways were assessed for each module. Out of 31 modules, only 28 modules had p
 
 ## Tan4
 
-32 pathways were identified in the **Tan4** module. The pathways were related to metabolism, mitochondrial metabolism, respiratory electron transport, oxidative phsophorylation, TCA cycle, thermogenesis, and translation.
+32 pathways were identified in the **Tan4** module. The pathways were related to metabolism, mitochondrial metabolism, respiratory electron transport, oxidative phosphorylation, TCA cycle, thermogenesis, and translation.
 
 ## Thistle1
 
@@ -261,7 +261,7 @@ The top 10 genes that were significant for time within the **palevioletred3** mo
 9. Mff
 10. Rtn4ip1
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **palevioletred3** 4wk mice, independent of treatment had half positive and half negative effects while 96 hr mice, indepednent of treatment, had a mostly positive effect, indicating that there are both over and under-expressed genes for 4wks and mostly over-expressed genes 96 hrs.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **palevioletred3** 4 week old mice, independent of treatment had half positive and half negative effects while 96 hr mice, independent of treatment, had a mostly positive effect, indicating that there are both over and under-expressed genes for 4 weeks and mostly over-expressed genes 96 hrs.
 
 ## Treatment by time
 

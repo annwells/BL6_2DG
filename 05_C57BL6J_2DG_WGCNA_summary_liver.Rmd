@@ -106,7 +106,7 @@ Pathways were assessed for each module. Out of 31 modules, only 21 modules had p
 
 ## Salmon
 
-236 pathways were identified in the **salmon** module. The pathways were related to APC, beta-oxidation, cell cycle, cellular responses, DNA, interleukin-1, metabolism, mitochondrial metabolism, mRNA, NF-kappa B, nonsense mediated decay, oxidative phsophorylation, p53, PPAR signaling, RNA polymerase II, rRNA, signaling, TCA cycle, transcriptional regulation, translation, thermogenesis, uniquitin, and VLDL.
+236 pathways were identified in the **salmon** module. The pathways were related to APC, beta-oxidation, cell cycle, cellular responses, DNA, interleukin-1, metabolism, mitochondrial metabolism, mRNA, NF-kappa B, nonsense mediated decay, oxidative phosphorylation, p53, PPAR signaling, RNA polymerase II, rRNA, signaling, TCA cycle, transcriptional regulation, translation, thermogenesis, ubiquitin, and VLDL.
 
 ## Skyblue3
 
@@ -235,7 +235,7 @@ The top 10 genes that were significant for time within the **skyblue3** module a
 9. Loxl3
 10. Chrac1
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **darkolivegreen** 96 hrs, independent of treatment, had a positive effect while 4 wk, independent of treatment, had a negative effect. 96 hrs had over-expressed genes while 4 wks had under-expressed genes.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **darkolivegreen** 96 hrs, independent of treatment, had a positive effect while 4 wk, independent of treatment, had a negative effect. 96 hrs had over-expressed genes while 4 weeks had under-expressed genes.
 
 ## Treatment by time
 

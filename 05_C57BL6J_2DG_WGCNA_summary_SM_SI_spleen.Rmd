@@ -42,7 +42,7 @@ Pathways were assessed for each module. Out of 4 modules, only 3 modules had pat
 
 ## Blue
 
-234 pathways were identified for the **blue** module. The pathways identified were involved in cell cycle, cardiac function, cancer, immunity, metabolism, and mitochrondrial function.
+234 pathways were identified for the **blue** module. The pathways identified were involved in cell cycle, cardiac function, cancer, immunity, metabolism, and mitochondrial function.
 
 ## Brown
 
@@ -50,7 +50,7 @@ Pathways were assessed for each module. Out of 4 modules, only 3 modules had pat
 
 ## Turquoise
 
-174 pathways were identified for the **turquoise** module. The pathways identified were involved in alzheimer disease, b cell receptor signaling pathway, cell cycle, chromatin, multiple DNA pathways, mRNA and RNA pathways, and Toll like receptor pathways.
+174 pathways were identified for the **turquoise** module. The pathways identified were involved in Alzheimer disease, b cell receptor signaling pathway, cell cycle, chromatin, multiple DNA pathways, mRNA and RNA pathways, and Toll like receptor pathways.
 
 ```{r}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))

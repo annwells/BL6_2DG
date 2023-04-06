@@ -33,7 +33,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine which pathways are significantly altered by each module.
 
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","downloadthis")
@@ -52,7 +52,7 @@ module_barplot(modules)
 ```
 
 # Pathway Analysis {.tabset .tabset-fade .tabset-pills}
-Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases.
+Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Modules that did not contain any significant pathways are blank.
 
 ## Pathway plots {.tabset .tabset-fade .tabset-pills}
 ```{r}
@@ -89,7 +89,7 @@ count.pathways(WGCNA.pathway)
 #dev.off()
 ```
 
-```{r}
+```{r, include=FALSE}
  p <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Petal.Length)
 
 p

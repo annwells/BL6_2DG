@@ -74,12 +74,12 @@ Pathways were assessed for each module. Out of 25 modules, only 12 modules had p
 
 ## Plum1
 
-**Plum1** contained the largest number of genes, which spanned across 236 pathways. The pathways that contained the largest number of genes from plum1 played a role in protein metabolism and psot-translational protein modification, as well as transcription, adaptive immunity, vesicle-mediated transport, and membrane trafficking. 
+**Plum1** contained the largest number of genes, which spanned across 236 pathways. The pathways that contained the largest number of genes from plum1 played a role in protein metabolism and post-translational protein modification, as well as transcription, adaptive immunity, vesicle-mediated transport, and membrane trafficking. 
 
 
 ## Skyblue
 
-8 pathways were identified for the **skyblue** module. The modeule only contained pathways related to digestion, particularly carbohydrate digestion. 
+8 pathways were identified for the **skyblue** module. The module only contained pathways related to digestion, particularly carbohydrate digestion. 
 
 # Modules, Traits, Genes, and Sample Effects
 
@@ -168,7 +168,7 @@ The top 10 genes that were significant for treatment within the **darkorange** m
 9. Rassf7
 10. Apbb3
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **darkorange** most controls had a negative effect while most 2DG had a positive effect, indicating that there are a lot of under-expressed genes for control mice and over-expressed genes 2DG treated mice.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **darkorange** most controls had a negative effect while most 2DG had a positive effect, indicating that there are a lot of under-expressed genes for control mice and over-expressed genes for 2DG treated mice.
 
 The top 10 genes that were significant for treatment within the **darkgreen** module and had the highest correlation with darkgreen were:
 
@@ -183,7 +183,7 @@ The top 10 genes that were significant for treatment within the **darkgreen** mo
 9. Mcl1
 10. Epb4
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgreen** all controls had a positive effect while 2DG had a negative effect, indicating that there are a lot of over-expressed genes for control mice and under-expressed genes 2DG treated mice.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgreen** all controls had a positive effect while 2DG had a negative effect, indicating that there are a lot of over-expressed genes for control mice and under-expressed genes for 2DG treated mice.
 
 ## Treatment by time
 
@@ -200,7 +200,7 @@ The top 10 genes that were significant for treatment by time within the **darkor
 9. Mmgt2
 10. Sft2d1
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **darkorange**, regardless of time, most controls had a negative effect while most 2DG had a positive effect, indicating that there are a lot of under-expressed genes for control mice and over-expressed genes 2DG treated mice.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **darkorange**, regardless of time, most controls had a negative effect while most 2DG had a positive effect, indicating that there are a lot of under-expressed genes for control mice and over-expressed genes for 2DG treated mice.
 
 The top 10 genes that were significant for treatment by time within the **darkgreen** module and had the highest correlation with darkgreen were:
 
@@ -215,7 +215,7 @@ The top 10 genes that were significant for treatment by time within the **darkgr
 9. Prmt5
 10. Snx17
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgreen**, regardless of timepoint, all controls had a positive effect while 2DG had a negative effect, indicating that there are a lot of over-expressed genes for control mice and under-expressed genes 2DG treated mice.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgreen**, regardless of time point, all controls had a positive effect while 2DG had a negative effect, indicating that there are a lot of over-expressed genes for control mice and under-expressed genes for 2DG treated mice.
 
 ## Time
 
@@ -232,4 +232,4 @@ The top 10 genes that were significant for time within the **plum1** module and 
 9. ENSMUSG00000087433
 10. Lrcc73
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **plum1** the 96hr timepoint had a negative effect while 4wks had a positive effect on the module, indicating that there are a lot of under-expressed genes at 96 hours and over-expressed genes at 4 weeks.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **plum1** the 96hr time point had a negative effect while 4 weeks had a positive effect on the module, indicating that there are a lot of under-expressed genes at 96 hours and over-expressed genes at 4 weeks.

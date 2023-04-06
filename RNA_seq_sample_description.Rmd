@@ -18,9 +18,4 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Sample Description
 
-RNAseq was performed on four samples per tissue (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) and treatment (2DG or control). Pair-end sequencing was performed using novaseq platform. depth 20 million both ways. read length 150 bp both ways. 
-
-Library prep (Illumina Truseq stranded mRNA kit, stranded)
-NovaSeq
-Paired End
-40M reads in 2x150bp reads format
+RNA-sequencing (RNA-seq) was performed by Omega Bioservices. Bulk RNA of 9 tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) (4 samples per group) was isolated with the QIAGEN miRNeasy mini extraction kit (QIAGEN) and cDNA was synthesized with the High-Capacity cDNA Reverse Transcription Kit (Applied Biosystems). RNA quality was assessed with a Bioanalyzer 2100 (Agilent Technologies). Poly(A)-selected RNA-seq libraries were generated using the Illumina TruSeq RNA Sample preparation kit v2. RNA-seq was performed in a 150-bp paired-end format with a minimum of 40 million reads per sample on the Illumina HiSeq platform according to the manufacturer’s instructions. RNA-seq reads were filtered and trimmed for quality scores >30 using a custom python script. The filtered reads were aligned to Mus musculus GRCm38 using RSEM (v1.2.12) (58) with Bowtie2 (v2.2.0) (59) (command: rsem-calculate-expression -p 12 --phred33-quals --seed-length 25 --forward-prob 0 --time --output-genome-bam -- bowtie2). RSEM calculates expected counts and transcript per million (TPM). The expected counts from RSEM were used in the Bioconductor edgeR 3.20.9 package (60) to determine differentially expressed genes.

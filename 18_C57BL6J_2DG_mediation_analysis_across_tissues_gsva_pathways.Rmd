@@ -13,6 +13,16 @@ output:
    
 ---
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+         $(document).ready(function() {
+             $("table").DataTable();
+         } );
+</script>
+
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -21,10 +31,10 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 knitr::opts_knit$set(progress=FALSE)
 ```
 
-This dataset contains nine tissues(heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. 
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. 
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "kableExtra", "GSVA", "DT","mediation", "pander")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap", "kableExtra", "GSVA", "DT","mediation", "pander","gtools")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -96,7 +106,23 @@ med.out <- mediate(med.fit, out.fit, treat = "Treatment2", mediator = "Valine..l
 model <- summary(med.out)
 #panderOptions('knitr.auto.asis', FALSE)
 #      print(pander(model))
-print(model)
+bt_effect <- c("Indirect Effect", "Direct Effect", "Total Effect", 
+               "Percent Direct Effect")
+bt_est <- c(med.out$d1, med.out$z1, med.out$tau.coef, med.out$n1)
+#bt_p <- format.pval(c(med.out$d1.p, med.out$z1.p, med.out$tau.p, med.out$n1.p))
+bt_p <- c(med.out$d1.p, med.out$z1.p, med.out$tau.p, med.out$n1.p)
+bt_stars <- c(stars.pval(med.out$d1.p), stars.pval(med.out$z1.p),
+              stars.pval(med.out$tau.p), stars.pval(med.out$n1.p))
+bt_DF <- data.frame(row.names = bt_effect, format(bt_est, digits = 2), 
+                    format(bt_p, nsmall = 3), bt_stars)
+colnames(bt_DF) <- c("Coefficients", "p-value", "")
+
+print(knitr::kable(bt_DF, booktabs = T, align = "c",
+      caption = "Bootstrapping Analysis for Mediation") %>%
+      footnote(general = c("Simulations: 1000", "Significance: ∗ p<0.05; 
+                            ∗∗ p<0.01; ∗∗∗ p<0.001"),
+               general_title = "Legend:"))
+
 cat("\n \n")
 }
 ```
@@ -118,7 +144,22 @@ med.out <- mediate(med.fit, out.fit, treat = "Treatment2", mediator = "G2.M.DNA.
 model <- summary(med.out)
 #panderOptions('knitr.auto.asis', FALSE)
 #      print(pander(model))
-print(model)
+bt_effect <- c("Indirect Effect", "Direct Effect", "Total Effect", 
+               "Percent Direct Effect")
+bt_est <- c(med.out$d1, med.out$z1, med.out$tau.coef, med.out$n1)
+#bt_p <- format.pval(c(med.out$d1.p, med.out$z1.p, med.out$tau.p, med.out$n1.p))
+bt_p <- c(med.out$d1.p, med.out$z1.p, med.out$tau.p, med.out$n1.p)
+bt_stars <- c(stars.pval(med.out$d1.p), stars.pval(med.out$z1.p),
+              stars.pval(med.out$tau.p), stars.pval(med.out$n1.p))
+bt_DF <- data.frame(row.names = bt_effect, format(bt_est, digits = 2), 
+                    format(bt_p, nsmall = 3), bt_stars)
+colnames(bt_DF) <- c("Coefficients", "p-value", "")
+
+print(knitr::kable(bt_DF, booktabs = T, align = "c",
+      caption = "Bootstrapping Analysis for Mediation") %>%
+      footnote(general = c("Simulations: 1000", "Significance: ∗ p<0.05; 
+                            ∗∗ p<0.01; ∗∗∗ p<0.001"),
+               general_title = "Legend:"))
 cat("\n \n")
 }
 ```

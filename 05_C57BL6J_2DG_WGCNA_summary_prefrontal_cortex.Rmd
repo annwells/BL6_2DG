@@ -42,7 +42,7 @@ Pathways were assessed for each module. Out of 36 modules, only 24 modules had p
 
 ## Aquamarine
 
-14 Pathways were identified in the **Aquamarine** module. The pathways were related to mRNA, gene expression and transcription, SOMUylation, and RNA polymerase II.
+14 Pathways were identified in the **Aquamarine** module. The pathways were related to mRNA, gene expression and transcription, SUMOylation, and RNA polymerase II.
 
 ## Bisque2
 
@@ -62,7 +62,7 @@ Pathways were assessed for each module. Out of 36 modules, only 24 modules had p
 
 ## Chocolate4
 
-169 pathways were identified in the **Chocolate4** module. The pathways were related to AMPK signaling, autophagy, axon guidance, cAMP, cardiac function, chemokine signaling, cardiac function, estrogen, gycosaminoglycan biosynthesis, glucagon signaling, insulin, mTOR signaling, MAPK, MyD88, neuronal, cancer, platelets, signaling, T cell receptors, Th1 and 2 differentiation, Th17 differentiation, toll like receptors, and vasopressin and VEGF. 
+169 pathways were identified in the **Chocolate4** module. The pathways were related to AMPK signaling, autophagy, axon guidance, cAMP, cardiac function, chemokine signaling, cardiac function, estrogen, glycosaminoglycan biosynthesis, glucagon signaling, insulin, mTOR signaling, MAPK, MyD88, neuronal, cancer, platelets, signaling, T cell receptors, Th1 and 2 differentiation, Th17 differentiation, toll like receptors, and vasopressin and VEGF. 
 
 ## Cornsilk
 
@@ -94,7 +94,7 @@ Pathways were assessed for each module. Out of 36 modules, only 24 modules had p
 
 ## Hotpink3
 
-7 pathways were identified in the **Hotpink3** module. The pathways were related to glycolysis, glyconeogenesis, carbon metabolism, amino acids, and glucose metabolism.
+7 pathways were identified in the **Hotpink3** module. The pathways were related to glycolysis, gluconeogenesis, carbon metabolism, amino acids, and glucose metabolism.
 
 ## Khaki3
 
@@ -118,11 +118,11 @@ Pathways were assessed for each module. Out of 36 modules, only 24 modules had p
 
 ## Mediumorchid1
 
-9 pathways were identified in the **Mediumorchid1** module. The pathways were related to digestion, carbohydrate digestion, pancreatice and salivary secretions.
+9 pathways were identified in the **Mediumorchid1** module. The pathways were related to digestion, carbohydrate digestion, pancreatic and salivary secretions.
 
 ## Pink
 
-37 pathways were identified in the **Pink** module. The pathways were related to innate immunity, natural killer cells, neutrophils, NF-kapp B, NOD-like receptors, toll like receptors, and osteoclast differentiation.
+37 pathways were identified in the **Pink** module. The pathways were related to innate immunity, natural killer cells, neutrophils, NF-kappa B, NOD-like receptors, toll like receptors, and osteoclast differentiation.
 
 ## Salmon
 

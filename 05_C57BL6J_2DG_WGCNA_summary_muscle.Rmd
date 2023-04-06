@@ -50,7 +50,7 @@ Pathways were assessed for each module. Out of 40 modules, only 24 modules had p
 
 ## Brown2
 
-12 Pathways were identified in the **Brown2** module. The pathways were related to MAPK, metals, viruses, estogren signaling, and heat shock.
+12 Pathways were identified in the **Brown2** module. The pathways were related to MAPK, metals, viruses, estrogen signaling, and heat shock.
 
 ## Brown4
 

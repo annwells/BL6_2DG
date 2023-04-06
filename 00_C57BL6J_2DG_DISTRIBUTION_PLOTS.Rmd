@@ -60,7 +60,7 @@ ggplot(melttissue, aes(x = Tissue, y = value, fill = Time)) + geom_boxplot() + x
 ```
 
 ### Tissue
-This boxplot groups control and treated samples for each time point and tissue but displays the data by timepoint.
+This boxplot groups control and treated samples for each time point and tissue but displays the data by time point.
 
 ```{r tissue boxplot}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
@@ -79,7 +79,7 @@ ggplot(melttissue, aes(x = Time, y = value, fill = Tissue)) + geom_boxplot() + x
 ```
 
 ### Treatment
-This boxplot groups timepoints for each treatment and tissue.
+This boxplot groups time points for each treatment and tissue.
 ```{r treatment boxplot}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
@@ -138,7 +138,7 @@ ggplot(melttissue, aes(x = rowname, y = value, fill = Tissue)) + geom_boxplot() 
 Density plots show us the distribution of the data.
 
 ### Time by treatment
-This plot displays treatment and time for each tissue.
+This plot displays treatment and time for each tissue for each sample.
 ```{r time*treatment density plot}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
@@ -157,7 +157,7 @@ melttissue <- melt(log.tdata.FPKM.sample.info, variable_name="Tissue")
 ```
 
 ### Tissue
-This plot groups treatment and timepoint for each tissue.
+This plot groups treatment and time point for each tissue for each sample.
 
 ```{r tissue density plot}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
@@ -196,11 +196,11 @@ colnames(mat.dist) = paste(colnames(mat.dist), tdata.FPKM.sample.info$Time, tdat
 mat.dist = as.matrix(dist(t(mat.dist)))
 mat.dist = mat.dist/max(mat.dist)
 hmcol = colorRampPalette(brewer.pal(9, "GnBu"))(144)
-pheatmap::pheatmap(mat.dist, color = rev(hmcol), fontsize = 3)
+pheatmap::pheatmap(mat.dist, color = rev(hmcol), fontsize = 2)
 ```
 
 # MA plots
-MA plots plot the log-fold change against the log average. The M in the plot is the log of the ratio of counts for each gene between two samples. The A in the plot is the average count for each gene across two samples. Each comparison below is only plotting like with like (i.e. spleen 2DG 4wks with spleen 2DG 4wks)
+MA plots plot the log-fold change against the log average. The M in the plot is the log of the ratio of counts for each gene between two samples. The A in the plot is the average count for each gene across two samples. Each comparison below is only plotting like with like (i.e. spleen 2DG 4wks with spleen 2DG 4wks). These plots will should hover around zero to visualize that samples within the same treatment and time combination have the same expression profile, relatively.
 
 ```{r Spleen MA plots, child='Spleen-MA-plots.Rmd', cache=TRUE}
 ```

@@ -64,7 +64,7 @@ ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
 
 ## Hub Genes {.tabset .tabset-fade .tabset-pills}
 
-Hub genes are genes in the module network that have the highest connectivity. For instance, if the gene significance of a particular module is associated with treatment. The hub genes in this module are likely associated with this trait.
+Hub genes are genes in the module network that have the highest connectivity. For instance, if the gene significance of a particular module is associated with treatment the hub genes in this module are likely associated with this trait.
 
 ```{r, results='asis'}
 hub.genes(net.deg,module.labels,modules,ensembl.location)
@@ -72,7 +72,7 @@ hub.genes(net.deg,module.labels,modules,ensembl.location)
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
 
-To perform analysis of variance Aligned Rank Transformation was performed, which is designed to handle non-parametric multi-factorial experiments. P-value was adjusted using Benjamini-hochberg procedure.
+To perform analysis of variance Aligned Rank Transformation was performed, which is designed to handle non-parametric multi-factorial experiments. P-value was adjusted using Benjamini-hochberg procedure. Only the top 10 hub genes are listed.
 
 ```{r, results='asis'}
 log.tdata.FPKM.sample.info.subset.kidney$Time <- as.factor(log.tdata.FPKM.sample.info.subset.kidney$Time)

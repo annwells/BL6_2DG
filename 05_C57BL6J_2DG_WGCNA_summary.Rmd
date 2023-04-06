@@ -42,15 +42,15 @@ Pathways were assessed for each module. Out of 20 modules, all 20 modules had pa
 
 ## Black
 
-21 pathways were identified in the **Black** module. The pathways were related to cardiomyopathy, cardiac function, metabolism, posttranslational protein modification, protein processing of the ER, steroid biosynthesis, and striated muscle contraction.
+21 pathways were identified in the **Black** module. The pathways were related to cardiomyopathy, cardiac function, metabolism, post-translational protein modification, protein processing of the ER, steroid biosynthesis, and striated muscle contraction.
 
 ## Darkgreen
 
-372 pathways were identified in the **Darkgreen** module. The pathways were related to adaptive immunity, CD28, caspase activation, cell cycle, cyclins, chemokines, DNA, mRNA, interleukins, innate immune system, rRNA, RNA polymerase II, p53, NF-kappa B, NOD1/2, neutrpohil, natural killer cell mediated cytotoxicity, B cells, toll like receptors, Th1 and 2, Th17, and TNF.
+372 pathways were identified in the **Darkgreen** module. The pathways were related to adaptive immunity, CD28, caspase activation, cell cycle, cyclins, chemokines, DNA, mRNA, interleukins, innate immune system, rRNA, RNA polymerase II, p53, NF-kappa B, NOD1/2, neutrophil, natural killer cell mediated cytotoxicity, B cells, toll like receptors, Th1 and 2, Th17, and TNF.
 
 ## Darkolivegreen
 
-37 pathways were identified in the **Darkolivegreen** module. The pathways were related to digestion, o-linked glycosylation, parathyroid hormone, gylcerophospholipid, protein digestion, vascular smooth muscle contraction, TGF-beta signaling, and vitamin digestion and absorption.
+37 pathways were identified in the **Darkolivegreen** module. The pathways were related to digestion, o-linked glycosylation, parathyroid hormone, glycerophospholipid, protein digestion, vascular smooth muscle contraction, TGF-beta signaling, and vitamin digestion and absorption.
 
 ## Darkorange2
 
@@ -78,11 +78,11 @@ Pathways were assessed for each module. Out of 20 modules, all 20 modules had pa
 
 ## Lightyellow
 
-252 pathways were identified in the **Lightyellow** module. The pathways were related to AMPK signaling, antigen processing, asparagine n-linked glycosylation, cell cycle, cellular responses, MHC I mediated antigen processing and presentation, DNA, ERK, glucose metabolism, glycolysis, insulin, MAPK, signaling, RNA plymerase II, mRNA, SUMOylation, transport, VEGF, and ubiquitin.
+252 pathways were identified in the **Lightyellow** module. The pathways were related to AMPK signaling, antigen processing, asparagine n-linked glycosylation, cell cycle, cellular responses, MHC I mediated antigen processing and presentation, DNA, ERK, glucose metabolism, glycolysis, insulin, MAPK, signaling, RNA polymerase II, mRNA, SUMOylation, transport, VEGF, and ubiquitin.
 
 ## Mediumpurple3
 
-4 pathways were identified in the **Mediumpurple3** module. The pathways were cellular responses to chemical stress, detoxification of reactive oxygen species, metanolic pathways, and parathyroid hormone synthesis, secretion, and action.
+4 pathways were identified in the **Mediumpurple3** module. The pathways were cellular responses to chemical stress, detoxification of reactive oxygen species, metabolic pathways, and parathyroid hormone synthesis, secretion, and action.
 
 ## Midnightblue
 
@@ -110,7 +110,7 @@ Pathways were assessed for each module. Out of 20 modules, all 20 modules had pa
 
 ## Turquoise
 
-204 pathways were identified in the **Turquoise** module. The pathways were related to calcium, signaling, dopamine, estrogen, GABA, glycosaminoglycans, insulin, neuronal systems, type 2 diabetes, trafficking varioud molecules, smooth muscle contraction, and vasopressin.
+204 pathways were identified in the **Turquoise** module. The pathways were related to calcium, signaling, dopamine, estrogen, GABA, glycosaminoglycans, insulin, neuronal systems, type 2 diabetes, trafficking various molecules, smooth muscle contraction, and vasopressin.
 
 ## Violet
 

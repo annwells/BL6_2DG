@@ -49,11 +49,11 @@ Pathways were assessed for each module. Out of 17 modules, only 12 modules had p
 
 ## Darkgreen module
 
-12 pathways were identified for the **darkgreen** module. The pathways identified were involved in DNA repair, PPAR signaling, and protein digestion and absoprtion.
+12 pathways were identified for the **darkgreen** module. The pathways identified were involved in DNA repair, PPAR signaling, and protein digestion and absorption.
 
 ## Darkgrey
 
-2 pathways were idetified for the **dargrey** module, ABC transporters and neurotrophin signaling pathway.
+2 pathways were identified for the **darkgrey** module, ABC transporters and neurotrophin signaling pathway.
 
 ## Darkred
 
@@ -74,11 +74,11 @@ Pathways were assessed for each module. Out of 17 modules, only 12 modules had p
 
 ## Lightyellow
 
-3 pathways were identified for the **lightyellow** module, mitotic spindle checkpoint, posphorylation of the APC/C, regulation fo APC/C activators between G1/S and early anaphase.
+3 pathways were identified for the **lightyellow** module, mitotic spindle checkpoint, phosphorylation of the APC/C, regulation fo APC/C activators between G1/S and early anaphase.
 
 ## Magenta
 
-3 pathways were identified for the **magenta** module, arrhythmogenic right ventricule cardiomyopathy, muscle contraction, and striated muscle contraction.
+3 pathways were identified for the **magenta** module, arrhythmogenic right ventricular cardiomyopathy, muscle contraction, and striated muscle contraction.
 
 ## Pink
 

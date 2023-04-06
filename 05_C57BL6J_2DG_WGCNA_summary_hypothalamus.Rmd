@@ -42,11 +42,11 @@ Pathways were assessed for each module. Out of 25 modules, only 16 modules had p
 
 ## Antiquewhite2
 
-11 pathways were identified for the **antiquewhite2** module. The pathways identified were involved in transcription, mRNA, and protranslational modification.
+10 pathways were identified for the **antiquewhite2** module. The pathways identified were involved in transcription, mRNA splicing.
 
 ## Antiquewhite4
 
-5 pathways were identified for the **antiquewhite4** module. The pathways identified were involved in metabolism, protein processing in the ER, anitgen processing, and N-glycan biosynthesis.
+5 pathways were identified for the **antiquewhite4** module. The pathways identified were involved in metabolism, protein processing in the ER, antigen processing, and N-glycan biosynthesis.
 
 ## Bisque4
 

@@ -54,15 +54,15 @@ Pathways were assessed for each module. Out of 45 modules, only 21 modules had p
 
 ## Chocolate3
 
-4 pathways were identified for the **chocolate3** module. All the pathways involved moetabolism, particularly fatty acid metabolism.
+4 pathways were identified for the **chocolate3** module. All the pathways involved metabolism, particularly fatty acid metabolism.
 
 ## Coral1
 
-9 pathways were identified for the **coral1** module. Pathways identified had to do with RNA, metabolism, amino acid biosynthesis, huntington and parkinson disease, and oxidative phosphorylation.
+9 pathways were identified for the **coral1** module. Pathways identified had to do with RNA, metabolism, amino acid biosynthesis, Huntington and Parkinson disease, and oxidative phosphorylation.
 
 ## Darkgoldenrod4
 
-1 pathway was identified for the **darkgoldenrod4** module, metabolism of angiotendinogen to angiotensins.
+1 pathway was identified for the **darkgoldenrod4** module, metabolism of angiotensinogen to angiotensins.
 
 ## Darkgrey
 
@@ -110,11 +110,11 @@ There were 112 pathways identified for the **deepskyblue** module. The pathways 
 
 ## Lavenderblush2
 
-1 pathway was identifed for the **lavenderblush2** module, calcium signaling pathway.
+1 pathway was identified for the **lavenderblush2** module, calcium signaling pathway.
 
 ## Pink4
 
-1 pathway was identifed for the **pink4** module, calcium signaling pathway.
+1 pathway was identified for the **pink4** module, calcium signaling pathway.
 
 ## Tan4
 
@@ -122,7 +122,7 @@ There were 112 pathways identified for the **deepskyblue** module. The pathways 
 
 ## Turquoise
 
-11 pathways were identified for the **turquoise** module. The pathways identified were involved in collgen formation, tight juncture pathways, and transport of small molecules.
+11 pathways were identified for the **turquoise** module. The pathways identified were involved in collagen formation, tight juncture pathways, and transport of small molecules.
 
 
 # Modules, Traits, Genes, and Sample Effects
@@ -306,7 +306,7 @@ The top 10 genes that were significant for treatment by time within the **coral1
 9. Gtpbp4
 10. Cnnm1
 
-When assessing the overall sample contribution through their summary eigengenes it appears that for **coral1** most controls had a positive effect while most 2DG had a negative effect, regardles of time point, indicating that there are many under-expressed genes for control mice and over-expressed genes 2DG treated mice.
+When assessing the overall sample contribution through their summary eigengenes it appears that for **coral1** most controls had a positive effect while most 2DG had a negative effect, regardless of time point, indicating that there are many under-expressed genes for control mice and over-expressed genes 2DG treated mice.
 
 The top 10 genes that were significant for treatment by time within the **darkslateblue** module and had the highest correlation with darkslateblue were:
 
