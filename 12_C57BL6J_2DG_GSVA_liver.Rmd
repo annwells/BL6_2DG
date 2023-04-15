@@ -81,10 +81,169 @@ DT::datatable(matrix())
 
 Aligned rank transformation was used to determine which factors significantly altered each pathway. If a factor or interaction with more than two factors is identified as significant then contrast statements are performed using emmeans() or testInteraction() to identify which factors are significantly different.
 
-```{r, results='asis',cache=TRUE}
+```{r cache=TRUE, include=FALSE}
 log.tdata.FPKM.sample.info.subset.liver$Time <- as.factor(log.tdata.FPKM.sample.info.subset.liver$Time)
 
 log.tdata.FPKM.sample.info.subset.liver$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.liver$Treatment)
 
-GSVA.modules(modules, log.data.FPKM.subset.liver, log.tdata.FPKM.sample.info.subset.liver)
+gsva.table.list <- GSVA.modules(modules, log.data.FPKM.subset.liver, log.tdata.FPKM.sample.info.subset.liver)
+```
+
+### Bisque4
+
+```{r, results='asis'}
+print.gsva.table(w = 1, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+
+### Black
+```{r, results='asis'}
+print.gsva.table(w = 2, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Brown
+```{r, results='asis'}
+print.gsva.table(w = 3, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Brown4
+```{r, results='asis'}
+print.gsva.table(w = 4, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Cyan
+```{r, results='asis'}
+print.gsva.table(w = 5, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Darkgreen
+```{r, results='asis'}
+print.gsva.table(w = 6, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+
+### Darkgrey
+```{r, results='asis'}
+print.gsva.table(w = 7, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Darkolivegreen
+```{r, results='asis'}
+print.gsva.table(w = 8, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Darkorange
+```{r, results='asis'}
+print.gsva.table(w = 9, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Darkorange2
+```{r, results='asis'}
+print.gsva.table(w = 10, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+
+### Darkred
+```{r, results='asis'}
+print.gsva.table(w = 11, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Darkslateblue
+```{r, results='asis'}
+print.gsva.table(w = 12, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Darkturquoise
+```{r, results='asis'}
+print.gsva.table(w = 13, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Green
+```{r, results='asis'}
+print.gsva.table(w = 14, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Grey60
+```{r, results='asis'}
+print.gsva.table(w = 15, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Ivory
+```{r, results='asis'}
+print.gsva.table(w = 16, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### lightcyan
+```{r, results='asis'}
+print.gsva.table(w = 17, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Lightcyan1
+```{r, results='asis'}
+print.gsva.table(w = 18, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Lightgreen
+```{r, results='asis'}
+print.gsva.table(w = 19, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Lightsteelblue1
+```{r, results='asis'}
+print.gsva.table(w = 20, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Mediumpurple3
+```{r, results='asis'}
+print.gsva.table(w = 21, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Orange
+```{r, results='asis'}
+print.gsva.table(w = 22, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Pink
+```{r, results='asis'}
+print.gsva.table(w = 23, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Plum2
+```{r, results='asis'}
+print.gsva.table(w = 24, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Salmon
+```{r, results='asis'}
+print.gsva.table(w = 25, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Skyblue
+```{r, results='asis'}
+print.gsva.table(w = 26, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Skyblue3
+```{r, results='asis'}
+print.gsva.table(w = 27, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Tan
+```{r, results='asis'}
+print.gsva.table(w = 28, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Turquoise
+```{r, results='asis'}
+print.gsva.table(w = 29, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Violet
+```{r, results='asis'}
+print.gsva.table(w = 30, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Yellowgreen
+```{r, results='asis'}
+print.gsva.table(w = 31, gsva.table.list$table.module, gsva.table.list$tES)
 ```

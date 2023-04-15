@@ -81,10 +81,32 @@ DT::datatable(matrix())
 
 Aligned rank transformation was used to determine which factors significantly altered each pathway. If a factor or interaction with more than two factors is identified as significant then contrast statements are performed using emmeans() or testInteraction() to identify which factors are significantly different.
 
-```{r, results='asis',cache=TRUE}
+```{r cache=TRUE, include=FALSE}
 log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Time <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Time)
 
 log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Treatment <- as.factor(log.tdata.FPKM.sample.info.subset.SM.SI.spleen$Treatment)
 
-GSVA.modules(modules, log.data.FPKM.subset.SM.SI.spleen, log.tdata.FPKM.sample.info.subset.SM.SI.spleen)
+gsva.table.list <- GSVA.modules(modules, log.data.FPKM.subset.SM.SI.spleen, log.tdata.FPKM.sample.info.subset.SM.SI.spleen)
+```
+
+### Blue
+
+```{r, results='asis'}
+print.gsva.table(w = 1, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+
+### Brown
+```{r, results='asis'}
+print.gsva.table(w = 2, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Green
+```{r, results='asis'}
+print.gsva.table(w = 3, gsva.table.list$table.module, gsva.table.list$tES)
+```
+
+### Turquoise
+```{r, results='asis'}
+print.gsva.table(w = 4, gsva.table.list$table.module, gsva.table.list$tES)
 ```

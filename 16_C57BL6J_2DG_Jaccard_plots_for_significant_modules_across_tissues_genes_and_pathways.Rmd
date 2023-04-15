@@ -246,15 +246,18 @@ mods<-crossprod(table(stack(tissues.treat)))
         colnames(Jaccard)<-colnames(mods)
         rownames(Jaccard)<-rownames(mods)
         
-        #write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
-        #write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
+        write.csv(p.val,here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
+        write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
 ```
 
 ```{r}
 pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
+
+pval2 <- signif(pval, 2)
+
 breaks<-seq(0,.07,length.out = 100)
 
-pheatmap(mods,cluster_cols=F,cluster_rows=F, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+pheatmap(mods,cluster_cols=F,cluster_rows=F, fontsize = 10, fontsize_row = 12,fontsize_col = 12,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval2, breaks = breaks)
 ```
 
 ### Pathways
@@ -313,18 +316,18 @@ mods<-crossprod(table(stack(tissues.treat)))
         colnames(Jaccard)<-colnames(mods)
         rownames(Jaccard)<-rownames(mods)
         
-        #write.csv(p.val,here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
-        #write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues_pathways.csv"))
+        write.csv(p.val,here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
+        write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues_pathways.csv"))
 ```
 
 ```{r}
 Jaccard <- read.csv(here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
 
 pval <- read.csv(here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
-
+pval2 <- signif(pval, 2)
 breaks<-seq(0,1,length.out = 100)
 
-pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 10, fontsize_row = 12,fontsize_col = 12,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval2, breaks = breaks)
 ```
 
 ## Jaccard Plots of Pathways within Each Tissue {.tabset .tabset-fade .tabset-pills}
@@ -398,16 +401,18 @@ mods<-crossprod(table(stack(heart.darkgreen)))
         colnames(Jaccard)<-colnames(mods)
         rownames(Jaccard)<-rownames(mods)
         
-        #write.csv(p.val,here("Data","Heart","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
-        #write.csv(Jaccard,here("Data","Heart","Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
+        write.csv(p.val,here("Data","Heart","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
+        write.csv(Jaccard,here("Data","Heart","Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
 ```
 
 ```{r}
 pval <- read.csv(here("Data","Heart","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"), row.names = 1)
 
+pval2 <- signif(pval, 2)
+
 breaks<-seq(0,1,length.out = 100)
 
-pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 7, fontsize_row = 10,fontsize_col = 7,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval2, breaks = breaks)
 ```
 
 ### Hypothalamus
@@ -441,16 +446,18 @@ mods<-crossprod(table(stack(hyp.bisque4)))
         rownames(Jaccard)<-rownames(mods)
         
         
-        #write.csv(p.val,here("Data","Hypothalamus","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
-        #write.csv(Jaccard,here("Data","Hypothalamus","Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
+        write.csv(p.val,here("Data","Hypothalamus","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
+        write.csv(Jaccard,here("Data","Hypothalamus","Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
 ```
 
 ```{r}
 pval <- read.csv(here("Data","Hypothalamus","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"), row.names = 1)
 
+pval2 <- signif(pval, 2)
+
 breaks<-seq(0,1,length.out = 100)
 
-pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 10, fontsize_row = 6,fontsize_col = 6,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval2, breaks = breaks)
 ```
 
 ### Prefrontal Cortex
@@ -483,16 +490,18 @@ mods<-crossprod(table(stack(cortex.bisque2)))
         colnames(Jaccard)<-colnames(mods)
         rownames(Jaccard)<-rownames(mods)
         
-        #write.csv(p.val,here("Data","Prefrontal Cortex","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
-        #write.csv(Jaccard,here("Data","Prefrontal Cortex","Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
+        write.csv(p.val,here("Data","Prefrontal Cortex","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
+        write.csv(Jaccard,here("Data","Prefrontal Cortex","Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
 ```
 
 ```{r}
 pval <- read.csv(here("Data","Prefrontal Cortex","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"), row.names = 1)
 
+pval2 <- signif(pval, 1)
+
 breaks<-seq(0,1,length.out = 100)
 
-pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 8,fontsize_col = 8,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 10, fontsize_row = 10,fontsize_col = 7,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval2, breaks = breaks)
 ```
 
 ### Small Intestine
@@ -525,16 +534,20 @@ mods<-crossprod(table(stack(small.intestine.green4)))
         colnames(Jaccard)<-colnames(mods)
         rownames(Jaccard)<-rownames(mods)
         
-        #write.csv(p.val,here("Data","Small Intestine","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
-        #write.csv(Jaccard,here("Data","Small Intestine","Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
+        write.csv(p.val,here("Data","Small Intestine","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
+        write.csv(Jaccard,here("Data","Small Intestine","Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
 ```
 
 ```{r}
 pval <- read.csv(here("Data","Small Intestine","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"), row.names = 1)
 
+pval2 <- signif(pval, 2)
+
 breaks<-seq(0,1,length.out = 100)
 
-pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 3,fontsize_col = 3,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+#pdf("Small Intestine Jaccard Pathways.pdf")
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 7, fontsize_row = 3.5,fontsize_col = 3,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), breaks = breaks)
+#dev.off()
 ```
 
 ### Skeletal Muscle
@@ -567,14 +580,16 @@ mods<-crossprod(table(stack(muscle.salmon2)))
         colnames(Jaccard)<-colnames(mods)
         rownames(Jaccard)<-rownames(mods)
         
-        #write.csv(p.val,here("Data","Skeletal Muscle","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
-        #write.csv(Jaccard,here("Data","Skeletal Muscle","Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
+        write.csv(p.val,here("Data","Skeletal Muscle","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
+        write.csv(Jaccard,here("Data","Skeletal Muscle","Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
 ```
 
 ```{r}
 pval <- read.csv(here("Data","Skeletal Muscle","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"), row.names = 1)
 
+pval2 <- signif(pval, 2)
+
 breaks<-seq(0,1,length.out = 100)
 
-pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 6, fontsize_row = 4,fontsize_col = 4,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval, breaks = breaks)
+pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 10, fontsize_row = 7,fontsize_col = 4.5,color = colorRampPalette(brewer.pal(n = 12, name = "Paired"))(100), display_numbers = pval2, breaks = breaks)
 ```

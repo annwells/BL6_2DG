@@ -83,12 +83,13 @@ hypothalamus.gsva.phenotypes <- hypothalamus.gsva.phenotypes %>% mutate("Module"
 
 PC.hyp.gsva.phenotypes <- full_join(hypothalamus.gsva.phenotypes, PC.gsva.phenotypes, by = c("rowname")) %>% column_to_rownames()
 
-#write.csv(PC.hyp.gsva.phenotypes,here("Data","PC.hyp.gsva.for.mediation.analysis.csv"), row.names = T, col.names = T)
+write.csv(PC.hyp.gsva.phenotypes,here("Data","PC.hyp.gsva.for.mediation.analysis.csv"), row.names = T, col.names = T)
 
 ```
 
 ```{r}
 SI.heart.gsva.phenotypes <- read.csv(here("Data","SI.heart.gsva.for.mediation.analysis.csv"), row.names = 1)
+
 ```
 
 ## Mediation analysis {.tabset .tabset-fade .tabset-pills}
@@ -131,11 +132,18 @@ cat("\n \n")
 We assessed whether G2/M DNA damage checkpoint in the hypothalamus mediated any of the pathways identified in the prefrontal cortex.
 ```{r}
 PC.hyp <- read.csv(here("Data","PC.hyp.gsva.for.mediation.analysis.csv"), row.names = 1)
-
+Treatment2 <- c(PC.hyp$Treatment.x, PC.hyp$Treatment.y)
+Treatment2 <- Treatment2[!is.na(Treatment2)]
+Time2 <- c(PC.hyp$Time.x, PC.hyp$Time.y)
+Time2 <- Time2[!is.na(Time2)]
+PC.hyp <- PC.hyp %>%
+   mutate("Treatment2" = Treatment2) %>%
+   mutate("Time2" = Time2)
+PC.hyp <- PC.hyp[,-c(10:13, 25:28)]
 ```
 
 ```{r, results='asis', cache=TRUE}
-for(i in 1: 23){
+for(i in 1: 20){
     cat("\n####",colnames(PC.hyp)[i],"\n")
 med.fit <- lm(data = PC.hyp, G2.M.DNA.damage.checkpoint ~ Treatment2 + Time2 + Treatment2:Time2)
 out.fit <- glm(data = PC.hyp, PC.hyp[,i] ~ G2.M.DNA.damage.checkpoint + Treatment2 + Time2 + Treatment2:Time2 + G2.M.DNA.damage.checkpoint*Treatment2)

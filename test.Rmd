@@ -68,7 +68,7 @@ genes.heart.darkorange <- genes.jaccard.pathways(Matched, "Heart_darkorange")
 ```
 ### Plum1
 ```{r, results='asis'}
-#genes.heart.plum1 <- genes.jaccard.pathways(Matched, "Heart_plum1")
+genes.heart.plum1 <- genes.jaccard.pathways(Matched, "Heart_plum1")
   
 ```
 
@@ -132,7 +132,7 @@ genes.kidney.lightcyan <- genes.jaccard.pathways(Matched, "Kidney_lightcyan")
 ```
 ### Blue
 ```{r, results='asis'}
-#genes.kidney.blue <- genes.jaccard.pathways(Matched, "Kidney_blue")
+genes.kidney.blue <- genes.jaccard.pathways(Matched, "Kidney_blue")
   
 ```
 ### Pink

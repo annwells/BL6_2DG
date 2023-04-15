@@ -44,6 +44,7 @@ softthreshold <- function(data){
   cat("\n \n")
   
   invisible(soft)
+
 }
 
 
@@ -65,6 +66,7 @@ module_barplot <- function(module){
   p <- ggplot(data=count,aes(x=Module,y=n))
   p <- p + geom_bar(color="black", fill=sort(samples), stat="identity",position="identity") + theme_classic()
   p <- p + theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + scale_x_discrete(labels=sort(samples)) + xlab("Modules")
+  p <- p + theme(axis.text = element_text(size = 14)) 
   print(p)
 }
 
@@ -118,6 +120,7 @@ Data_setup <- function(data, by.x=NULL, by.y=NULL, file="file.RData", folder=NUL
 
 ## Function that finds pathways
 pathways<-function(annotation, organism=NULL, src_filter=NULL, pathwayfile = "file.RData", genefile = "file.RData", folder = NULL){
+  gprofiler2::set_base_url("https://biit.cs.ut.ee/gprofiler_archive3/e104_eg51_p15/")
   pathway=list()
   pathway.genes=list()
   Matched.module <- split(annotation$Gene, annotation$X..Module.)
@@ -143,7 +146,7 @@ pathways<-function(annotation, organism=NULL, src_filter=NULL, pathwayfile = "fi
 ## GOST PLOTS
 
 gost.plot<-function(annotation, organism=NULL, src_filter=NULL, folder = NULL){
-  
+  gprofiler2::set_base_url("https://biit.cs.ut.ee/gprofiler_archive3/e104_eg51_p15/")
   Matched.module <- split(annotation$Gene, annotation$X..Module.)
   for(i in 1:length(Matched.module)){
     name <- str_split(names(Matched.module)[i],"_")
@@ -276,7 +279,8 @@ eigen.expression <-function(eigens, expression){
     rownames(anno) <- colnames(expression2)
     colors <- list(Tissue = c("Spleen" = "coral3", "Kidney" = "deeppink4", "Liver" = "palegreen3", "Prefrontal Cortex" = "royalblue4", "Heart" = "darkorange", "Hippocampus" = "darkgoldenrod3", "Hypothalamus" = "thistle3", "Skeletal Muscle" = "firebrick", "Small Intestine" = "sienna3"), Treatment = c("Control" = "aquamarine3", "2DG" = "darkolivegreen"), Time = c("4 wks" = "orchid4", "96 hrs" = "deepskyblue2"))
     g <- pheatmap(expression2, cluster_rows = T, cluster_cols = T, show_rownames = F, scale = "none", breaks = breaks, color = colorRampPalette(brewer.pal(12, "Paired"))(50), annotation_col = anno, annotation_colors = colors, fontsize_col = 8)
-    p <- ggplot(eigens) + geom_bar(aes(eigens$X,unlist(eigens[i+1])), stat = "identity", color=name[[i]], fill = name[[i]]) + basic_theme + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) + labs(x = "Samples", y = "Module Summary Eigengene") + geom_hline(yintercept = 0, color = "black", size = .25)
+    p <- ggplot(eigens) + geom_bar(aes(eigens$X,unlist(eigens[i+1])), stat = "identity", color=name[[i]], fill = name[[i]]) + basic_theme + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) + labs(x = "Samples", y = "Module Summary Eigengene") + geom_hline(yintercept = 0, color = "black", size = .25) 
+      
     print(g)
     print(p)
     cat("\n \n")
@@ -324,7 +328,9 @@ dot.plot <-function(eigens){
       p <- ggplot(eigens2,aes(x = as.factor(eigens2[,j]),y = unlist(eigens2[i+n]))) + 
         geom_dotplot(binaxis='y', stackdir='center', stackratio=1.5, dotsize=.5, 
                      color=name[[i]], fill = name[[i]]) + basic_theme + 
-        theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12)) + 
+        theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 14), 
+              axis.text.y = element_text(size = 14), axis.title.x = element_text(size = 16),
+              axis.title.y = element_text(size = 16)) + 
         labs(x = "Samples", y = "Module Summary Eigengene") + 
         geom_hline(yintercept = 0, color = "black", size = .25) +
         theme(plot.background = element_rect(fill = "linen"),
@@ -332,7 +338,8 @@ dot.plot <-function(eigens){
                                               colour = "linen",
                                               size = 0.5, linetype = "solid"),
               panel.grid.major = element_line(size = 0.5, linetype = 'solid',
-                                              colour = "grey87"))
+                                              colour = "grey87")) +
+                scale_x_discrete(labels=c("2DG" = "2DG", "None" = "Control"))
       
       print(p)
       cat("\n \n")
@@ -404,6 +411,7 @@ module.jaccard.pathways <- function(count, tissue){
 # Plot pathways shared genes between tissues in jaccard overlaps
 
 genes.jaccard.pathways <- function(Matched, module){
+  gprofiler2::set_base_url("https://biit.cs.ut.ee/gprofiler_archive3/e104_eg51_p15")
   genes.module <- Matched[which(str_detect(names(Matched),module))]
   genes.module <- map_df(genes.module, ~as.data.frame(.))
   gene <- as.vector(genes.module$Genes)
@@ -544,10 +552,10 @@ eigenmetabolite <- function(factors, data){
     abs.max <- max(abs(plot.data$Value))
     
     p <- ggplot(plot.data) +
-      geom_raster(aes_string(x=trait, y="Module", fill="Value")) +
-      scale_fill_distiller(palette="PRGn", limits=c(-abs.max, abs.max)) + 
+      geom_tile(aes_string(x=trait, y="Module", fill="Value")) +
+      scale_fill_distiller(palette="PRGn", limits=c(-abs.max, abs.max)) +
       basic_theme + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-      theme(axis.text.y = element_text(size = 7))
+      theme(axis.text.y = element_text(size = 14))
     
     cat("\n###",trait,"\n")
     print(p)
@@ -793,14 +801,13 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
   names(tES) <- names(module.gene)
   
   
-
+  table.module <-list()
   for(j in 1:length(tES)){
     name.tES <- colnames(tES[[j]])
     tES[[j]] <- as.data.frame(tES[[j]])
     colnames(tES[[j]]) <- name.tES
     
   name <- str_split(names(tES)[j],"_")[[1]][2]
-  cat("\n###", name, "{.tabset .tabset-fade .tabset-pills}","\n")
   
   table.df <- data.frame(matrix(NA, 0, 5))
   
@@ -825,14 +832,27 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
     
   }
   
+  
   colnames(table.df) <- c("Pathway","Time", "Treatment","Time by Treatment","2DG expression compared to Control")
   
   table.df$Time <- as.numeric(table.df$Time)
   table.df$Treatment <- as.numeric(table.df$Treatment)
   table.df$`Time by Treatment` <- as.numeric(table.df$`Time by Treatment`)
+  table.module[[j]] <- table.df
+  }
   
-  if(length(unique(table.df$`2DG expression compared to Control`)) == 1 && unique(table.df$`2DG expression compared to Control`) == "up"){ 
-    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+  names(table.module) <- names(module.gene)
+  
+  return(list(table.module = table.module, tES = tES))
+}
+
+print.gsva.table <- function(w = 1, table.module, tES){
+  name <- str_split(names(tES)[w],"_")[[1]][2]
+  
+  table.module2 <- table.module[[w]]
+  
+  if(length(unique(table.module2$`2DG expression compared to Control`)) == 1 && unique(table.module2$`2DG expression compared to Control`) == "up"){ 
+    DT::datatable(table.module2, extensions = 'Buttons',
                                            rownames = FALSE, 
                                            filter="top",
                                            options = list(dom = 'Blfrtip',
@@ -844,24 +864,25 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
                                  'Time',
                                  color = styleInterval(c(0,0.05), c('white',"white","black")),
                                  backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-                               
+
                                formatStyle(
                                  'Treatment',
                                  color = styleInterval(c(0,0.05), c('white',"white","black")),
                                  backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
-                               
+
                                formatStyle(
                                  'Time by Treatment',
                                  color = styleInterval(c(0,0.05), c('white',"white","black")),
                                  backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-                               
+
                                formatStyle(
                                  '2DG expression compared to Control',
                                  color = "white",
-                                 backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), c("#CDB1AD")))))
-  } else if(length(unique(table.df$`2DG expression compared to Control`)) == 1 && unique(table.df$`2DG expression compared to Control`) == 
+                                 backgroundColor = styleEqual(unique(table.module2$`2DG expression compared to Control`), c("#CDB1AD")))
+
+  } else if(length(unique(table.module2$`2DG expression compared to Control`)) == 1 && unique(table.module2$`2DG expression compared to Control`) == 
             "down"){ 
-    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+    DT::datatable(table.module2, extensions = 'Buttons',
                                            rownames = FALSE, 
                                            filter="top",
                                            options = list(dom = 'Blfrtip',
@@ -873,23 +894,24 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
                                  'Time',
                                  color = styleInterval(c(0,0.05), c('white',"white","black")),
                                  backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-                               
+
                                formatStyle(
                                  'Treatment',
                                  color = styleInterval(c(0,0.05), c('white',"white","black")),
                                  backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
-                               
+
                                formatStyle(
                                  'Time by Treatment',
                                  color = styleInterval(c(0,0.05), c('white',"white","black")),
                                  backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-                               
+
                                formatStyle(
                                  '2DG expression compared to Control',
                                  color = "white",
-                                 backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), c("#2A385B")))))
-  } else if(length(unique(table.df$`2DG expression compared to Control`)) == 2){ 
-    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+                                 backgroundColor = styleEqual(unique(table.module2$`2DG expression compared to Control`), c("#2A385B")))
+
+      } else if(length(unique(table.module2$`2DG expression compared to Control`)) == 2){ 
+    DT::datatable(table.module2, extensions = 'Buttons',
                   rownames = FALSE, 
                   filter="top",
                   options = list(dom = 'Blfrtip',
@@ -901,23 +923,24 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
         'Time',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-      
+
       formatStyle(
         'Treatment',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
-      
+
       formatStyle(
         'Time by Treatment',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-      
+
       formatStyle(
         '2DG expression compared to Control',
         color = "white",
-        backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), c("#2A385B","#CDB1AD")))))
-  } else if(unique(table.df$`2DG expression compared to Control`) == "up") {
-    print(htmltools::tagList(DT::datatable(table.df, extensions = 'Buttons',
+        backgroundColor = styleEqual(unique(table.module2$`2DG expression compared to Control`), c("#2A385B","#CDB1AD")))
+
+  } else if(unique(table.module2$`2DG expression compared to Control`) == "up") {
+    DT::datatable(table.module2, extensions = 'Buttons',
                   rownames = FALSE, 
                   filter="top",
                   options = list(dom = 'Blfrtip',
@@ -929,23 +952,24 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
         'Time',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-      
+
       formatStyle(
         'Treatment',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
-      
+
       formatStyle(
         'Time by Treatment',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-      
+
       formatStyle(
         '2DG expression compared to Control',
         color = "white",
-        backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), "#CDB1AD"))))
-  } else if(unique(table.df$`2DG expression compared to Control`) == "down") {
-    print(htmltools:tagList(DT::datatable(table.df, extensions = 'Buttons',
+        backgroundColor = styleEqual(unique(table.module2$`2DG expression compared to Control`), "#CDB1AD"))
+
+  } else if(unique(table.module2$`2DG expression compared to Control`) == "down") {
+    DT::datatable(table.module2, extensions = 'Buttons',
                   rownames = FALSE, 
                   filter="top",
                   options = list(dom = 'Blfrtip',
@@ -957,34 +981,34 @@ GSVA.modules <- function(modules, logdata, data){ ## data contains sample info
         'Time',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-      
+
       formatStyle(
         'Treatment',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c("#440154FF","white"))) %>%
-      
+
       formatStyle(
         'Time by Treatment',
         color = styleInterval(c(0,0.05), c('white',"white","black")),
         backgroundColor = styleInterval(0.05, c('#440154FF',"white"))) %>%
-      
+
       formatStyle(
         '2DG expression compared to Control',
         color = "white",
-        backgroundColor = styleEqual(unique(table.df$`2DG expression compared to Control`), "#2A385B"))))
+        backgroundColor = styleEqual(unique(table.module2$`2DG expression compared to Control`), "#2A385B"))
+
   }
-  output_name <- paste(name, "Module GSVA ANOVA")
-  print(table.df %>%
-          download_this(
-            output_name = output_name,
-            output_extension = ".csv",
-            button_label = "Download data as csv",
-            button_type = "info",
-            has_icon = TRUE,
-            icon = "fa fa-save"
-          ))
-  cat("\n \n")
-}
+  # output_name <- paste(name, "Module GSVA ANOVA")
+  # print(table.module2 %>%
+  #         download_this(
+  #           output_name = output_name,
+  #           output_extension = ".csv",
+  #           button_label = "Download data as csv",
+  #           button_type = "info",
+  #           has_icon = TRUE,
+  #           icon = "fa fa-save"
+  #         ))
+#}
 }
 
 ## ANOVA for genes within WGCNA pathways time and treatment

@@ -50,7 +50,7 @@ modules<-read.csv(here("Data","Small Intestine","log.tdata.FPKM.sample.info.subs
 module_barplot(modules)
 ```
 
-## Pathway Analysis {.tabset .tabset-fade .tabset-pills}
+# Pathway Analysis {.tabset .tabset-fade .tabset-pills}
 Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Modules that did not contain any significant pathways are blank.
 
 ## Pathway plots {.tabset .tabset-fade .tabset-pills}

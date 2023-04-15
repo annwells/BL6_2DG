@@ -1,6 +1,6 @@
 ---
 ## Scree plot and summary statistics
-```{r PCA tissue.2DG.4wk log scree}
+```{r PCA tissue 2DG 4wk log scree}
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
 tdata.FPKM.sample.info.tissue.2DG.4wk <- rownames_to_column(tdata.FPKM.sample.info) %>% filter(Treatment=="2DG" & Time=="4 wks") %>% column_to_rownames('rowname')
@@ -24,7 +24,7 @@ summary(pca)
 ```
 
 ## Tissue
-```{r PCA tissue.2DG.4wk log}
+```{r PCA tissue 2DG 4wk }
 Tissue_color <- as.factor(tdata.FPKM.sample.info.tissue.2DG.4wk$Tissue)
 Tissue_color <- as.data.frame(Tissue_color)
 col_tissue <- colorRampPalette(brewer.pal(n = 12, name = "Paired"))(9)[Tissue_color$Tissue_color]
