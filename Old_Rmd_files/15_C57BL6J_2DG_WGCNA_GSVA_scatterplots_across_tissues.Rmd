@@ -32,6 +32,11 @@ source(here("source_files","WGCNA_source.R"))
 ```
 
 ```{r load data}
+heart <- readRDS(here("Data","Heart","Chang_2DG_BL6_GSVA_pathways_heart.RData"))
+small.intestine <- readRDS(here("Data","Small Intestine","Chang_2DG_BL6_GSVA_pathways_small_intestine.RData"))
+spleen <- readRDS(here("Data","Spleen","Chang_2DG_BL6_GSVA_pathways_spleen.RData"))
+Brain <- readRDS(here("Data","Brain","Chang_2DG_BL6_GSVA_pathways_brain.RData"))
+
 tdata.FPKM.sample.info <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_phenotypes.RData"))
 
 tdata.FPKM <- readRDS(here("Data","20190406_RNAseq_B6_4wk_2DG_counts_numeric.RData"))
@@ -43,9 +48,6 @@ log.tdata.FPKM.subset <- log.tdata.FPKM[,colMeans(log.tdata.FPKM != 0) > 0.5]
 
 log.tdata.FPKM.sample.info.subset <- cbind(log.tdata.FPKM.subset,tdata.FPKM.sample.info[,c(27238:27240)])
 
-heart <- readRDS(here("Data","Heart","GSVA.modules.heart.RData"))
-
-small.intestine <- readRDS(here("Data","Small Intestine","GSVA.modules.small.intestine.RData"))
 ```
 
 ## Treatment

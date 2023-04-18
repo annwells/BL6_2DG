@@ -5,7 +5,7 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: RNAseq
+    - text: Data Descriptions
       menu:
       - text: "Sample Description"
         href: RNA_seq_sample_description.html
@@ -13,797 +13,368 @@ navbar:
         href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent.html
       - text: "Distribution Plots"
         href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS.html
-      - text: "WGCNA"
-        menu:
-          - text: "Heart"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_heart.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_heart.html
-            - text: "Contribution of Main Effects to Modules"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_heart.html 
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_heart.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_heart.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_heart.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_heart.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_heart.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_heart.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_heart.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_heart.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_heart.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_heart.html
-          - text: "Hippocampus"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_hippocampus.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_hippocampus.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_hippocampus.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_hippocampus.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_hippocampus.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_hippocampus.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_hippocampus.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_hippocampus.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_hippocampus.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_hippocampus.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_hippocampus.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_hippocampus.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_hippocampus.html
-          - text: "Hypothalamus"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_hypothalamus.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_hypothalamus.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_hypothalamus.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_hypothalamus.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_hypothalamus.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_hypothalamus.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_hypothalamus.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_hypothalamus.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_hypothalamus.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_hypothalamus.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_hypothalamus.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_hypothalamus.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_hypothalamus.html
-          - text: "Kidney"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_kidney.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_kidney.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_kidney.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_kidney.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_kidney.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_kidney.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_kidney.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_kidney.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_kidney.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_kidney.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_kidney.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_kidney.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_kidney.html
-          - text: "Liver"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_liver.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_liver.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_liver.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_liver.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_liver.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_liver.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_liver.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_liver.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_liver.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_liver.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_liver.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_liver.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_liver.html
-          - text: "Prefrontal Cortex"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_prefrontal_cortex.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_prefrontal_cortex.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_prefrontal_cortex.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_prefrontal_cortex.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_prefrontal_cortex.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_prefrontal_cortex.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_prefrontal_cortex.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_prefrontal_cortex.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_prefrontal_cortex.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_prefrontal_cortex.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_prefrontal_cortex.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_prefrontal_cortex.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_prefrontal_cortex.html
-          - text: "Skeletal Muscle"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_muscle.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_muscle.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_muscle.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_muscle.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_muscle.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_muscle.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_muscle.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_muscle.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_muscle.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_muscle.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_muscle.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_muscle.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_muscle.html
-          - text: "Small Intestine"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_small_intestine.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_small_intestine.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_small_intestine.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_small_intestine.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_small_intestine.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_small_intestine.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_small_intestine.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_small_intestine.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_small_intestine.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_small_intestine.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_small_intestine.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_small_intestine.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_small_intestine.html
-          - text: "Spleen"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_spleen.html 
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_spleen.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_spleen.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_spleen.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_spleen.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_spleen.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_spleen.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_spleen.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_spleen.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_spleen.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_spleen.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_spleen.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_spleen.html
-          - text: "SM_SI_spleen"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_SM_SI_spleen.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_SM_SI_spleen.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_SM_SI_spleen.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_SM_SI_spleen.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_SM_SI_spleen.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_SM_SI_spleen.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_SM_SI_spleen.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_SM_SI_spleen.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_SM_SI_spleen.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_SM_SI_spleen.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_SM_SI_spleen.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_SM_SI_spleen.html
-          - text: "Brain"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_Brain.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_Brain.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_Brain.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA_Brain.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_Brain.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_Brain.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_Brain.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_Brain.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_Brain.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_Brain.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_Brain.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA_Brain.html
-          - text: "All Data"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS.html
-            - text: "ANOVA for Genes in Pathways"
-              href: 14_C57BL6J_2DG_gene_in_pathways_ANOVA.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification.html
-            - text: "Gene Set Variation Analysis"
-              href: 12_C57BL6J_2DG_GSVA.html
-      - text: "Jaccard Index"
-        menu:
-        - text: "Module Comparison"
-          href: 04_C57BL6J_2DG_WGCNA_MODULES_Jaccard_Index_comparison.html
-        - text: "Tissue identification for modules related to traits"
-          href: 06_C57BL6J_2DG_WGCNA_JACCARD_Pathway_synopsis.html
-        - text: "Pathways for gene overlaps of modules related to traits"
-          href: 06_C57BL6J_2DG_WGCNA_JACCARD_gene_synopsis.html
-        - text: "Comparison of Pathways and Genes within Modules of Choice for Manuscript"
-          href: 16_C57BL6J_2DG_Jaccard_plots_for_significant_modules_across_tissues_genes_and_pathways
-      - text: "Additional Analysis"
-        menu:
-        - text: "Cibersort Small Intestine"
-          href: 18_C57BL6J_2DG_Cibersort_small_intestine.html
-        - text: "Mediation Analysis"
-          href: 18_C57BL6J_2DG_mediation_analysis_across_tissues_gsva_pathways.html
-        - text: "Upset Plots for Modules of Choice for Manuscript"
-          href: 15_C57BL6J_2DG_WGCNA_UpSet_plots_across_tissues.html
-        - text: "Scatterplots Across Tissue Modules of Choice for Manuscript"
-          href: 15_C57BL6J_2DG_WGCNA_scatterplots_across_tissue_modules
-        - text: "Differential Expression of genes"
+    - text: "Individual Tissues"
+      menu:
+        - text: "Heart"
           menu:
-          - text: "Heart"
-            href: 17_C57BL6J_2DG_DE_genes_heart.html
-          - text: "Hippocampus"
-            href: 17_C57BL6J_2DG_DE_genes_hippocampus.html
-          - text: "Hypothalamus"
-            href: 17_C57BL6J_2DG_DE_genes_hypothalamus.html
-          - text: "Kidney"
-            href: 17_C57BL6J_2DG_DE_genes_kidney.html
-          - text: "Liver"
-            href: 17_C57BL6J_2DG_DE_genes_liver.html
-          - text: "Skeletal Muscle"
-            href: 17_C57BL6J_2DG_DE_genes_muscle.html
-          - text: "Small Intestine"
-            href: 17_C57BL6J_2DG_DE_genes_small_intestine.html
-          - text: "Spleen"
-            href: 17_C57BL6J_2DG_DE_genes_spleen.html
-        - text: "UpSet Plots for Differential Expression Analysis"
-          href: 19_C57BL6J_2DG_UpSet_plots_for_diff_exp_and pathways_all_genes.html
-        - text: "Correlations Across Tissue Modules Chosen for Manuscript"
-          href: 19_C57BL6J_2DG_Correlations_for_tissue_modules_chosen.Rmd
-    - text: Metabolomics
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_heart.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_heart.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_heart.html 
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_heart.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_heart.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_heart.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_heart.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_heart.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_heart.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_heart.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_heart.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_heart.html
+        - text: "Hippocampus"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_hippocampus.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_hippocampus.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_hippocampus.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_hippocampus.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_hippocampus.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_hippocampus.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_hippocampus.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_hippocampus.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_hippocampus.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_hippocampus.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_hippocampus.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_hippocampus.html
+        - text: "Hypothalamus"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_hypothalamus.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_hypothalamus.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_hypothalamus.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_hypothalamus.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_hypothalamus.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_hypothalamus.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_hypothalamus.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_hypothalamus.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_hypothalamus.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_hypothalamus.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_hypothalamus.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_hypothalamus.html
+        - text: "Kidney"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_kidney.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_kidney.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_kidney.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_kidney.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_kidney.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_kidney.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_kidney.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_kidney.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_kidney.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_kidney.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_kidney.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_kidney.html
+        - text: "Liver"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_liver.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_liver.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_liver.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_liver.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_liver.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_liver.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_liver.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_liver.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_liver.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_liver.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_liver.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_liver.html
+        - text: "Prefrontal Cortex"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_prefrontal_cortex.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_prefrontal_cortex.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_prefrontal_cortex.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_prefrontal_cortex.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_prefrontal_cortex.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_prefrontal_cortex.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_prefrontal_cortex.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_prefrontal_cortex.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_prefrontal_cortex.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_prefrontal_cortex.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_prefrontal_cortex.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_prefrontal_cortex.html
+        - text: "Skeletal Muscle"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_muscle.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_muscle.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_muscle.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_muscle.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_muscle.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_muscle.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_muscle.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_muscle.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_muscle.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_muscle.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_muscle.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_muscle.html
+        - text: "Small Intestine"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_small_intestine.html
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_small_intestine.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_small_intestine.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_small_intestine.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_small_intestine.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_small_intestine.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_small_intestine.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_small_intestine.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_small_intestine.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_small_intestine.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_small_intestine.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_small_intestine.html
+        - text: "Spleen"
+          menu:
+          - text: "Cleaning"
+            href: 00_C57BL6J_2DG_WGCNA_cleaning_spleen.html 
+          - text: "Module Creation"
+            href: 01_C57BL6J_2DG_WGCNA_MODULES_spleen.html
+          - text: "Pathway Analysis"
+            href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_spleen.html
+          - text: "ANOVA for Genes in Pathways"
+            href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_spleen.html 
+          - text: "Contribution of Main Effects to Modules"
+            href: 03_C57BL6J_2DG_WGCNA_contribution_spleen.html
+          - text: "Contribution of Samples to Modules"
+            href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_spleen.html
+          - text: "Summary"
+            href: 05_C57BL6J_2DG_WGCNA_summary_spleen.html
+          - text: "Pathway frequency across trait related modules"
+            href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_spleen.html
+          - text: "Hub Genes"
+            href: 09_C57BL6J_2DG_WGCNA_hub_genes_spleen.html
+          - text: "Gene significance"
+            href: 10_C57BL6J_2DG_WGCNA_gene_significance_spleen.html
+          - text: "Eigenmetabolite Stratification"
+            href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_spleen.html
+          - text: "Gene Set Variation Analysis"
+            href: 12_C57BL6J_2DG_GSVA_spleen.html
+    - text: "Multiple Tissues"
       menu:
-      - text: "Sample Description"
-        href: Metabolomics_sample_description.html
-      - text: "Data Diagnostics"
+      - text: "SM_SI_spleen"
         menu:
-          - text: "Heart"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_heart.html
-          - text: "Hippocampus"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_hippocampus.html
-          - text: "Hypothalamus"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_hypothalamus.html
-          - text: "Kidney"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_kidney.html
-          - text: "Liver"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_liver.html
-          - text: "Skeletal Muscle"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_muscle.html
-          - text: "Small Intestine"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_small_intestine.html
-          - text: "Spleen"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_spleen.html
-          - text: "SM_SI_spleen"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_SM_SI_spleen.html
-          - text: "SM_SI_spleen_4wks"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_SM_SI_spleen_4wks.html
-          - text: "SM_SI_spleen_96hrs"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_SM_SI_spleen_96hrs.html
-          - text: "Brain"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics_hip_hyp_cortex.html
-          - text: "All Data"
-            href: 00_C57BL6J_2DG_BASIC_DIAGNOSTICS_parent_metabolomics.html
-      - text: "Distribution Plots"
-        menu: 
-          - text: "Heart"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_heart.html
-          - text: "Hippocampus"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_hippocampus.html
-          - text: "Hypothalamus"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_hypothalamus.html
-          - text: "Kidney"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_kidney.html
-          - text: "Liver"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_liver.html
-          - text: "Skeletal Muscle"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_muscle.html
-          - text: "Small Intestine"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_small_intestine.html
-          - text: "Spleen"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_spleen.html
-          - text: "SM_SI_spleen"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_SM_SI_spleen.html
-          - text: "SM_SI_spleen_4wks"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_SM_SI_spleen_4wks.html
-          - text: "SM_SI_spleen_96hrs"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_SM_SI_spleen_96hrs.html
-          - text: "Brain"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics_hip_hyp_cortex.html
-          - text: "All Data"
-            href: 00_C57BL6J_2DG_DISTRIBUTION_PLOTS_metabolomics.html
-      - text: "WGCNA"
+        - text: "Cleaning"
+          href: 00_C57BL6J_2DG_WGCNA_cleaning_SM_SI_spleen.html
+        - text: "Module Creation"
+          href: 01_C57BL6J_2DG_WGCNA_MODULES_SM_SI_spleen.html
+        - text: "Pathway Analysis"
+          href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_SM_SI_spleen.html
+        - text: "ANOVA for Genes in Pathways"
+          href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_SM_SI_spleen.html 
+        - text: "Contribution of Main Effects to Modules"
+          href: 03_C57BL6J_2DG_WGCNA_contribution_SM_SI_spleen.html
+        - text: "Contribution of Samples to Modules"
+          href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_SM_SI_spleen.html
+        - text: "Summary"
+          href: 05_C57BL6J_2DG_WGCNA_summary_SM_SI_spleen.html
+        - text: "Pathway frequency across trait related modules"
+          href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_SM_SI_spleen.html
+        - text: "Hub Genes"
+          href: 09_C57BL6J_2DG_WGCNA_hub_genes_SM_SI_spleen.html
+        - text: "Gene significance"
+          href: 10_C57BL6J_2DG_WGCNA_gene_significance_SM_SI_spleen.html
+        - text: "Eigenmetabolite Stratification"
+          href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_SM_SI_spleen.html
+        - text: "Gene Set Variation Analysis"
+          href: 12_C57BL6J_2DG_GSVA_SM_SI_spleen.html
+      - text: "Brain"
         menu:
-          - text: "Heart"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_heart_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_heart_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_heart_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_heart_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_heart_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_heart_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_heart_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_heart_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_heart_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_heart_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_heart_metabolomics.html
-          - text: "Hippocampus"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_hippocampus_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_hippocampus_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_hippocampus_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_hippocampus_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_hippocampus_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_hippocampus_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_hippocampus_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_hippocampus_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_hippocampus_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_hippocampus_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_hippocampus_metabolomics.html
-          - text: "Hypothalamus"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_hypothalamus_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_hypothalamus_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_hypothalamus_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_hypothalamus_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_hypothalamus_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_hypothalamus_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_hypothalamus_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_hypothalamus_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_hypothalamus_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_hypothalamus_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_hypothalamus_metabolomics.html
-          - text: "Kidney"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_kidney_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_kidney_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_kidney_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_kidney_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_kidney_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_kidney_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_kidney_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_kidney_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_kidney_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_kidney_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_kidney_metabolomics.html
-          - text: "Liver"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_liver_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_liver_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_liver_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_liver_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_liver_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_liver_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_liver_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_liver_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_liver_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_liver_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_liver_metabolomics.html
-          - text: "Prefrontal Cortex"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_prefrontal_cortex_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_prefrontal_cortex_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_prefrontal_cortex_metabolomics.html
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_prefrontal_cortex_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_prefrontal_cortex_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_prefrontal_cortex_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_prefrontal_cortex_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_prefrontal_cortex_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_prefrontal_cortex_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_prefrontal_cortex_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_prefrontal_cortex_metabolomics.html
-          - text: "Skeletal Muscle"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_muscle_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_muscle_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_muscle_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_muscle_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_muscle_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_muscle_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_muscle_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_muscle_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_muscle_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_muscle_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_muscle_metabolomics.html
-          - text: "Small Intestine"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_small_intestine_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_small_intestine_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_small_intestine_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_small_intestine_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_small_intestine_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_small_intestine_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_small_intestine_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_small_intestine_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_small_intestine_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_small_intestine_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_small_intestine_metabolomics.html
-          - text: "Spleen"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_spleen_metabolomics.html 
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_spleen_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_spleen_metabolomics.html
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_spleen_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_spleen_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_spleen_metabolomics.html
-            - text: "Cytoscape"
-              href: 07_C57BL6J_2DG_WGCNA_Cytoscape_export_spleen_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_spleen_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_spleen_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_spleen_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_spleen_metabolomics.html
-          - text: "SM_SI_spleen"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_SM_SI_spleen_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_SM_SI_spleen_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_SM_SI_spleen_metabolomics.html
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_SM_SI_spleen_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_SM_SI_spleen_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_SM_SI_spleen_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_SM_SI_spleen_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_SM_SI_spleen_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_SM_SI_spleen_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_SM_SI_spleen_metabolomics.html
-          - text: "SM_SI_spleen_4wks"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_SM_SI_spleen_4wks_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_SM_SI_spleen_4wks_metabolomics.html
-          - text: "SM_SI_spleen_96hrs"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_SM_SI_spleen_96hrs_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_SM_SI_spleen_96hrs_metabolomics.html
-          - text: "Brain"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_Brain_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_Brain_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_Brain_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_Brain_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_Brain_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_Brain_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_Brain_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_Brain_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_Brain_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_Brain_metabolomics.html
-          - text: "All Data"
-            menu:
-            - text: "Cleaning"
-              href: 00_C57BL6J_2DG_WGCNA_cleaning_metabolomics.html
-            - text: "Module Creation"
-              href: 01_C57BL6J_2DG_WGCNA_MODULES_metabolomics.html
-            - text: "Pathway Analysis"
-              href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_metabolomics.html 
-            - text: "Contribution of Main Effects to Modules"
-              href: 03_C57BL6J_2DG_WGCNA_contribution_metabolomics.html
-            - text: "Contribution of Samples to Modules"
-              href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_metabolomics.html
-            - text: "Summary"
-              href: 05_C57BL6J_2DG_WGCNA_summary_metabolomics.html
-            - text: "Pathway frequency across trait related modules"
-              href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_metabolomics.html
-            - text: "Hub Genes"
-              href: 09_C57BL6J_2DG_WGCNA_hub_genes_metabolomics.html
-            - text: "Gene significance"
-              href: 10_C57BL6J_2DG_WGCNA_gene_significance_metabolomics.html
-            - text: "Eigenmetabolite Stratification"
-              href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_metabolomics.html
-      - text: "Jaccard Index"
+        - text: "Cleaning"
+          href: 00_C57BL6J_2DG_WGCNA_cleaning_Brain.html
+        - text: "Module Creation"
+          href: 01_C57BL6J_2DG_WGCNA_MODULES_Brain.html
+        - text: "Pathway Analysis"
+          href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS_Brain.html
+        - text: "ANOVA for Genes in Pathways"
+          href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA_Brain.html 
+        - text: "Contribution of Main Effects to Modules"
+          href: 03_C57BL6J_2DG_WGCNA_contribution_Brain.html
+        - text: "Contribution of Samples to Modules"
+          href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution_Brain.html
+        - text: "Summary"
+          href: 05_C57BL6J_2DG_WGCNA_summary_Brain.html
+        - text: "Pathway frequency across trait related modules"
+          href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits_Brain.html
+        - text: "Hub Genes"
+          href: 09_C57BL6J_2DG_WGCNA_hub_genes_Brain.html
+        - text: "Gene significance"
+          href: 10_C57BL6J_2DG_WGCNA_gene_significance_Brain.html
+        - text: "Eigenmetabolite Stratification"
+          href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification_Brain.html
+        - text: "Gene Set Variation Analysis"
+          href: 12_C57BL6J_2DG_GSVA_Brain.html
+      - text: "All Data"
         menu:
-        - text: "Module Comparison"
-          href: 04_C57BL6J_2DG_WGCNA_MODULES_Jaccard_Index_comparison.html
-        - text: "Tissue identification for modules related to traits"
-          href: 06_C57BL6J_2DG_WGCNA_JACCARD_Pathway_synopsis.html
-        - text: "Pathways for gene overlaps of modules related to traits"
-          href: 06_C57BL6J_2DG_WGCNA_JACCARD_gene_synopsis.html
-    - text: Proteomics
+        - text: "Cleaning"
+          href: 00_C57BL6J_2DG_WGCNA_cleaning.html
+        - text: "Module Creation"
+          href: 01_C57BL6J_2DG_WGCNA_MODULES.html
+        - text: "Pathway Analysis"
+          href: 02_C57BL6J_2DG_WGCNA_PATHWAY_ANALYSIS.html
+        - text: "ANOVA for Genes in Pathways"
+          href: 14_C57BL6J_2DG_genes_in_pathways_ANOVA.html 
+        - text: "Contribution of Main Effects to Modules"
+          href: 03_C57BL6J_2DG_WGCNA_contribution.html
+        - text: "Contribution of Samples to Modules"
+          href: 04_C57BL6J_2DG_WGCNA_Module_Sample_Contribution.html
+        - text: "Summary"
+          href: 05_C57BL6J_2DG_WGCNA_summary.html
+        - text: "Pathway frequency across trait related modules"
+          href: 08_C57BL6J_2DG_WGCNA_frequency_of_pathways_across_modules_related_to_traits.html
+        - text: "Hub Genes"
+          href: 09_C57BL6J_2DG_WGCNA_hub_genes.html
+        - text: "Gene significance"
+          href: 10_C57BL6J_2DG_WGCNA_gene_significance.html
+        - text: "Eigenmetabolite Stratification"
+          href: 11_C57BL6J_2DG_WGCNA_eigenmetabolite_stratification.html
+        - text: "Gene Set Variation Analysis"
+          href: 12_C57BL6J_2DG_GSVA.html
+    - text: "Jaccard Index"
       menu:
-       - text: "Sample Description"
-       - text: "Data Diagnostics"
-       - text: "Distribution Plots"
-       - text: "WGCNA"
-    - text: Microbiome
+      - text: "Module Comparison"
+        href: 04_C57BL6J_2DG_WGCNA_MODULES_Jaccard_Index_comparison.html
+      - text: "Tissue identification for modules related to traits"
+        href: 06_C57BL6J_2DG_WGCNA_JACCARD_Pathway_synopsis.html
+      - text: "Pathways for gene overlaps of modules related to traits"
+        href: 06_C57BL6J_2DG_WGCNA_JACCARD_gene_synopsis.html
+      - text: "Comparison of Pathways and Genes within Modules of Choice for Manuscript"
+        href: 16_C57BL6J_2DG_Jaccard_plots_for_significant_modules_across_tissues_genes_and_pathways.html
+    - text: "Additional Analyses"
       menu:
-       - text: "Sample Description"
-       - text: "Data Diagnostics"
-       - text: "Distribution Plots"
-       - text: "WGCNA"
-    - text: Integration
-      menu:
-       - text: "Sample Description"
-       - text: "Data Diagnostics"
-       - text: "Distribution Plots"
-       - text: "WGCNA"
+      - text: "Cibersort Small Intestine"
+        href: 18_C57BL6J_2DG_Cibersort_small_intestine.html
+      - text: "Mediation Analysis"
+        href: 18_C57BL6J_2DG_mediation_analysis_across_tissues_gsva_pathways.html
+      - text: "Upset Plots for Modules of Choice for Manuscript"
+        href: 15_C57BL6J_2DG_WGCNA_UpSet_plots_across_tissues.html
+      - text: "Scatterplots Across Tissue Modules of Choice for Manuscript"
+        href: 15_C57BL6J_2DG_WGCNA_scatterplots_across_tissue_modules.html
+      - text: "Differential Expression of genes"
+        menu:
+        - text: "Heart"
+          href: 17_C57BL6J_2DG_DE_genes_heart.html
+        - text: "Hippocampus"
+          href: 17_C57BL6J_2DG_DE_genes_hippocampus.html
+        - text: "Hypothalamus"
+          href: 17_C57BL6J_2DG_DE_genes_hypothalamus.html
+        - text: "Kidney"
+          href: 17_C57BL6J_2DG_DE_genes_kidney.html
+        - text: "Liver"
+          href: 17_C57BL6J_2DG_DE_genes_liver.html
+        - text: "Skeletal Muscle"
+          href: 17_C57BL6J_2DG_DE_genes_muscle.html
+        - text: "Small Intestine"
+          href: 17_C57BL6J_2DG_DE_genes_small_intestine.html
+        - text: "Spleen"
+          href: 17_C57BL6J_2DG_DE_genes_spleen.html
+      - text: "UpSet Plots for Differential Expression Analysis"
+        href: 19_C57BL6J_2DG_UpSet_plots_for_diff_exp_and pathways_all_genes.html
+      - text: "Correlations Across Tissue Modules Chosen for Manuscript"
+        href: 19_C57BL6J_2DG_Correlations_for_tissue_modules_chosen.html
+  
   right:
     - icon: fa-connectdevelop
-      href: http://carterdev:3838/2DG_SLE/
+      href: https://annwells.shinyapps.io/B6_2DG_shiny/?_ga=2.93240091.765029282.1681827325-846817614.1680024087
     - icon: fa-github
       href: https://github.com/annwells/BL6_2DG/tree/main
     - icon: fa-database
