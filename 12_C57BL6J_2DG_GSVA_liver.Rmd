@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -72,9 +62,9 @@ modules <- readRDS(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.
 Gene Set Variation Analysis is a non-parametric, unsupervised method that assesses gene set enrichment. The method is performed using the R package GSVA. It is performed without phenotypes, which allows for complex experimental studies to be assessed for pathway enrichment. Gene sets can be provided or pulled down from websites that store pre-defined gene sets. The gene sets used for this dataset were determined by assessing pathways present within each module through WGCNA. To obtain these pathways WGCNA was performed to cluster genes into modules. Overrepresented pathways were identified within each module using gProfiler2. To assess enrichment of pathways, Gene set variation analysis (GSVA) was performed. Genes of interest need to be compared to a gene set. To create this gene set, a complete ensembl gene list was assessed using gProfiler2 to identify pathways, regardless of significance. Each set of genes within each module was then assessed against the gene set to perform GSVA.
 
 
-```{r echo=FALSE, include = FALSE}
+```{r, include = FALSE}
 # Why, oh why do I need this chunk?
-DT::datatable(matrix())
+DT::datatable(data.frame(Init="Init"))
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}

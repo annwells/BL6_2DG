@@ -67,6 +67,7 @@ genes.heart.darkorange <- genes.jaccard.pathways(Matched, "Heart_darkorange")
   
 ```
 ### Plum1
+Server won't run this module currently
 ```{r, results='asis'}
 #genes.heart.plum1 <- genes.jaccard.pathways(Matched, "Heart_plum1")
   
@@ -131,6 +132,7 @@ genes.kidney.lightcyan <- genes.jaccard.pathways(Matched, "Kidney_lightcyan")
   
 ```
 ### Blue
+Server won't run this module currently
 ```{r, results='asis'}
 #genes.kidney.blue <- genes.jaccard.pathways(Matched, "Kidney_blue")
   
