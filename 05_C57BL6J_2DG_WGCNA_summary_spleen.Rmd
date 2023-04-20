@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Spleen"
+title: "Summary Spleen"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -24,7 +24,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,109 +38,110 @@ modules<-read.csv(here("Data","Spleen","log.tdata.FPKM.sample.info.subset.spleen
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 31 modules, only 28 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were metabolism and metabolism of RNA. The blue2, blue3, cornflowerblue, mediumpurple1, orangered4, slateblue1, and tan4 modules all contained these pathways.
 
-## Black
+### Black
 
 9 pathways were identified in the **Black** module. The pathways were related to digestion, carbohydrates, pancreatic and salivary secretion, and synaptic vesicle cycle.
 
-## Blue2
+### Blue2
 
 284 pathways were identified in the **Blue2** module. The pathways were related to APC, DNA, cell cycle, p53, interleukins, metabolism, mitochondrial metabolism, mRNA, oxidative phosphorylation, RNA polymerase II, TGF-beta, thermogenesis, signaling, transcriptional regulation.
 
-## Blue3
+### Blue3
 
 39 pathways were identified in the **Blue3** module. The pathways were related to chromatin, mRNA, RNA polymerase I, and WNT signaling.
 
-## Coral2
+### Coral2
 
 21 pathways were identified in the **Coral2** module. The pathways were related to antigen processing and presentation, autoimmune disease, metabolic pathways, and viral.
 
-## Cornflowerblue
+### Cornflowerblue
 
 22 pathways were identified in the **Cornflowerblue** module. The pathways were related to metabolism, ribosomes, translation, rRNA, and nonsense mediated decay.
 
-## Darkgreen
+### Darkgreen
 
 7 pathways were identified in the **Darkgreen** module. The pathways were related to fat digestion and absorption, microbial functions, and transcriptional misregulation in cancer.
 
-## Darkseagreen4
+### Darkseagreen4
 
 1 pathway, striated muscle contraction, was identified in the **Darkseagreen4** module.
 
-## Grey
+### Grey
 
 14 pathways were identified in the **Grey** module. The pathways were related to calcium signaling, muscle contraction, cardiac function, and neuronal activity.
 
-## Indiandred1
+### Indiandred1
 
 2 pathways were identified in the **Indianred1** module. The pathways were FMO oxidizes nucleophiles and regulation of insulin-like growth factor transport and uptake by insulin-like growth factor binding proteins.
 
-## Indianred4
+### Indianred4
 
 64 pathways were identified in the **Indianred4** module. The pathways were related to chromatin, B cell receptor signaling, autoimmune disease, immunity, insulin resistance, interleukins, natural killer cells, NF-kappa B signaling, Notch signaling, T cell receptor signaling, Th1 and 2 differentiation, and Th17 differentiation.
 
-## Lightblue2
+### Lightblue2
 
 10 pathways were identified in the **Lightblue2** module. The pathways were related to neuronal activity, estrogen, and endocannabinoid signaling.
 
-## Lightskyblue4
+### Lightskyblue4
 
 18 pathways were identified in the **Lightskyblue4** module. The pathways were related to MAPK, NMDA receptors, and mitochondrial uncoupling.
 
-## Mediumorchid
+### Mediumorchid
 
 7 pathways were identified in the **Mediumorchid** module. The pathways were related to neuronal activity.
 
-## Mediumpurple
+### Mediumpurple
 
 3 pathways were identified in the **Mediumpurple** module. The pathways were folate biosynthesis, metabolism of amine-derived hormones, and protein digestion and absorption.
 
-## Mediumpurple1
+### Mediumpurple1
 
 279 pathways were identified in the **Mediumpurple1** module. The pathways were related to APC, antigen processing, cell cycle, cellular responses, cyclins, DNA, metabolism, interleukins, mitochrondria, p53, amino acid metabolism, TCA cycle, signaling, SUMOylation, and transport.
 
-## Moccasin
+### Moccasin
 
 140 pathways were identified in the **Moccasin**  module. The pathways were related to amino acids, adherens, cell-cell interactions, endocrine function, glycolysis, gluconeogenesis, insulin signaling, glycosphingolipid, MAPK, pantothenate and CoA biosynthesis, and platelet activation.
 
-## Navajowhite
+### Navajowhite
 
 1 pathway, laminin interactions, were identified in the **Navajowhite** module.
 
-## Orange
+### Orange
 
 4 pathways were identified in the **Orange** module. The pathways were cushing syndrome, metabolism, PPAR signaling pathway, and renin-angiotensin system.
 
-## Orangered4
+### Orangered4
 
 33 pathways were identified in the **Orangered4** module. The pathways were related to amino acids, fatty acid metabolism, peroxisomes, protein digestion and absorption, synthesis of bile acids, and transport.
 
-## Palevioletred3
+### Palevioletred3
 
 27 pathways were identified in the **Palevioletred3** module. The pathways were related to B cell receptor signaling, MAPK, NOD-like receptor signaling, T cell receptor signaling, TNF signaling, TLR cascade and signaling, and osteoclast differentiation.
 
-## Pink2
+### Pink2
 
 2 pathways were identified in the **Pink2** module. The pathways were EPH-Ephrin signaling and EPHA-mediated growth cone collapse.
 
-## Plum
+### Plum
 
 1 pathway, neuroactive ligand-receptor interaction, was identified in the **Plum** module.
 
-## Sienna2
+### Sienna2
 
 2 pathways were identified in the **Sienna2** module. The pathways were ECM-receptor interaction and Focal adhesion.
 
-## Slateblue1
+### Slateblue1
 
 55 pathways were identified in the **Slateblue1** module. The pathways were related to cell cycle, metabolism, mitochondrial metabolism, mRNA, SUMOylation, and transport.
 
-## Tan4
+### Tan4
 
 32 pathways were identified in the **Tan4** module. The pathways were related to metabolism, mitochondrial metabolism, respiratory electron transport, oxidative phosphorylation, TCA cycle, thermogenesis, and translation.
 
-## Thistle1
+### Thistle1
 
 117 pathways were identified in the **Thistle1** module. The pathways were related to fatty acid metabolism,  bile acids, chylomicron activity, complement, HDL and LDL processing, metabolism, innate immunity, platelets, plasma, urea cycle, steroid hormone biosynthesis, tyrosine catabolism and metabolism, and VLDL processing.
 
@@ -209,14 +210,15 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Treatment
 None
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **tan4** module and had the highest correlation with tan4 were:
 
@@ -263,6 +265,6 @@ The top 10 genes that were significant for time within the **palevioletred3** mo
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **palevioletred3** 4 week old mice, independent of treatment had half positive and half negative effects while 96 hr mice, independent of treatment, had a mostly positive effect, indicating that there are both over and under-expressed genes for 4 weeks and mostly over-expressed genes 96 hrs.
 
-## Treatment by time
+### Treatment by time
 
 None

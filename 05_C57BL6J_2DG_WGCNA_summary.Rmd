@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary"
+title: "Summary"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -24,7 +24,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap" ,"WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,81 +38,82 @@ modules<-read.csv(here("Data","log.tdata.FPKM.sample.info.subset.WGCNA.module.me
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 20 modules, all 20 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were metabolic pathways and calcium signaling pathways. The black, darkolivegreen, grey, midnightblue, pink, royalblue, skyblue3, and turquoise modules all contained these pathways.
 
-## Black
+### Black
 
 21 pathways were identified in the **Black** module. The pathways were related to cardiomyopathy, cardiac function, metabolism, post-translational protein modification, protein processing of the ER, steroid biosynthesis, and striated muscle contraction.
 
-## Darkgreen
+### Darkgreen
 
 372 pathways were identified in the **Darkgreen** module. The pathways were related to adaptive immunity, CD28, caspase activation, cell cycle, cyclins, chemokines, DNA, mRNA, interleukins, innate immune system, rRNA, RNA polymerase II, p53, NF-kappa B, NOD1/2, neutrophil, natural killer cell mediated cytotoxicity, B cells, toll like receptors, Th1 and 2, Th17, and TNF.
 
-## Darkolivegreen
+### Darkolivegreen
 
 37 pathways were identified in the **Darkolivegreen** module. The pathways were related to digestion, o-linked glycosylation, parathyroid hormone, glycerophospholipid, protein digestion, vascular smooth muscle contraction, TGF-beta signaling, and vitamin digestion and absorption.
 
-## Darkorange2
+### Darkorange2
 
 9 pathways were identified in the **Darkorange2** module. The pathways were related to extracellular matrix, mTOR signaling, transport of bile salts and small molecules, and cellular response to starvation.
 
-## Floralwhite
+### Floralwhite
 
 21 pathways were identified in the **Floralwhite** module. The pathways were related to cardiac function, cAMP, neurodegenerative diseases, thyroid hormone signaling, and potassium channels.
 
-## Grey
+### Grey
 
 8 pathways were identified in the **Grey** module. The pathways were related to digestion, carbohydrates, pancreatic and salivary secretion.
 
-## Lightcyan
+### Lightcyan
 
 85 pathways were identified in the **Lightcyan** module. The pathways were related to amino acid metabolism, eicosanoids, fatty acid metabolism, insulin, glycolysis, gluconeogenesis, metabolism, nicotinate metabolism, pantothenate and CoA biosynthesis, PPAR signaling, steroids, and synthesis of bile acids.
 
-## Lightcyan1
+### Lightcyan1
 
 5 pathways were identified in the **Lightcyan1** module. The were related to mitochondrial translation, HDL modeling, and plasma lipoprotein remodeling.
 
-## Lightsteelblue1
+### Lightsteelblue1
 
 3 pathways were identified in the **Lightsteelblue1** module. The pathways were cellular responses to external stimuli, cellular responses to stress, and MAPK signaling pathway.
 
-## Lightyellow
+### Lightyellow
 
 252 pathways were identified in the **Lightyellow** module. The pathways were related to AMPK signaling, antigen processing, asparagine n-linked glycosylation, cell cycle, cellular responses, MHC I mediated antigen processing and presentation, DNA, ERK, glucose metabolism, glycolysis, insulin, MAPK, signaling, RNA polymerase II, mRNA, SUMOylation, transport, VEGF, and ubiquitin.
 
-## Mediumpurple3
+### Mediumpurple3
 
 4 pathways were identified in the **Mediumpurple3** module. The pathways were cellular responses to chemical stress, detoxification of reactive oxygen species, metabolic pathways, and parathyroid hormone synthesis, secretion, and action.
 
-## Midnightblue
+### Midnightblue
 
 46 pathways were identified in the **Midnightblue** module. The pathways were related to antigen presentation, caspase activation, metabolism, neutrophil degranulation, nicotinate metabolism, pentose phosphate pathway, purine catabolism, protein processing in the ER, TNF signaling, TRAIL signaling, and zinc transporters.
 
-## Orangered4
+### Orangered4
 
 2 pathways were identified in the **Orangered4** module. The pathways were apelin signaling pathway and fluid shear stress and atherosclerosis.
 
-## Pink
+### Pink
 
 70 pathways were identified in the **Pink** module. The pathways were related to bile acid, complement, extracellular matrix formation, fibrin, gamma-carboxylation, metabolism of amino acids, vitamins, lipids, porphyrins, and steroids, mitochondrial metabolism, platelets, PPAR signaling, regulation of IGF, synthesis of bile acids, and transport. 
 
-## Royalblue
+### Royalblue
 
 36 pathways identified in the **Royalblue** module. The pathways were related to the TCA cycle, neurodegenerative diseases, mitochondrial metabolism, pyruvate metabolism, respiratory electron transport, thermogenesis, and TP53 related pathways.
 
-## Skyblue
+### Skyblue
 
 57 pathways identified in the **Skyblue** module. The pathways were related to amino acid metabolism, fatty acid metabolism, metabolism of lipids, amino acids, and vitamins, HDL remodeling, plasma lipoprotein, pantothenate and CoA biosynthesis, steroid synthesis, and urea cycle. 
 
-## Skylblue3
+### Skylblue3
 
 11 pathways were identified in the **Skyblue3** module. The pathways were related to signaling, cardiac function, and muscle contraction.
 
-## Turquoise
+### Turquoise
 
 204 pathways were identified in the **Turquoise** module. The pathways were related to calcium, signaling, dopamine, estrogen, GABA, glycosaminoglycans, insulin, neuronal systems, type 2 diabetes, trafficking various molecules, smooth muscle contraction, and vasopressin.
 
-## Violet
+### Violet
 
 13 pathways were identified in the **Violet** module. The pathways were related to collagen, the extracellular matrix, and vasculature.
 
@@ -179,11 +180,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Tissue
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Tissue
 The top 10 genes that were significant for tissue within the **floralwhite** module and had the highest correlation with floralwhite were:
 
 1. Vwf
@@ -210,23 +212,23 @@ The top 10 genes that were significant for tissue within the **darkgreen** modul
 9. Crtc3
 10. Zswim8
 
-## Treatment
+### Treatment
 
 None
 
-## Time
+### Time
 
 None
 
-## Treatment by tissue
+### Treatment by tissue
 
 None
 
-## Treatment by time
+### Treatment by time
 
 None
 
-## Tissue by time
+### Tissue by time
 
 The top 10 genes that were significant for tissue by time within the **floralwhite** module and had the highest correlation with floralwhite were:
 
@@ -254,6 +256,6 @@ The top 10 genes that were significant for tissue by time within the **darkgreen
 9. Crtc3
 10. Zswim8
 
-## Treatment by tissue by time
+### Treatment by tissue by time
 
 None

@@ -1,5 +1,5 @@
 ---
-title: "Module Generation Pre-frontal Cortex"
+title: "Module Generation Prefrontal Cortex"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -54,16 +54,23 @@ options(stringsAsFactors=FALSE)
 
 WGCNA uses a smooth softmax function to force a scale-free topology on the gene expression network. I cycled through a set of threshold power values to see which one is the best for the specific topology. As recommended by the authors, I choose the smallest power such that the scale-free topology correlation attempts to hit 0.9.
 
-```{r, results='asis', cache=TRUE}
-threshold <- softthreshold(log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA)
+```{r, include=FALSE}
+powers <- 1:20
+  
+soft <- pickSoftThreshold(log.tdata.FPKM.sample.info.subset.prefrontal.cortex.WGCNA, powerVector=powers, verbose=0)
+```
+
+```{r, cache=TRUE, results='asis'}
+threshold <- softthreshold(soft)
+
 ```
 
 ### Pick Soft Threshold
 
 ```{r}
-knitr::kable(threshold$fitIndices)
+knitr::kable(soft$fitIndices)
 
-threshold$fitIndices %>%
+soft$fitIndices %>%
   download_this(
     output_name = "Soft Threshold Prefrontal Cortex",
     output_extension = ".csv",
@@ -79,7 +86,7 @@ threshold$fitIndices %>%
 I generated a weighted adjacency matrix for the gene expression profile network using the softmax threshold I determined in the previous step. Then I generate the Topological Overlap Matrix (TOM) for the adjacency matrix. This reduces noise and spurious associations according to the authors.I use the TOM matrix to cluster the profiles of each metabolite based on their similarity. I use dynamic tree cutting to generate modules. 
 
 ```{r adjacency matrix, cache=TRUE, cache.lazy=FALSE}
-soft.power <- which(threshold$fitIndices$SFT.R.sq >= 0.8)[1]
+soft.power <- which(soft$fitIndices$SFT.R.sq >= 0.8)[1]
 cat("\n", "Power chosen") 
 soft.power
 cat("\n \n")

@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Hypothalamus"
+title: "Summary Hypothalamus"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -16,6 +16,7 @@ output:
 
 # Summary
 
+
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -24,7 +25,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,61 +39,62 @@ modules<-read.csv(here("Data","Hypothalamus","log.tdata.FPKM.sample.info.subset.
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 25 modules, only 16 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were innate immune system, metabolism of RNA, and neutrophil degradation. The antiquewhite2, blue, darkgreen, indianred4, midnightblue, and skyblue modules all contained these pathways.
 
-## Antiquewhite2
+### Antiquewhite2
 
 10 pathways were identified for the **antiquewhite2** module. The pathways identified were involved in transcription, mRNA splicing.
 
-## Antiquewhite4
+### Antiquewhite4
 
 5 pathways were identified for the **antiquewhite4** module. The pathways identified were involved in metabolism, protein processing in the ER, antigen processing, and N-glycan biosynthesis.
 
-## Bisque4
+### Bisque4
 
 9 pathways were identified for the **bisque4** module. The pathways identified were involved in fatty acid metabolism, and telomere maintenance.
 
-## Black
+### Black
 
 29 pathways were identified for the **black** module. The pathways identified were involved in several cancers and cancer pathways.
 
-## Blue
+### Blue
 
 198 pathways were identified for the **blue** module. The pathways identified were involved in Alzheimer's disease, B-cell processes, external cellular responses (stress, hypoxia), IL-1 signaling, cancer pathways, metabolism and mitochondrial processes, mRNA and RNA pathways, and the TCA cycle.
 
-## Brown2
+### Brown2
 
 43 pathways were identified for the **brown2** module. The pathways identified were involved in collagen, extracellular matrix, protein digestion and absorption, IGF transport and uptake, and transport of bile salts.
 
-## Darkslateblue
+### Darkslateblue
 
 8 pathways were identified for the **darkslateblue** module. The pathways identified were involved in collagen and extracellular matrix pathways.
 
-## Indianred4
+### Indianred4
 
 12 pathways were identified for the **indianred4** module. The pathways identified were involved in fructose and mannose metabolism, neutrophil degranulation, and RNA pathways.
 
-## Lightblue4
+### Lightblue4
 
 16 pathways were identified for the **lightblue4** module. The pathways identified were involved in GABA, calmodulin and calcium signaling, and neurotransmitters.
 
-## Lightgreen
+### Lightgreen
 
 33 pathways were identified for the **lightgreen** module. The pathways identified were involved in the TCA cycle, calcium signaling, dopaminergic synapse, hormone pathways, insulin secretion, and gastric acid and hormone pathways.
 
-## Lightsteelblue1
+### Lightsteelblue1
 
 11 pathways were identified for the **lightsteelblue1** module. The pathways identified were involved in digestion, starch and sucrose metabolism, and the innate immune system.
 
-## Midnightblue
+### Midnightblue
 
 33 pathways were identified for the **midnightblue** module.  The pathways identified were involved in immunity, lupus, and toll like receptor pathways.
 
-## Orangered1
+### Orangered1
 
 10 pathways were identified for the **orangered1** module. The pathways identified were involved in glycogen metabolism, signaling, and transport of glycerol from adipocytes.
 
-## Skyblue
+### Skyblue
 
 30 pathways were identified for the **skyblue** module. The pathways identified were involved in fibrin pathways, innate immune system, platelet pathways, pathways of bile acids and salts, regulation of IGF transport and uptake, retinol metabolism, and transport of several molecules.
 
@@ -160,11 +162,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Treatment
 
 The top 10 genes that were significant for treatment within the **midnightblue** module and had the highest correlation with midnightblue were:
 
@@ -196,10 +199,10 @@ The top 10 genes that were significant for treatment within the **bisque4** modu
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **bisque4** most controls had a positive effect while most 2DG had a negative effect, indicating that there are many over-expressed genes for control mice and under-expressed genes 2DG treated mice.
 
-## Time
+### Time
 None
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **midnightblue** module and had the highest correlation with midnightblue were:
 

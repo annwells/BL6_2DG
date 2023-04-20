@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Skeletal Muscle"
+title: "Summary Skeletal Muscle"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -24,7 +24,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,101 +38,102 @@ modules<-read.csv(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subs
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 40 modules, only 24 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were metabolism of RNA, mitotic cell cycle, protein metabolism, and mRNA pathways. The brown4, darkgrey, navajowhite2, plum3, purple, salmon2, sienna4, skyblue4, and thistle1 modules all contained these pathways.
 
-## Antiquewhite2
+### Antiquewhite2
 
 2 pathways were identified in the **Antiquewhite2** module. The pathways were cell-cell communication and nephrin family interactions.
 
-## Bisque4
+### Bisque4
 
 86 pathways were identified in the **Bisque4** module. The pathways were related to cardiac function, collagen, calcium signaling, glycogen, glycolysis, gluconeogenesis, extracellular matrix, HIF-1, JAK-STAT, NOD-like receptor, NF-kappa B, O-glycosylation, platelets, osteoclast differentiation, autoimmune disease, Th17 differentiation, TNF signaling, and toll-like receptors.
 
-## Brown2
+### Brown2
 
 12 Pathways were identified in the **Brown2** module. The pathways were related to MAPK, metals, viruses, estrogen signaling, and heat shock.
 
-## Brown4
+### Brown4
 
 229 pathways were identified in the **Brown 4** module. The pathways were related to autophagy, cardiac function, AMPK signaling, B cell receptor signaling, cell cycle, cellular response, chromatin, immunity, cancer, ERK, estrogen, insulin, GnRH, interleukin-17, MAPK, metabolism of RNA and proteins, mRNA, mTOR, myD88, notch signaling, osteoclast differentiation, oxidative phosphorylation, protein processing of the ER, RNA, signaling, SUMOylation, T cell receptor signaling, Th1 and 2 differentiation, Th17 differentiation, thermogenesis, TNF signaling, toll like receptors, type II diabetes, VEGF and vasopressin, ubiquitin, and WNT signaling.
 
-## Coral2
+### Coral2
 
 7 pathways were identified in the **Coral2** module. The pathways identified were related to cardiomyopathy, muscle contraction, and cAMP signaling.
 
-## Coral3
+### Coral3
 
 1 pathway, long-term potentiation, was identified in the **Coral3** module.
 
-## Darkgrey
+### Darkgrey
 
 82 pathways were identified in the **Darkgrey** module. The pathways were related to APC, cell cycle, MHC I mediated antigen processing and presentation, insulin, homologous directed recombination, metabolism, mismatch repair, p53, RUNX, ubiquitin, and TCR signaling.
 
-## Darkseagreen3
+### Darkseagreen3
 
 9 pathways were identified in the **Darkseagreen3** module. The pathways identified were related to digestion, carbohydrate metabolism, and pancreatic and salivary secretion.
 
-## Firebrick4
+### Firebrick4
 
 3 pathways were identified in the **Firebrick4** module. The pathways identified were carbon metabolism, Rap1 signaling pathway, and VEGFR2 mediated vascular permeability.
 
-## Green
+### Green
 
 12 pathways were identified in the **Green** module. The pathways identified were related to fatty acid metabolism, propanoate metabolism, regulation of lipolysis, and amino acid metabolism.
 
-## Grey60
+### Grey60
 
 6 pathways were identified in the **Grey60** module. The pathways identified were related to GABA synthesis and protein-protein interactions at synapses.
 
-## Honeydew1
+### Honeydew1
 
 31 pathways were identified in the **Honeydew1** module. The pathways were related to collagen, extracellular matrix, keratan, MET, platelets, and signaling.
 
-## Lightcyan1
+### Lightcyan1
 
 6 pathways were identified in the **lightcyan1** module. The pathways were related to neuronal function at the synapse.
 
-## Lightsteelblue1
+### Lightsteelblue1
 
 27 pathways were identified in the **lightsteelblue1** module. The pathways were related to fatty acid metabolism, mitochondrial metabolism, respiratory electron transport, TCA cycle, thermogenesis, translation, and diabetic cardiomyopathy.
 
-## Magenta4
+### Magenta4
 
 3 pathways were identified in the **Magenta4** module. The pathways were TCA cycle and signaling pathways regulating pluripotency of stem cells.
 
-## Mediumpurple3
+### Mediumpurple3
 
 1 pathway, metabolic pathways, was identified in the **Mediumpurple3** module.
 
-## Navajowhite2
+### Navajowhite2
 
 50 pathways were identified in the **navajowhite2** module. The pathways were related to cell cycle, immunity, MHC II antigen presentation, RHO GTPase, and neutrophil degranulation.
 
-## Orangered4
+### Orangered4
 
 3 pathways were identified in the **Orangered4** module. The pathways were glycosphingolipid biosynthesis-lacto and neolacto series, neuronal system, and transmission across chemical synapses.
 
-## Plum3
+### Plum3
 
 6 pathways were identified in the **Plum3** module. The pathways were related to RNA and rRNA processing.
 
-## Purple
+### Purple
 
 180 pathways were identified in the **Purple** module. The pathways were related to antigen processing, APC, cell cycle, cellular responses, MHC I mediated antigen processing and presentation, metabolism, mRNA, nonsense mediated decay, transcriptional regulation, ubiquitin, translation, TCA cycle, RNA polymerase II, rRNA, p53, and respiratory electron transport.
 
-## Salmon2
+### Salmon2
 
 5 pathways were identified in the **Salmon2** module. The pathways were ARMS-mediated activation, metabolism of RNA, prolonged ERK activation events, regulation of ornithine decarboxylase, and TP53 regulates transcription of additional cell cycle genes whose exact role in the p53 pathways remain uncertain. 
 
-## Sienna4
+### Sienna4
 
 9 pathways were identified in the **Sienna4** module. The pathways were related to O-glycosylation, post-translational modification, and metabolism of folate and proteins.
 
-## Thistle1
+### Thistle1
 
 15 pathways were identified in the **Thistle1** module. The pathways were related to mRNA and mitotic events.
 
-## Turquoise
+### Turquoise
 
 38 pathways were identified in the **Turquoise** module. The pathways were related to cholesterol, NOD-like receptors, fat digestion and absorption, drug metabolism, urea cycle, vitamin digestion and absorption, and transport.
 
@@ -200,11 +201,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Treatment
 
 The top 10 genes that were significant for treatment within the **grey** module and had the highest correlation with grey were:
 
@@ -266,7 +268,7 @@ The top 10 genes that were significant for treatment within the **darkseagreen3*
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkseagreen3** half of the controls had a positive effect while all 2DG had a negative effect, indicating that there are some over-expressed genes for control mice and under-expressed genes 2DG treated mice.
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **firebrick4** module and had the highest correlation with firebrick4 were:
 
@@ -283,7 +285,7 @@ The top 10 genes that were significant for time within the **firebrick4** module
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **firebrick4** most controls had a negative effect while nearly half of the 2DG mice had a positive effect, with no clear time point effects, indicating that there are some under-expressed genes for control mice and over-expressed genes 2DG treated mice.
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **grey** module and had the highest correlation with grey were:
 

@@ -22,7 +22,7 @@ output:
          } );
 </script>
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal liver, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will deconvolve the green4 module, as well as all genes identified in the small intestine due to the predominant immunological signature that was identified when looking at overrepresented pathways for the green4 module.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal liver, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will deconvolve the green4 module, as well as all genes identified in the small intestine due to the predominant immunological signature that was identified when looking at overrepresented pathways for the green4 module.
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
@@ -59,7 +59,7 @@ cibersort.compare <- rbind(cibersort.phenotypes,cibersort.all.phenotypes)
 
 ### Raw Percentages {.tabset .tabset-fade .tabset-pills}
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 for(i in 1: length(cibersort[-1])){
   cat("\n####", names(cibersort[i+1]), "\n")
   hist(cibersort[,i+1],xlab = "Percentage of cells", main = names(cibersort[i+1]))
@@ -69,7 +69,7 @@ for(i in 1: length(cibersort[-1])){
 
 ### Logged Percentages {.tabset .tabset-fade .tabset-pills}
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 log.cibersort <- log(cibersort[,2:26])
 
 for(i in 1: length(log.cibersort[-1])){
@@ -82,7 +82,7 @@ for(i in 1: length(log.cibersort[-1])){
 ## Density Plots {.tabset .tabset-fade .tabset-pills}
 
 ### Green4 module {.tabset .tabset-fade .tabset-pills}
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 process <- preProcess(as.data.frame(cibersort), method=c("range"))
 
 norm_scale <- predict(process, as.data.frame(cibersort))
@@ -118,7 +118,7 @@ names(adjust) <- colnames(norm_scale[-1])
 
 ### All genes in Small Intestine {.tabset .tabset-fade .tabset-pills}
 
-```{r}
+```{r, results='asis', cache=TRUE}
 process <- preProcess(as.data.frame(cibersort.all), method=c("range"))
 
 norm_scale_all <- predict(process, as.data.frame(cibersort))
@@ -205,7 +205,6 @@ model <- list()
 adjust <- list()
 
 for(i in 1:length(cibersort.all[-1])) {
-   print(i)
     name <- colnames(cibersort.all.phenotypes[,i])
     #m <- art(data = cibersort.all.phenotypes, cibersort.all.phenotypes[,i] ~ Time*Treatment)
     m <- lm(data = cibersort.all.phenotypes, cibersort.all.phenotypes[,i] ~ Time*Treatment)
@@ -245,7 +244,6 @@ model <- list()
 adjust <- list()
 
 for(i in 1:length(cibersort.all[-1])) {
-   print(i)
     name <- colnames(cibersort.compare[,i])
     #m <- art(data = cibersort.compare, cibersort.compare[,i] ~ Time*Treatment)
     m <- lm(data = cibersort.compare, cibersort.compare[,i] ~ Module*Time*Treatment)
@@ -277,7 +275,7 @@ cibersort.all.matrix <- as.data.frame(cibersort.all.matrix)
 ```
 
 ## Plot to compare Green4 module to all genes in small intestine
-```{r plot cibersort all genes}
+```{r plot cibersort all genes, cache=TRUE}
 meltcibersort.all <- melt(cibersort.compare)
 p <- ggplot(meltcibersort.all, aes(variable,value, fill = c(Treatment),alpha = Module))
 p <- p + geom_bar(stat = "summary", position = "dodge") + basic_theme + theme(axis.text.x = element_text(angle = 90)) + xlab("Immune Cells") + ylab("Percentage") + labs(fill = c("Treatment")) + scale_alpha_discrete(range = c(.4,1))

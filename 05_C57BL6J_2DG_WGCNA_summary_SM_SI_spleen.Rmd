@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Skeletal Muscle, Small Intestine, and Spleen"
+title: "Summary Skeletal Muscle, Small Intestine, and Spleen"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -24,7 +24,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,17 +38,18 @@ modules<-read.csv(here("Data","SM.SI.spleen","log.tdata.FPKM.sample.info.subset.
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 4 modules, only 3 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were cell cycle and metabolism. The blue, brown, and turquoise modules all contained these pathways.
 
-## Blue
+### Blue
 
 234 pathways were identified for the **blue** module. The pathways identified were involved in cell cycle, cardiac function, cancer, immunity, metabolism, and mitochondrial function.
 
-## Brown
+### Brown
 
 45 pathways were identified for the **brown** module. The pathways identified were involved in calcium signaling, fructose catabolism and metabolism, lipid metabolism, and amino acid metabolism.
 
-## Turquoise
+### Turquoise
 
 174 pathways were identified for the **turquoise** module. The pathways identified were involved in Alzheimer disease, b cell receptor signaling pathway, cell cycle, chromatin, multiple DNA pathways, mRNA and RNA pathways, and Toll like receptor pathways.
 
@@ -120,11 +121,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Tissue
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Tissue
 
 The top 10 genes that were significant for tissue within the **brown** module and had the highest correlation with brown were:
 
@@ -141,7 +143,7 @@ The top 10 genes that were significant for tissue within the **brown** module an
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **brown** all skeletal muscle had a negative effect, spleen had a negative effect, and intestine had a positive effect. Muscle and spleen had mostly under-expressed genes while intestine had mostly over-expressed genes.
 
-## Treatment
+### Treatment
 
 The top 10 genes that were significant for treatment within the **turquoise** module and had the highest correlation with turquoise were:
 
@@ -203,7 +205,7 @@ The top 10 genes that were significant for treatment within the **brown** module
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **brown** all skeletal muscle had a negative effect, spleen had a negative effect, and intestine had a positive effect, all independent of treatment. Muscle and spleen had mostly under-expressed genes while intestine had mostly over-expressed genes.
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **turquoise** module and had the highest correlation with turquoise were:
 
@@ -265,7 +267,7 @@ The top 10 genes that were significant for time within the **brown** module and 
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **brown** all skeletal muscle had a negative effect, spleen had a negative effect, and intestine had a positive effect, all independent of time. Muscle and spleen had mostly under-expressed genes while intestine had mostly over-expressed genes.
 
-## Treatment by tissue
+### Treatment by tissue
 
 The top 10 genes that were significant for treatment by tissue within the **green** module and had the highest correlation with green were:
 
@@ -297,7 +299,7 @@ The top 10 genes that were significant for treatment by tissue within the **brow
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **brown** all skeletal muscle had a negative effect, spleen had a negative effect, and intestine had a positive effect, all independent of treatment but not tissue. Muscle and spleen had mostly under-expressed genes while intestine had mostly over-expressed genes.
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **turquoise** module and had the highest correlation with turquoise were:
 
@@ -359,7 +361,7 @@ The top 10 genes that were significant for treatment by time within the **brown*
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **brown** all skeletal muscle had a negative effect, spleen had a negative effect, and intestine had a positive effect, all independent of treatment and time. Muscle and spleen had mostly under-expressed genes while intestine had mostly over-expressed genes.
 
-## Tissue by time
+### Tissue by time
 
 The top 10 genes that were significant for tissue by time within the **brown** module and had the highest correlation with brown were:
 
@@ -376,7 +378,7 @@ The top 10 genes that were significant for tissue by time within the **brown** m
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **brown** all skeletal muscle had a negative effect, spleen had a negative effect, and intestine had a positive effect, all independent of time but not tissue. Muscle and spleen had mostly under-expressed genes while intestine had mostly over-expressed genes.
 
-## Treatment by tissue by time
+### Treatment by tissue by time
 
 The top 10 genes that were significant for treatment by tissue by time within the **green** module and had the highest correlation with green were:
 

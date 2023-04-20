@@ -25,14 +25,14 @@ output:
 
 # Introduction and Data files
 
-```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 knitr::opts_knit$set(progress=FALSE)
 
 ```
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlapped.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlapped.
 
 ## Load in Packages and read in files
 ```{r load packages}
@@ -53,7 +53,7 @@ Each tissue module was compared to the traits in the experiment. The modules tha
 ## Heart {.tabset .tabset-fade .tabset-pills}
 
 ### Darkgreen
-```{r Heart darkgreen, echo=FALSE}
+```{r Heart darkgreen}
 jaccard.heart.darkgreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkgreen"))
 ]
 
@@ -77,13 +77,13 @@ jaccard.heart.darkgreen.merged <- map_df(jaccard.heart.darkgreen, ~as.data.frame
 jaccard.heart.darkgreen.merged <- jaccard.heart.darkgreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.heart.darkgreen.merged)
 ```
 
 ### Darkgrey
 
-```{r Heart darkgrey, echo=FALSE}
+```{r Heart darkgrey}
 jaccard.heart.darkgrey <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkgrey"))
 ]
 
@@ -107,12 +107,12 @@ jaccard.heart.darkgrey.merged <- map_df(jaccard.heart.darkgrey, ~as.data.frame(.
 jaccard.heart.darkgrey.merged <- jaccard.heart.darkgrey.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.heart.darkgrey.merged)
 ```
 
 ### Darkorange
-```{r Heart darkorange, echo=FALSE}
+```{r Heart darkorange}
 jaccard.heart.darkorange <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkorange"))
 ]
 
@@ -136,12 +136,12 @@ jaccard.heart.darkorange.merged <- map_df(jaccard.heart.darkorange, ~as.data.fra
 jaccard.heart.darkorange.merged <- jaccard.heart.darkorange.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results="asis"}
+```{r, results="asis", cache=TRUE}
 module.jaccard.pathways(jaccard.heart.darkorange.merged)
 ```
 
 ### Plum1
-```{r Heart plum1, echo=FALSE}
+```{r Heart plum1}
 jaccard.heart.plum1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_plum1"))
 ]
 
@@ -165,13 +165,13 @@ jaccard.heart.plum1.merged <- map_df(jaccard.heart.plum1, ~as.data.frame(.)) %>%
 jaccard.heart.plum1.merged <- jaccard.heart.plum1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results="asis"}
+```{r, results="asis", cache=TRUE}
 module.jaccard.pathways(jaccard.heart.plum1.merged)
 ```
 
 ## Hippocampus {.tabset .tabset-fade .tabset-pills}
 ### Green
-```{r Hippocampus green, echo=FALSE}
+```{r Hippocampus green}
 jaccard.Hippocampus.green <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_green"))
 ]
 
@@ -195,12 +195,12 @@ jaccard.Hippocampus.green.merged <- map_df(jaccard.Hippocampus.green, ~as.data.f
 jaccard.Hippocampus.green.merged <- jaccard.Hippocampus.green.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Hippocampus.green.merged)
 ```
 
 ### Coral1
-```{r Hippocampus coral1, echo=FALSE}
+```{r Hippocampus coral1}
 jaccard.hippocampus.coral1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_coral1"))
 ]
 
@@ -224,12 +224,12 @@ jaccard.hippocampus.coral1.merged <- map_df(jaccard.hippocampus.coral1, ~as.data
 jaccard.hippocampus.coral1.merged <- jaccard.hippocampus.coral1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.hippocampus.coral1.merged)
 ```
 
 ### Darkslateblue
-```{r Hippocampus darkslateblue, echo=FALSE}
+```{r Hippocampus darkslateblue}
 jaccard.hippocampus.darkslateblue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_darkslateblue"))
 ]
 
@@ -253,12 +253,12 @@ jaccard.hippocampus.darkslateblue.merged <- map_df(jaccard.hippocampus.darkslate
 jaccard.hippocampus.darkslateblue.merged <- jaccard.hippocampus.darkslateblue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.hippocampus.darkslateblue.merged)
 ```
 
 ### Darkolivegreen
-```{r Hippocampus darkolivegreen, echo=FALSE}
+```{r Hippocampus darkolivegreen}
 jaccard.hippocampus.darkolivegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_darkolivegreen"))
 ]
 
@@ -282,12 +282,12 @@ jaccard.hippocampus.darkolivegreen.merged <- map_df(jaccard.hippocampus.darkoliv
 jaccard.hippocampus.darkolivegreen.merged <- jaccard.hippocampus.darkolivegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.hippocampus.darkolivegreen.merged)
 ```
 
 ### Khaki3
-```{r Hippocampus khaki3, echo=FALSE}
+```{r Hippocampus khaki3}
 jaccard.hippocampus.khaki3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_khaki3"))
 ]
 
@@ -311,13 +311,13 @@ jaccard.hippocampus.khaki3.merged <- map_df(jaccard.hippocampus.khaki3, ~as.data
 jaccard.hippocampus.khaki3.merged <- jaccard.hippocampus.khaki3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.hippocampus.khaki3.merged)
 ```
 
 ## Hypothalamus {.tabset .tabset-fade .tabset-pills}
 ### Midnightblue
-```{r Hypothalamus midnightblue, echo=FALSE}
+```{r Hypothalamus midnightblue}
 jaccard.Hypothalamus.midnightblue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hypothalamus_midnightblue"))
 ]
 
@@ -341,12 +341,12 @@ jaccard.Hypothalamus.midnightblue.merged <- map_df(jaccard.Hypothalamus.midnight
 jaccard.Hypothalamus.midnightblue.merged <- jaccard.Hypothalamus.midnightblue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Hypothalamus.midnightblue.merged)
 ```
 
 ### Bisque4
-```{r Hypothalamus bisque4, echo=FALSE}
+```{r Hypothalamus bisque4}
 jaccard.Hypothalamus.bisque4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hypothalamus_bisque4"))
 ]
 
@@ -370,13 +370,13 @@ jaccard.Hypothalamus.bisque4.merged <- map_df(jaccard.Hypothalamus.bisque4, ~as.
 jaccard.Hypothalamus.bisque4.merged <- jaccard.Hypothalamus.bisque4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Hypothalamus.bisque4.merged)
 ```
 
 ## Kidney {.tabset .tabset-fade .tabset-pills}
 ### Lightyellow
-```{r Kidney lightyellow, echo=FALSE}
+```{r Kidney lightyellow}
 jaccard.Kidney.lightyellow <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_lightyellow"))
 ]
 
@@ -400,12 +400,12 @@ jaccard.Kidney.lightyellow.merged <- map_df(jaccard.Kidney.lightyellow, ~as.data
 jaccard.Kidney.lightyellow.merged <- jaccard.Kidney.lightyellow.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Kidney.lightyellow.merged)
 ```
 
 ### Purple
-```{r Kidney purple, echo=FALSE}
+```{r Kidney purple}
 jaccard.Kidney.purple <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_purple"))
 ]
 
@@ -429,12 +429,12 @@ jaccard.Kidney.purple.merged <- map_df(jaccard.Kidney.purple, ~as.data.frame(.))
 jaccard.Kidney.purple.merged <- jaccard.Kidney.purple.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Kidney.purple.merged)
 ```
 
 ### Lightcyan
-```{r Kidney lightcyan, echo=FALSE}
+```{r Kidney lightcyan}
 jaccard.Kidney.lightcyan <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_lightcyan"))
 ]
 
@@ -458,12 +458,12 @@ jaccard.Kidney.lightcyan.merged <- map_df(jaccard.Kidney.lightcyan, ~as.data.fra
 jaccard.Kidney.lightcyan.merged <- jaccard.Kidney.lightcyan.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Kidney.lightcyan.merged)
 ```
 
 ### Blue
-```{r Kidney blue, echo=FALSE}
+```{r Kidney blue}
 jaccard.Kidney.blue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_blue"))
 ]
 
@@ -487,12 +487,12 @@ jaccard.Kidney.blue.merged <- map_df(jaccard.Kidney.blue, ~as.data.frame(.)) %>%
 jaccard.Kidney.blue.merged <- jaccard.Kidney.blue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Kidney.blue.merged)
 ```
 
 ### Pink
-```{r Kidney pink, echo=FALSE}
+```{r Kidney pink}
 jaccard.Kidney.pink <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_pink"))
 ]
 
@@ -516,13 +516,13 @@ jaccard.Kidney.pink.merged <- map_df(jaccard.Kidney.pink, ~as.data.frame(.)) %>%
 jaccard.Kidney.pink.merged <- jaccard.Kidney.pink.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Kidney.pink.merged)
 ```
 
 ## Liver {.tabset .tabset-fade .tabset-pills}
 ### Darkturquoise
-```{r Liver darkturquoise, echo=FALSE}
+```{r Liver darkturquoise}
 jaccard.Liver.darkturquoise <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_darkturquoise"))
 ]
 
@@ -546,12 +546,12 @@ jaccard.Liver.darkturquoise.merged <- map_df(jaccard.Liver.darkturquoise, ~as.da
 jaccard.Liver.darkturquoise.merged <- jaccard.Liver.darkturquoise.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Liver.darkturquoise.merged)
 ```
 
 ### Darkolivegreen
-```{r Liver darkolivegreen, echo=FALSE}
+```{r Liver darkolivegreen}
 jaccard.Liver.darkolivegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_darkolivegreen"))
 ]
 
@@ -575,12 +575,12 @@ jaccard.Liver.darkolivegreen.merged <- map_df(jaccard.Liver.darkolivegreen, ~as.
 jaccard.Liver.darkolivegreen.merged <- jaccard.Liver.darkolivegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE,cache=TRUE}
 module.jaccard.pathways(jaccard.Liver.darkolivegreen.merged)
 ```
 
 ### Skyblue3
-```{r Liver skyblue3, echo=FALSE}
+```{r Liver skyblue3}
 jaccard.Liver.skyblue3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_skyblue3"))
 ]
 
@@ -604,13 +604,13 @@ jaccard.Liver.skyblue3.merged <- map_df(jaccard.Liver.skyblue3, ~as.data.frame(.
 jaccard.Liver.skyblue3.merged <- jaccard.Liver.skyblue3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Liver.skyblue3.merged)
 ```
 
 ## Prefrontal Cortex {.tabset .tabset-fade .tabset-pills}
 ### Limegreen
-```{r Prefrontal Cortex limegreen, echo=FALSE}
+```{r Prefrontal Cortex limegreen}
 jaccard.Prefrontal.Cortex.limegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_limegreen"))
 ]
 
@@ -634,12 +634,12 @@ jaccard.Prefrontal.Cortex.limegreen.merged <- map_df(jaccard.Prefrontal.Cortex.l
 jaccard.Prefrontal.Cortex.limegreen.merged <- jaccard.Prefrontal.Cortex.limegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.limegreen.merged)
 ```
 
 ### Rosybrown2
-```{r Prefrontal Cortex rosybrown2, echo=FALSE}
+```{r Prefrontal Cortex rosybrown2}
 jaccard.Prefrontal.Cortex.rosybrown2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_rosybrown2"))
 ]
 
@@ -663,12 +663,12 @@ jaccard.Prefrontal.Cortex.rosybrown2.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.rosybrown2.merged <- jaccard.Prefrontal.Cortex.rosybrown2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.rosybrown2.merged)
 ```
 
 ### Lavenderblush2
-```{r Prefrontal Cortex lavenderblush2, echo=FALSE}
+```{r Prefrontal Cortex lavenderblush2}
 jaccard.Prefrontal.Cortex.lavenderblush2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_lavenderblush2"))
 ]
 
@@ -692,12 +692,12 @@ jaccard.Prefrontal.Cortex.lavenderblush2.merged <- map_df(jaccard.Prefrontal.Cor
 jaccard.Prefrontal.Cortex.lavenderblush2.merged <- jaccard.Prefrontal.Cortex.lavenderblush2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.lavenderblush2.merged)
 ```
 
 ### Antiquewhite
-```{r Prefrontal Cortex antiquewhite, echo=FALSE}
+```{r Prefrontal Cortex antiquewhite}
 jaccard.Prefrontal.Cortex.antiquewhite <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_antiquewhite"))
 ]
 
@@ -721,12 +721,12 @@ jaccard.Prefrontal.Cortex.antiquewhite.merged <- map_df(jaccard.Prefrontal.Corte
 jaccard.Prefrontal.Cortex.antiquewhite.merged <- jaccard.Prefrontal.Cortex.antiquewhite.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.antiquewhite.merged)
 ```
 
 ### Pink
-```{r Prefrontal Cortex pink, echo=FALSE}
+```{r Prefrontal Cortex pink}
 jaccard.Prefrontal.Cortex.pink <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_pink"))
 ]
 
@@ -750,12 +750,12 @@ jaccard.Prefrontal.Cortex.pink.merged <- map_df(jaccard.Prefrontal.Cortex.pink, 
 jaccard.Prefrontal.Cortex.pink.merged <- jaccard.Prefrontal.Cortex.pink.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.pink.merged)
 ```
 
 ###Lightpink1
-```{r Prefrontal Cortex lightpink1, echo=FALSE}
+```{r Prefrontal Cortex lightpink1}
 jaccard.Prefrontal.Cortex.lightpink1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_lightpink1"))
 ]
 
@@ -779,12 +779,12 @@ jaccard.Prefrontal.Cortex.lightpink1.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.lightpink1.merged <- jaccard.Prefrontal.Cortex.lightpink1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.lightpink1.merged)
 ```
 
 ### Goldenrod3
-```{r Prefrontal Cortex goldenrod3, echo=FALSE}
+```{r Prefrontal Cortex goldenrod3}
 jaccard.Prefrontal.Cortex.goldenrod3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_goldenrod3"))
 ]
 
@@ -808,12 +808,12 @@ jaccard.Prefrontal.Cortex.goldenrod3.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.goldenrod3.merged <- jaccard.Prefrontal.Cortex.goldenrod3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.goldenrod3.merged)
 ```
 
 ### Aquamarine
-```{r Prefrontal Cortex aquamarine, echo=FALSE}
+```{r Prefrontal Cortex aquamarine}
 jaccard.Prefrontal.Cortex.aquamarine <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_aquamarine"))
 ]
 
@@ -837,13 +837,13 @@ jaccard.Prefrontal.Cortex.aquamarine.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.aquamarine.merged <- jaccard.Prefrontal.Cortex.aquamarine.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Prefrontal.Cortex.aquamarine.merged)
 ```
 
 ## Skeletal Muscle {.tabset .tabset-fade .tabset-pills}
 ### Grey
-```{r Skeletal Muscle grey, echo=FALSE}
+```{r Skeletal Muscle grey}
 jaccard.Skeletal.Muscle.grey <- filtered.pathways[which(str_detect(names(filtered.pathways),"Skeletal Muscle_grey"))
 ]
 
@@ -867,13 +867,13 @@ jaccard.Skeletal.Muscle.grey.merged <- map_df(jaccard.Skeletal.Muscle.grey, ~as.
 jaccard.Skeletal.Muscle.grey.merged <- jaccard.Skeletal.Muscle.grey.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Skeletal.Muscle.grey.merged)
 ```
 
 ## Small Intestine {.tabset .tabset-fade .tabset-pills}
 ### Green4
-```{r Small Intestine green4, echo=FALSE}
+```{r Small Intestine green4}
 jaccard.Small.Intestine.green4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_green4"))
 ]
 
@@ -897,12 +897,12 @@ jaccard.Small.Intestine.green4.merged <- map_df(jaccard.Small.Intestine.green4, 
 jaccard.Small.Intestine.green4.merged <- jaccard.Small.Intestine.green4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Small.Intestine.green4.merged)
 ```
 
 ### Blue2
-```{r Small Intestine blue2, echo=FALSE}
+```{r Small Intestine blue2}
 jaccard.Small.Intestine.blue2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_blue2"))
 ]
 
@@ -926,12 +926,12 @@ jaccard.Small.Intestine.blue2.merged <- map_df(jaccard.Small.Intestine.blue2, ~a
 jaccard.Small.Intestine.blue2.merged <- jaccard.Small.Intestine.blue2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Small.Intestine.blue2.merged)
 ```
 
 ### Cornsilk
-```{r Small Intestine cornsilk, echo=FALSE}
+```{r Small Intestine cornsilk}
 jaccard.Small.Intestine.cornsilk <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_cornsilk"))
 ]
 
@@ -955,12 +955,12 @@ jaccard.Small.Intestine.cornsilk.merged <- map_df(jaccard.Small.Intestine.cornsi
 jaccard.Small.Intestine.cornsilk.merged <- jaccard.Small.Intestine.cornsilk.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Small.Intestine.cornsilk.merged)
 ```
 
 ### Magenta2
-```{r Small Intestine magenta2, echo=FALSE}
+```{r Small Intestine magenta2}
 jaccard.Small.Intestine.magenta2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_magenta2"))
 ]
 
@@ -984,12 +984,12 @@ jaccard.Small.Intestine.magenta2.merged <- map_df(jaccard.Small.Intestine.magent
 jaccard.Small.Intestine.magenta2.merged <- jaccard.Small.Intestine.magenta2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Small.Intestine.magenta2.merged)
 ```
 
 ### Darkgoldenrod4
-```{r Small Intestine darkgoldenrod4, echo=FALSE}
+```{r Small Intestine darkgoldenrod4}
 jaccard.Small.Intestine.darkgoldenrod4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_darkgoldenrod4"))
 ]
 
@@ -1013,13 +1013,13 @@ jaccard.Small.Intestine.darkgoldenrod4.merged <- map_df(jaccard.Small.Intestine.
 jaccard.Small.Intestine.darkgoldenrod4.merged <- jaccard.Small.Intestine.darkgoldenrod4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Small.Intestine.darkgoldenrod4.merged)
 ```
 
 ## Spleen {.tabset .tabset-fade .tabset-pills}
 ### Tan4
-```{r Spleen tan4, echo=FALSE}
+```{r Spleen tan4}
 jaccard.Spleen.tan4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_tan4"))
 ]
 
@@ -1043,12 +1043,12 @@ jaccard.Spleen.tan4.merged <- map_df(jaccard.Spleen.tan4, ~as.data.frame(.)) %>%
 jaccard.Spleen.tan4.merged <- jaccard.Spleen.tan4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Spleen.tan4.merged)
 ```
 
 ### Mediumpurple1
-```{r Spleen mediumpurple1, echo=FALSE}
+```{r Spleen mediumpurple1}
 jaccard.Spleen.mediumpurple1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_mediumpurple1"))
 ]
 
@@ -1072,12 +1072,12 @@ jaccard.Spleen.mediumpurple1.merged <- map_df(jaccard.Spleen.mediumpurple1, ~as.
 jaccard.Spleen.mediumpurple1.merged <- jaccard.Spleen.mediumpurple1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Spleen.mediumpurple1.merged)
 ```
 
 ### Palevioletred3
-```{r Spleen palevioletred3, echo=FALSE}
+```{r Spleen palevioletred3}
 jaccard.Spleen.palevioletred3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_palevioletred3"))
 ]
 
@@ -1102,6 +1102,6 @@ jaccard.Spleen.palevioletred3.merged <- jaccard.Spleen.palevioletred3.merged %>%
 
 ```
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 module.jaccard.pathways(jaccard.Spleen.palevioletred3.merged)
 ```

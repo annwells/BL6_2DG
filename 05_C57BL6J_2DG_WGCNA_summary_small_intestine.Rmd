@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Small Intestine"
+title: "Summary Small Intestine"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -24,7 +24,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,121 +38,122 @@ modules<-read.csv(here("Data","Small Intestine","log.tdata.FPKM.sample.info.subs
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 46 modules, only 29 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were cell cycle and mitotic metaphase and anaphase. The antiquewhite1, antiquewhite2, antiquewhite4, cornsilk, lightblue, lightblue4, orange, and yellow4 modules all contained these pathways.
 
-## Aliceblue
+### Aliceblue
 
 71 pathways were identified in the **Aliceblue** module. The pathways were related to cholesterol, fatty acid metabolism, glycolysis, gluconeogenesis, glycerophospholipids, metabolism, LDL, peroxisomes, PPAR signaling, pyruvate metabolism, sphingolipids, sulfur, and transport.
 
-## Antiquewhite
+### Antiquewhite
 
 1 pathway, sulfur relay system, was identified in the **Antiquwhite** module.
 
-## Antiquewhite1
+### Antiquewhite1
 
 136 pathways were identified in the **Antiquewhite1** module. The pathways were related to APC, NF-kappa B cells, cell cycle, cellular responses, DNA, metabolism, interleukin-1, mRNA, and p53.
 
-## Antiquewhite2
+### Antiquewhite2
 
 211 pathways were identified in the **Antiquewhite2** module. The pathways were related to APC, cell cycle, interleukin-1, metabolism, mitochondrial metabolism, mRNA, oxidative phosphorylation, p53, RNA polymerase I, transcriptional regulation, TCA cycle, thermogenesis, activation of NF-kappa in B cells.
 
-## Antiquewhite4
+### Antiquewhite4
 
 132 pathways were identified in the **Antiquewhite4** module. The pathways were related to APC, cell cycle, cellular responses, DNA, MHC I mediated antigen processing and presentation, interleukin-1, mitochondrial metabolism, insulin receptor signaling, p53, rRNA, translation, and ubiquitin.
 
-## Blue1
+### Blue1
 
 40 pathways were identified in the **Blue1** module. The pathways were related to cell cycle, collagen, MAPK, adrenergic signaling, wnt signaling, VEGF, protein processing in the ER, and n-glycan biosynthesis.
 
-## Blue3
+### Blue3
 
 5 pathways were identified in the **Blue3** module. The pathways were related to branched chain amino acid degradation, riboflavin metabolism, autophagy, metabolic pathways, and biosynthesis of cofactors.
 
-## Burlywood
+### Burlywood
 
 52 pathways were identified in the **Burlywood** module. The pathways were related to cardiac function, axon guidance, collagen, glycogen, cAMP, platelets, MET, and ion homeostasis.
 
-## Coral1
+### Coral1
 
 2 pathways were identified in the **Coral1** module. The pathways were glycerolipid metabolism and herpes simplex virus 1 infection.
 
-## Cornsilk
+### Cornsilk
 
 22 pathways were identified in the **Cornsilk** module. They pathways were related to cell cycle, SUMOylation, oxidative phosphorylation, lysine degradation, and thermogenesis.
 
-## Firebrick
+### Firebrick
 
 2 pathways were identified in the **Firebrick** module. The pathways were IL-17 signaling pathway and TNF signaling pathway.
 
-## Green4
+### Green4
 
 69 pathways were identified in the **Green4** module. The pathways were related to adaptive immunity, cytokine signaling, DAP12, autoimmune disease, cell adhesion molecules, cytokine signaling,  immunity, interleukins, natural killer cells, NOD-like receptor signaling, JAK-STAT signaling, NF-kappa B signaling, Th1 and 2 differentiation, Th17 differentiation, and TNF signaling.
 
-## Hotpink4
+### Hotpink4
 
 13 pathways were identified in the **Hotpink4** module. The pathways were related to PDH, TCA cycle, FOXO-mediated transcription of cell cycle genes.
 
-## Indianred
+### Indianred
 
 9 pathways were identified in the **Indianred** module. The pathways were related to viruses and NOD-like receptor signaling pathway.
 
-## Lightblue
+### Lightblue
 
 29 pathways were identified in the **Lightblue** module. The pathways were related to cell cycle, MHC II antigen presentation, RHO GTPase, and HDL remodeling.
 
-## Lightblue2
+### Lightblue2
 
 44 pathways were identified in the **Lightblue2** module. The pathways were related to cellular senescence, mRNA, chromatin, cancer, and RNA.
 
-## Lightgreen
+### Lightgreen
 
 3 pathways were identified in the **lightgreen** module. The pathways were metabolism,  PPAR signaling pathway, and regulation of lipolysis in adipocytes.
 
-## Magenta3
+### Magenta3
 
 19 pathways were identified in the **Magenta3** module. The pathways were related to insulin signaling, interleukin-6, ERK 1/2, thermogenesis, ubiquitin, growth hormone, and axon guidance.
 
-## Mistyrose
+### Mistyrose
 
 7 pathways were identified in the **Mistyrose** module. The pathways were related to collagen, MET, depolarization, and cardiac conduction.
 
-## Moccasin
+### Moccasin
 
 2 pathways were identified in the **Moccasin** module. The pathways were ATP sensitive potassium channels and wnt signaling.
 
-## Oldlace
+### Oldlace
 
 21 pathways were identified in the **Oldlace** module. The pathways were related to antigen processing and presentation, cellular responses, MAPK signaling, protein processing in the ER, estrogen, HSF1, and HSP90.
 
-## Pink2
+### Pink2
 
 6 pathways were identified in the **Pink2** module. The pathways were Apoptosis - multiple species, Herpes simplex virus 1 infection, Human immunodeficiency virus 1 infection, Lipid and atherosclerosis, Osteoclast differentiation, and Toxoplasmosis.
 
-## Red4
+### Red4
 
 1 pathway, fatty acid degradation, was identified in the **Red4** module.
 
-## Rosybrown3
+### Rosybrown3
 
 103 pathways were identified in the **Rosybrown3** module. The pathways were related to adaptive immunity, autoimmune disease, cytokine signaling, DAP12, CD28, calcium signaling, B cell receptor, cell adhesion molecules, interleukins, innate immune system, JAK-STAT, natural killer cells, NF-kappa B, platelets, Rap1, PD-1, Th1 and 2 differentiation, Th17 differentiation, TNF, T cell receptor signaling, and VEGF. 
 
-## Rosybrown4
+### Rosybrown4
 
 17 pathways were identified in the **Rosybrown4** module. The pathways were related to neurodegenerative diseases, oxidative phosphorylation, thermogenesis, and cardiac muscle contraction.
 
-## Royalblue
+### Royalblue
 
 3 pathways were identified in the **Royalblue** module. The pathways were muscle contraction, nicotine addiction, and striated muscle contraction.
 
-## Thistle2
+### Thistle2
 
 1 pathway, neuroactive ligand-receptor interaction, was identified in the **Thistle2** module. 
 
-## White
+### White
 
 8 pathways were identified in the **White** module. The pathways were related to digestion, metabolic pathways, carbohydrates, and pancreatic and salivary secretion.
 
-## Yellow4
+### Yellow4
 
 34 pathways were identified in the **Yellow4** module. The pathways were related to adaptive immunity, cell cycle, DNA, MHC II antigen presentation, mTOR, and RHO GTPase.
 
@@ -220,11 +221,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Treatment
 
 The top 10 genes that were significant for treatment within the **green4** module and had the highest correlation with green4 were:
 
@@ -241,7 +243,7 @@ The top 10 genes that were significant for treatment within the **green4** modul
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **green4** most controls had a positive effect while most 2DG had a negative effect, indicating that there are some over-expressed genes for control mice and under-expressed genes 2DG treated mice.
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **blue2** module and had the highest correlation with blue2 were:
 
@@ -303,7 +305,7 @@ The top 10 genes that were significant for time within the **darkgoldenrod4** mo
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgoldenrod4** half of 4 wk controls had a positive effect and half had a negative effect. The 96 hr controls had a negative effect while most 96 hr 2DG mice had a negative effect and 4 wk 2DG mice had a positive effect, indicating that there are some over-expressed genes for 4 wk control and 2DG mice, and under-expressed genes for 96 hr, independent of time point.
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **green4** module and had the highest correlation with green4 were:
 

@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Eigenmetabolite Stratification Hypothalamus"
+title: "Eigenmetabolite Stratification Hypothalamus"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 knitr::opts_knit$set(progress=FALSE)
 ```
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the overall summary expression of each module across the main effects, as well as, assess the significance of each main effect and their interaction, using ANOVA, for each module and assess potential interactions visually for each module. 
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will determine the overall summary expression of each module across the main effects, as well as, assess the significance of each main effect and their interaction, using ANOVA, for each module and assess potential interactions visually for each module. 
 
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR", "WGCNA","plotly", "pheatmap","pander", "kableExtra")
@@ -75,7 +75,7 @@ ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
 
 Eigengene were stratified by time and treatment. The heatmap is a matrix of the average eigengene value for each level of the trait.
 
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 factors <- c("Time","Treatment", "Time.Treatment")
 eigenmetabolite(factors,log.tdata.FPKM.sample.info.subset.hypothalamus)
 ```
@@ -106,7 +106,7 @@ for (m in colnames(module.eigens)) {
 ## Interaction plots {.tabset .tabset-fade .tabset-pills}
 Interaction plots were created to identify which modules have a potential interaction between time and treatment. A potential interaction is identified when the two lines cross.
 
-```{r,results='asis'}
+```{r,results='asis', cache=TRUE}
 for (m in module.labels) {
   p = plot.interaction(model.data, "Time", "Treatment", resp = m)
   name <- sapply(str_split(m,"_"),"[",2)

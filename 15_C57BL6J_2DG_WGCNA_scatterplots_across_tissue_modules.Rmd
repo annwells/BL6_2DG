@@ -1,5 +1,5 @@
 ---
-title: "Chang_B6_96hr_4wk 2DG Scatterplots Across Tissue Modules for Chosen Modules"
+title: "Scatterplots Across Tissue Modules for Chosen Modules"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -22,7 +22,7 @@ knitr::opts_knit$set(progress=FALSE)
 
 ```
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will plot correlations of GSVA eigengenes for each pathway across tissues of interest.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will plot correlations of GSVA eigengenes for each pathway across tissues of interest.
 
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","pheatmap")
@@ -150,7 +150,7 @@ names(modules.tissue) <- c("heart.darkgreen", "hypothalamus.bisque4", "prefronta
 
 ## Correlations {.tabset .tabset-fade .tabset-pills}
 
-```{r corr loop, results='asis'}
+```{r corr loop, results='asis', cache=TRUE}
 for(i in 1:length(modules.tissue)){
   for(j in 1:length(modules.tissue)){
     cat("\n###",paste(names(modules.tissue[i]), "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
@@ -162,7 +162,7 @@ for(i in 1:length(modules.tissue)){
 }
 ```
 
-```{r corr loop liver, results='asis'}
+```{r corr loop liver, results='asis', cache=TRUE}
   for(j in 1:length(modules.tissue)){
     cat("\n###",paste("liver.darkolivegreen", "vs", names(modules.tissue[j])),"{.tabset .tabset-fade .tabset-pills}","\n")
     correlations <- cor(liver.darkolivegreen, modules.tissue[[j]])
@@ -178,6 +178,6 @@ for(i in 1:length(modules.tissue)){
 # breaks <- seq(-.65,.61,length.out = 100)
 # pdf("Heatmap of small intestine green4 and heart darkgreen correlations GSVA pathways.pdf")
 # pheatmap(correlations, show_rownames = T,show_colnames = T, fontsize_col = 8, fontsize_row = 8, color = colorRampPalette(rev(brewer.pal(n = 11, name =
-#   "Spectral")))(100), breaks = breaks)
+#   "Paired")))(100), breaks = breaks)
 # dev.off()
 ```

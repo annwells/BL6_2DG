@@ -1,5 +1,5 @@
 ---
-title: "Hub Genes All Data"
+title: "Hub Genes"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:

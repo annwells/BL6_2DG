@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Liver"
+title: "Summary Liver"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -24,7 +24,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap","WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,85 +38,86 @@ modules<-read.csv(here("Data","Liver","log.tdata.FPKM.sample.info.subset.liver.W
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 31 modules, only 21 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were metabolism and various aspects of mitochondrial function. The brown, darkorange, darkred, grey60, skyblue3, and turquoise modules all contained these pathways.
 
-## Black
+### Black
 
 14 pathways were identified in the **black** module. The pathways were related to calcium signaling, Th1 and 2 differentiation, Th17 differentiation, cell adhesion molecules, and autoimmune disease.
 
-## Brown
+### Brown
 
 26 pathways were identified in the **brown** module. The pathways were related to metabolism, mitochondrial metabolism, oxidative phosphorylation, TCA cycle, respiratory electron transport, thermogenesis, neurodegenerative diseases, translation, and branched chain amino acid degradation.
 
-## Brown4
+### Brown4
 
 2 pathways were identified in the **brown4** module. They were adherens junction and steroid biosynthesis.
 
-## Darkgrey
+### Darkgrey
 
 1 pathway (protein processing in the endoplasmic reticulum) was identified in the **darkgrey** module.
 
-## Darkolivegreen
+### Darkolivegreen
 
 1 pathway (nicotinate metabolism) was identified in the **darkolivegreen** module.
 
-## Darkorange
+### Darkorange
 
 21 pathways were identified in the **darkorange** module. The pathways were related to cap-dependent translation, rRNA, metabolism of RNA and proteins, and translation.
 
-## Darkorange2
+### Darkorange2
 
 6 pathways were identified in the **darkorange2** module. The pathways identified were related to ion transport.
 
-## Darkred
+### Darkred
 
 21 pathways were identified in the **darkred** module. The pathways were related to fatty acid metabolism, metabolism, mitochondrial metabolism, tryptophan metabolism, retinol metabolism, and sterols.
 
-## Darkturquoise
+### Darkturquoise
 
 2 pathways were identified in the **darkturquoise** module. They were influenza A and various types of n-glycan biosynthesis.
 
-## Green
+### Green
 
 26 pathways were identified in the **green** module. The pathways were related to cardiac function, muscle contraction, insulin secretion, type II diabetes, GABA, and ion homeostasis.
 
-## Grey60
+### Grey60
 
 13 pathways were identified in the **grey60** module. The pathways were related to SUMOylation, complement, metabolism of proteins, RNA polymerase II, cell cycle, and metabolism of proteins.
 
-## Lightcyan
+### Lightcyan
 
 2 pathways were identified in the **lightcyan** module. These pathways were biosynthesis of DPA-derived SPMs and Biosynthesis of DPAn-3 SPMs.
 
-## Lightgreen
+### Lightgreen
 
 6 pathways were identified in the **lightgreen** module. The pathways identified were related to digestion and carbohydrate absorption and metabolism.
 
-## Orange
+### Orange
 
 1 pathway (nicotine addiction) was identified in the **orange** module.
 
-## Pink
+### Pink
 
 10 pathways were identified in the **pink** module. The pathways identified were related to digestion, defensins, and staphylococcus aureus infection.
 
-## Plum2
+### Plum2
 
 5 pathways were identified in the **plum2** module. The pathways identified were related to cancer, nicotine addiction, and wnt signaling.
 
-## Salmon
+### Salmon
 
 236 pathways were identified in the **salmon** module. The pathways were related to APC, beta-oxidation, cell cycle, cellular responses, DNA, interleukin-1, metabolism, mitochondrial metabolism, mRNA, NF-kappa B, nonsense mediated decay, oxidative phosphorylation, p53, PPAR signaling, RNA polymerase II, rRNA, signaling, TCA cycle, transcriptional regulation, translation, thermogenesis, ubiquitin, and VLDL.
 
-## Skyblue3
+### Skyblue3
 
 91 pathways were identified in the **skyblue3** module. The pathways were related to APC, cell cycle, metabolism, p53, NADPH regeneration, interleukin-1, TCR signaling, transcriptional regulation, and ubiquitin.
 
-## Turquoise
+### Turquoise
 
 220 pathways were identified in the **turquoise** module. The pathways were related to adipocytokine signaling, apoptosis, AMPK signaling, autophagy, biosynthesis of amino acids and co-factors, antigen processing, cell cycle, MHC I mediated antigen processing and presentation, collagen, fatty acid metabolism, fructose and mannose metabolism, glucagon signaling, glycerophospholipids, amino acid metabolism, glycosaminoglcans, cancer, autoimmune disease, immunity, insulin, LDL, toll like receptors, metabolism, MyD88, neutrophil degranulation, NF-kappa B, notch signaling, MAPK, n-glycan biosynthesis, platelet activation, protein processing of the ER, signaling, t cell receptor signaling, vasopressin and VEGF, and vitamin digestion and absorption.
 
-## Violet
+### Violet
 
 19 pathways were identified in the **violet** module. The pathways were related to cell cycle, MHC II antigen presentation, nuclear envelope, and p53.
 
@@ -184,11 +185,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Treatment
 
 The top 10 genes that were significant for treatment within the **darkturquoise** module and had the highest correlation with darkturquoise were:
 
@@ -220,7 +222,7 @@ The top 10 genes that were significant for treatment within the **darkolivegreen
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkolivegreen** controls had a negative effect while 2DG had a positive effect. Controls had under-expressed genes while 2DG had over-expressed genes.
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **skyblue3** module and had the highest correlation with skyblue3 were:
 
@@ -237,7 +239,7 @@ The top 10 genes that were significant for time within the **skyblue3** module a
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkolivegreen** 96 hrs, independent of treatment, had a positive effect while 4 wk, independent of treatment, had a negative effect. 96 hrs had over-expressed genes while 4 weeks had under-expressed genes.
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **darkturquoise** module and had the highest correlation with darkturquoise were:
 

@@ -1,5 +1,5 @@
 ---
-title: "Comparing Significant Overlaps (Jaccard) for Modules Related to Traits through Pathways Identified"
+title: "Comparing Significant Overlaps (Jaccard) of Genes and Pathways for Modules Across Tissues of Interest"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -32,7 +32,7 @@ knitr::opts_knit$set(progress=FALSE)
 
 ```
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlapped.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlapped.
 
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "rlist", "pheatmap")
@@ -250,7 +250,7 @@ mods<-crossprod(table(stack(tissues.treat)))
         write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 pval <- read.csv(here("Data","Fisher's_exact_text_p_val_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
 
 pval2 <- signif(pval, 2)
@@ -320,7 +320,7 @@ mods<-crossprod(table(stack(tissues.treat)))
         write.csv(Jaccard,here("Data","Jaccard_Index_module_C57BL6J_treat_across_tissues_pathways.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 Jaccard <- read.csv(here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
 
 pval <- read.csv(here("Data","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_treat_across_tissues.csv"), row.names = 1)
@@ -405,7 +405,7 @@ mods<-crossprod(table(stack(heart.darkgreen)))
         write.csv(Jaccard,here("Data","Heart","Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 pval <- read.csv(here("Data","Heart","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_heart.csv"), row.names = 1)
 
 pval2 <- signif(pval, 2)
@@ -450,7 +450,7 @@ mods<-crossprod(table(stack(hyp.bisque4)))
         write.csv(Jaccard,here("Data","Hypothalamus","Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 pval <- read.csv(here("Data","Hypothalamus","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_hypothalamus.csv"), row.names = 1)
 
 pval2 <- signif(pval, 2)
@@ -494,7 +494,7 @@ mods<-crossprod(table(stack(cortex.bisque2)))
         write.csv(Jaccard,here("Data","Prefrontal Cortex","Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 pval <- read.csv(here("Data","Prefrontal Cortex","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_cortex.csv"), row.names = 1)
 
 pval2 <- signif(pval, 1)
@@ -538,7 +538,7 @@ mods<-crossprod(table(stack(small.intestine.green4)))
         write.csv(Jaccard,here("Data","Small Intestine","Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 pval <- read.csv(here("Data","Small Intestine","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_small.intestine.csv"), row.names = 1)
 
 pval2 <- signif(pval, 2)
@@ -584,7 +584,7 @@ mods<-crossprod(table(stack(muscle.salmon2)))
         write.csv(Jaccard,here("Data","Skeletal Muscle","Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"))
 ```
 
-```{r}
+```{r, cache=TRUE}
 pval <- read.csv(here("Data","Skeletal Muscle","Fisher's_exact_text_p_val_pathways_Jaccard_Index_module_C57BL6J_genes_across_pathways_muscle.csv"), row.names = 1)
 
 pval2 <- signif(pval, 2)

@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Heart"
+title: "Summary Heart"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -14,7 +14,8 @@ output:
 ---
 
 
-# Summary
+# Summary 
+
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
@@ -24,7 +25,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,46 +39,47 @@ modules<-read.csv(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.W
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 25 modules, only 12 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were mitochondrial related (mitochondrial translation, elongation, and termination). The black, brown, and darkgreen modules all contained these pathways. Innate immune system was another pathway hit that was identified in the black, cyan, and darkgrey modules. 
 
-## Black
+### Black
 
 151 pathways were identified for the **Black** module. Many pathways had to do with various aspects of transcription and translation. The innate immune system was also an affected pathway. Several pathways that also play a role in cancer were identified.
 
-## Brown
+### Brown
 
 193 pathways were identified for the **Brown** module. Many pathways involved in cell cycle and RNA were present.
 
-## Cyan
+### Cyan
 
 7 pathways were identified for the **cyan** module. These pathways included the innate immune system, complement pathways, neutrophil degradation, as well as, sphingolipid metabolism, phagosomes, and platelet degradation.
 
-## Darkgreen
+### Darkgreen
 
 8 pathways were identified for the **darkgreen** module. Overall, metabolism was identified in this module through mitochondrial pathways, pyruvate dehydrogenase, and the TCA cycle.
 
-## Darkgrey
+### Darkgrey
 
 36 pathways were identified for the **darkgrey** module. Overall, many different aspects of immunity were identified within this module, as well as pathways related to platelet function, and rheumatoid arthritis.
 
-## Lightgreen
+### Lightgreen
 
 11 pathways were identified for the **lightgreen** module. IL-17, TNF signaling, neutrophil degradation, and viral protein interaction with cytokine and cytokine receptor were among the pathways identified.
 
-## Mediumpurple3
+### Mediumpurple3
 
 1 pathway was identified for the **mediumpurple3** module. Histidine metabolism was identified.
 
-## Pink
+### Pink
 
 92 pathways were identified for the **pink** module. Overall, different aspects of fatty acid metabolism we identified, as well as amino acid metabolism.
 
-## Plum1
+### Plum1
 
 **Plum1** contained the largest number of genes, which spanned across 236 pathways. The pathways that contained the largest number of genes from plum1 played a role in protein metabolism and post-translational protein modification, as well as transcription, adaptive immunity, vesicle-mediated transport, and membrane trafficking. 
 
 
-## Skyblue
+### Skyblue
 
 8 pathways were identified for the **skyblue** module. The module only contained pathways related to digestion, particularly carbohydrate digestion. 
 
@@ -149,11 +151,13 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+
+### Treatment
 
 The top 10 genes that were significant for treatment within the **darkorange** module and had the highest correlation with darkorange were:
 
@@ -185,7 +189,7 @@ The top 10 genes that were significant for treatment within the **darkgreen** mo
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgreen** all controls had a positive effect while 2DG had a negative effect, indicating that there are a lot of over-expressed genes for control mice and under-expressed genes for 2DG treated mice.
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **darkorange** module and had the highest correlation with darkorange were:
 
@@ -217,7 +221,7 @@ The top 10 genes that were significant for treatment by time within the **darkgr
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **darkgreen**, regardless of time point, all controls had a positive effect while 2DG had a negative effect, indicating that there are a lot of over-expressed genes for control mice and under-expressed genes for 2DG treated mice.
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **plum1** module and had the highest correlation with plum1 were:
 

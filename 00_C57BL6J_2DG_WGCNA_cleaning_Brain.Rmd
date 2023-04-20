@@ -1,5 +1,5 @@
 ---
-title: "Data Cleaning Hippocampus, Hypothalamus, and Prefrontal Cortex"
+title: "Data Cleaning Brain"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:

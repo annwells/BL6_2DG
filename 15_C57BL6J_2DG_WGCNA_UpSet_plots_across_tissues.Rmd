@@ -1,5 +1,5 @@
 ---
-title: "Chang_B6_96hr_4wk 2DG UpSet plots Across Tissue Modules for Chosen Modules"
+title: "UpSet plots Across Tissue Modules for Chosen Modules"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -22,7 +22,7 @@ knitr::opts_knit$set(progress=FALSE)
 
 ```
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will assess the number of genes that are shared between tissue modules of interest.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will assess the number of genes that are shared between tissue modules of interest.
 
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2","rlist", "plotly","kableExtra","foreach","doParallel","doFuture","UpSetR")
@@ -51,7 +51,7 @@ cortex <- readRDS(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.su
 ```
 
 ## Upset Plots {.tabset .tabset-fade .tabset-pills}
-```{r pull modules significant for treatment for each tissue}
+```{r pull modules significant for treatment for each tissue, cache=TRUE}
 ## heart
 Matched.module.heart <- split(heart$Gene, heart$Module)
 
@@ -149,14 +149,14 @@ modulenames <- sort(modulenames)
 names(Matched.module.cortex) <- modulenames
 ```
 ### With Brain
-```{r}
+```{r, cache=TRUE}
 tissues.treat <- list("Heart" = Matched.module.heart$darkgreen, "Hypothalamus" = Matched.module.hyp$bisque4, "Liver" = Matched.module.liver$darkolivegreen, "Prefrontal Cortex" = Matched.module.cortex$bisque2, "Skeletal Muscle" = Matched.module.SM$salmon2, "Small Intestine" = Matched.module.SI$green4)
 
 upset(nsets=6, fromList(tissues.treat), main.bar.color = "salmon", matrix.color = "midnightblue", sets.bar.color = "darkolivegreen", text.scale = 1)
 ```
 
 ### Without Brain
-```{r}
+```{r, cache=TRUE}
 tissues.treat.nobrain <- list("Heart" = Matched.module.heart$darkgreen, "Liver" = Matched.module.liver$darkolivegreen, "Skeletal Muscle" = Matched.module.SM$salmon2, "Small Intestine" = Matched.module.SI$green4)
 
 upset(nsets=, fromList(tissues.treat.nobrain), main.bar.color = "salmon", matrix.color = "midnightblue", sets.bar.color = "darkolivegreen", text.scale = 1)
@@ -186,7 +186,7 @@ names(small.intestine) <- as.list(names(Matched.module.SI))
 ```
 
 ### Treatment
-```{r}
+```{r, cache=TRUE}
 treat <- list("Heart" = heart$darkgreen$term_name, "Hypothalamus" = hyp$bisque4$term_name, "Liver" = liver$darkolivegreen$term_name, "Prefrontal Cortex" = cortex$bisque2$term_name, "Skeletal Muscle" = muscle$salmon2$term_name, "Small Intestine" = small.intestine$green4$term_name)
 
 upset(nsets=6, fromList(treat), main.bar.color = "darkolivegreen4", matrix.color = "darkorchid4", sets.bar.color = "dodgerblue4", text.scale = 1)

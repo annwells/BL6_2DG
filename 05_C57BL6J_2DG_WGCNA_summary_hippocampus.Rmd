@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Hippocampus"
+title: "Summary Hippocampus"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -14,7 +14,8 @@ output:
 ---
 
 
-# Summary
+# Summary 
+
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
@@ -24,7 +25,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap", "WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -38,89 +39,90 @@ modules<-read.csv(here("Data","Hippocampus","log.tdata.FPKM.sample.info.subset.h
 module_barplot(modules)
 ```
 
+## Pathways {.tabset .tabset-fade .tabset-pills}
 Pathways were assessed for each module. Out of 45 modules, only 21 modules had pathway hits of any kind. The pathways that had the highest frequency across modules were general metabolism pathways, gene expression, and Huntington disease. The brown2, chocolate3, coral1, and darkgrey modules all contained these pathways.
 
-## Bisque2
+### Bisque2
 
 11 pathways were identified for the **bisque2** module. Many pathways were involved in erythrocyte health (oxygen and carbon dioxide exchange, heme biosynthesis, and scavenging of heme from plasma).
 
-## Blue3
+### Blue3
 
 50 pathways were identified for the **blue3** module. Many pathways were involved in collagen formation and degradation, extracellular matrix processes, and autoimmune disease.
 
-## Brown2
+### Brown2
 
 1 pathway was identified for the **brown2** module, Huntington disease.
 
-## Chocolate3
+### Chocolate3
 
 4 pathways were identified for the **chocolate3** module. All the pathways involved metabolism, particularly fatty acid metabolism.
 
-## Coral1
+### Coral1
 
 9 pathways were identified for the **coral1** module. Pathways identified had to do with RNA, metabolism, amino acid biosynthesis, Huntington and Parkinson disease, and oxidative phosphorylation.
 
-## Darkgoldenrod4
+### Darkgoldenrod4
 
 1 pathway was identified for the **darkgoldenrod4** module, metabolism of angiotensinogen to angiotensins.
 
-## Darkgrey
+### Darkgrey
 
 2 pathways were identified for the **darkgrey** module. Both were related to transcription.
 
-## Darkseagreen2
+### Darkseagreen2
 
 1 pathway was identified for the **darkseagreen2** module, herpes simplex virus 1 infection.
 
-## Darkslateblue
+### Darkslateblue
 
 3 pathways were identified for the **darkslateblue** module. All three pathways were digestion related.
 
-## Deepskyblue4
+### Deepskyblue4
 
 There were 112 pathways identified for the **deepskyblue** module. The pathways identified were involved in cell cycle, IL-1, mitochondrial processing, mRNA, cancer pathways, and RNA polymerase II.
 
-## Dodgerblue1
+### Dodgerblue1
 
 2 pathways were identified for the **dodgerblue1** module. Focal adhesion and glycosaminoglycan degradation were identified.
 
-## Goldenrod4
+### Goldenrod4
 
 55 pathways were identified for the **goldenrod4** module. Pathways involved in neuroregulation were identified.
 
-## Green
+### Green
 
 18 pathways were identified for the **green** module. The pathways identified were involved in various aspects of the immune system, autoimmune disease (lupus), and osteoclast differentiation.
 
-## Indianred
+### Indianred
 
 1 pathway was identified for the **indianred** module, serotonergic synapse.
 
-## Indianred2
+### Indianred2
 
 12 pathways were identified for the **indianred2** module. The pathways identified were involved in fatty acid metabolism, drug metabolism, pentose and glucuronate interconversions, and steroid biosynthesis.
 
-## Indianred4
+### Indianred4
 
 1 pathway was identified for the **indianred4** module, herpes simplex virus 1 infection.
 
-## Lavenderblush1
+### Lavenderblush1
 
 5 pathways were identified for the **lavenderblush1** module. The pathways identified were involved in amino acid transport.
 
-## Lavenderblush2
+### Lavenderblush2
 
 1 pathway was identified for the **lavenderblush2** module, calcium signaling pathway.
 
-## Pink4
+### Pink4
 
 1 pathway was identified for the **pink4** module, calcium signaling pathway.
 
-## Tan4
+### Tan4
 
 1 pathway was identified for the **tan4** module, hippo signaling pathway - multiple species.
 
-## Turquoise
+### Turquoise
 
 11 pathways were identified for the **turquoise** module. The pathways identified were involved in collagen formation, tight juncture pathways, and transport of small molecules.
 
@@ -193,11 +195,13 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Treatment
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+
+### Treatment
 
 The top 10 genes that were significant for treatment within the **coral1** module and had the highest correlation with coral1 were:
 
@@ -274,7 +278,7 @@ The top 10 genes that were significant for treatment within the **blue1** module
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **blue1** most controls had a positive effect while most 2DG had a negative effect, indicating that there are many under-expressed genes for control mice and over-expressed genes 2DG treated mice.
 
-## Time
+### Time
 
 The top 10 genes that were significant for time within the **khaki3** module and had the highest correlation with khaki3 were:
 
@@ -291,7 +295,7 @@ The top 10 genes that were significant for time within the **khaki3** module and
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **khaki3** most 96 hr samples had a positive effect while most 4 wk samples had a negative effect, indicating that there are many under-expressed genes for control mice and over-expressed genes 2DG treated mice.
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **coral1** module and had the highest correlation with coral1 were:
 

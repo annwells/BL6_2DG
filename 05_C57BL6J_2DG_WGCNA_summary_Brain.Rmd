@@ -1,5 +1,5 @@
 ---
-title: "Chang B6 96hr 4wk 2DG Summary Brain"
+title: "Summary Brain"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
@@ -14,7 +14,8 @@ output:
 ---
 
 
-# Summary
+# Summary {.tabset .tabset-fade .tabset-pills}
+
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
@@ -24,7 +25,7 @@ knitr::opts_knit$set(progress=FALSE)
 ```
 
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gProfileR","rlist", "pheatmap","WGCNA")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -217,11 +218,12 @@ textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
 dim(textMatrix) = dim(moduleTraitCor)
 
 # Display the correlation values within a heatmap plot
-heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Spectral"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
+heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 11, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 ```
 
-## Tissue
+## Top 10 Hub genes within each significant module {.tabset .tabset-fade .tabset-pills}
+### Tissue
 
 The top 10 genes that were significant for tissue within the **lavenderblush3** module and had the highest correlation with lavenderblush3 were:
 
@@ -251,7 +253,7 @@ The top 10 genes that were significant for tissue within the **chocolate3** modu
 9. Klhdc9
 10. Mark3
 
-## Treatment
+### Treatment
 
 The top 10 genes that were significant for treatment within the **royalblue** module and had the highest correlation with royalblue were:
 
@@ -268,11 +270,11 @@ The top 10 genes that were significant for treatment within the **royalblue** mo
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **royalblue** most controls had a negative effect while most 2DG had a positive effect. Controls had under-expressed genes while 2DG had over-expressed genes.
 
-## Time
+### Time
 
 None
 
-## Treatment by tissue
+### Treatment by tissue
 
 The top 10 genes that were significant for treatment by tissue within the **royalblue** module and had the highest correlation with royalblue were:
 
@@ -289,7 +291,7 @@ The top 10 genes that were significant for treatment by tissue within the **roya
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **royalblue** most controls had a negative effect while most 2DG had a positive effect, independent of tissue. Controls had under-expressed genes while 2DG had over-expressed genes. 
 
-## Treatment by time
+### Treatment by time
 
 The top 10 genes that were significant for treatment by time within the **royalblue** module and had the highest correlation with royalblue were:
 
@@ -306,7 +308,7 @@ The top 10 genes that were significant for treatment by time within the **royalb
 
 When assessing the overall sample contribution through their summary eigengenes it appears that for **royalblue** most controls had a negative effect while most 2DG had a positive effect, independent of time. Controls had under-expressed genes while 2DG had over-expressed genes.
 
-## Tissue by time
+### Tissue by time
 
 The top 10 genes that were significant for tissue by time within the **lavenderblush3** module and had the highest correlation with lavenderblush3 were:
 
@@ -334,7 +336,7 @@ The top 10 genes that were significant for tissue by time within the **chocolate
 9. Mark3
 10. Hcrtr2
 
-## Treatment by tissue by time
+### Treatment by tissue by time
 
 The top 10 genes that were significant for treatment by tissue by time within the **royalblue** module and had the highest correlation with royalblue were:
 

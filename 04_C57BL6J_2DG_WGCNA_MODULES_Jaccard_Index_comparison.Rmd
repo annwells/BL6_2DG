@@ -34,7 +34,7 @@ knitr::opts_knit$set(progress=FALSE)
 
 ## R Markdown
 
-This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL6/J mice that were fed 2-deoxyglucose (add dosage) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will assess how similarly genes measured within each tissue are clustering.
+This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (add dosage) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for proteomics, metabolomics, and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will assess how similarly genes measured within each tissue are clustering.
 
 ## Load in Packages and read in files
 ```{r load packages}
@@ -249,7 +249,7 @@ pheatmap(mods.subset,cluster_cols=T,cluster_rows=T, fontsize = 10, fontsize_row 
 #dev.off()
 ```
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, cache=TRUE}
 significant <- c()
 header <- c()
         for(i in 1:length(rownames(pval))){ ## This will only pull the significant modules
@@ -323,20 +323,22 @@ saveRDS(filtered.pathways,here("Data","Chang_2DG_BL6_gprofiler_annotation_filter
 ```
 
 ## Pathway Analysis {.tabset .tabset-fade .tabset-pills}
-Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Each pathway listed represents the pathways shared among the two modules. All modules represented were significantly overlapped and all pathways represented are significant according to their raw p-value.
+Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Each pathway listed represents the pathways shared among the two modules. All modules represented were significantly overlapped and all pathways represented are significant according to their adjusted p-value (FDR < 0.05).
 ```{r, results='asis', cache=TRUE}
 filtered.pathways <- readRDS(here("Data","Chang_2DG_BL6_gprofiler_annotation_filtered_list_modules.RData"))
 
-for(i in 1:length(filtered.pathways)){
-  cat("\n###",names(filtered.pathways)[i], "Module","\n")
-  print(knitr::kable(filtered.pathways[[i]][c(11,3:6)], format = "markdown", col.names = c("Pathway","Raw p-value","Term Size", "Query Size", "Overlap Size")))
-
-  #print(DT::datatable(filter.pathways[[i]][c(12,3:6)], colnames=c("Pathway"="term.name","Raw p-value"="p.value","Term Size"="term.size", "Query Size"="query.size", "Overlap Size"="overlap.size"), filter = "bottom", style="bootstrap"))
-  cat("\n \n")
-}
+# for(i in 1:length(filtered.pathways)){
+#   cat("\n###",names(filtered.pathways)[i], "Module","\n")
+#   print(knitr::kable(filtered.pathways[[i]][c(11,3:6)], format = "markdown", col.names = c("Pathway","Raw p-value","Term Size", "Query Size", "Overlap Size")))
+# 
+#   #print(DT::datatable(filter.pathways[[i]][c(12,3:6)], colnames=c("Pathway"="term.name","Raw p-value"="p.value","Term Size"="term.size", "Query Size"="query.size", "Overlap Size"="overlap.size"), filter = "bottom", style="bootstrap"))
+#   cat("\n \n")
+# }
 ```
 
 ## Pathway Frequency {.tabset .tabset-fade .tabset-pills}
+
+The number of times each pathway was identified across pairwise overlaps was counted and listed below.
 
 ```{r, results='asis'}
 filtered.pathways <- readRDS(here("Data","Chang_2DG_BL6_gprofiler_annotation_filtered_list_modules.RData"))
