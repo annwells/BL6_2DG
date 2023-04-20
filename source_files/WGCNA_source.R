@@ -16,10 +16,7 @@ sampleclustering <- function(data){
 }
 
 ## Determining soft threshold
-softthreshold <- function(data){
-  powers <- 1:20
-  
-  soft <- pickSoftThreshold(data, powerVector=powers, verbose=0)
+softthreshold <- function(soft){
   
   # Plot correlation with scale free topology
   plot.data <- soft$fitIndices %>%
@@ -43,8 +40,6 @@ softthreshold <- function(data){
   print(q)
   cat("\n \n")
   
-  invisible(soft)
-
 }
 
 
@@ -374,7 +369,7 @@ count.pathways <- function(pathways){
       output_name = "Pathway Frequency Table",
       output_extension = ".csv",
       button_label = "Download data as csv",
-      button_type = "default",
+      button_type = "info",
       has_icon = TRUE,
       icon = "fa fa-save"
     ))
