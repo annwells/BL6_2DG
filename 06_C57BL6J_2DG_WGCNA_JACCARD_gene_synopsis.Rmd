@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -51,204 +41,578 @@ Each tissue module was compared to the traits in the experiment. The modules tha
 
 ## Heart {.tabset .tabset-fade .tabset-pills}
 
-### Darkgreen
+### Darkgreen {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.heart.darkgreen <- genes.jaccard.pathways(Matched, "Heart_darkgreen")
-  
 ```
-### Darkgrey
+
+#### Pathway Table
+```{r}
+if(is.null(genes.heart.darkgreen)) {
+    print("No significant pathways")
+  } else {genes.heart.darkgreen <- genes.heart.darkgreen$result
+  DT.table.jaccard(genes.heart.darkgreen[c(11,4:6,3)])
+  
+ }
+```
+
+### Darkgrey {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.heart.darkgrey <- genes.jaccard.pathways(Matched, "Heart_darkgrey")
   
 ```
-### Darkorange
+
+#### Pathway Table
+```{r}
+if(is.null(genes.heart.darkgrey)) {
+    print("No significant pathways")
+  } else {genes.heart.darkgrey <- genes.heart.darkgrey$result
+  DT.table.jaccard(genes.heart.darkgrey[c(11,4:6,3)])
+  
+ }
+```
+
+### Darkorange {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.heart.darkorange <- genes.jaccard.pathways(Matched, "Heart_darkorange")
-  
 ```
-### Plum1
+
+#### Pathway Table
+```{r}
+if(is.null(genes.heart.darkorange)) {
+    print("No significant pathways")
+  } else {genes.heart.darkorange <- genes.heart.darkorange$result
+  DT.table.jaccard(genes.heart.darkorange[c(11,4:6,3)])
+  
+ }
+```
+
+### Plum1 {.tabset .tabset-fade .tabset-pills}
 Server won't run this module currently
 ```{r, results='asis'}
 #genes.heart.plum1 <- genes.jaccard.pathways(Matched, "Heart_plum1")
   
 ```
 
+#### Pathway Table
+```{r}
+# if(is.null(genes.heart.plum1)) {
+#     print("No significant pathways")
+#   } else {genes.heart.plum1 <- genes.heart.plum1$result
+#   DT.table.jaccard(genes.heart.plum1[c(11,4:6,3)])
+#   
+#  }
+```
+
 ## Hippocampus {.tabset .tabset-fade .tabset-pills}
 
-### Green
+### Green {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hippocampus.green <- genes.jaccard.pathways(Matched, "Hippocampus_green")
   
 ```
-### Coral1
+
+#### Pathway Table
+```{r}
+if(is.null(genes.hippocampus.green)) {
+    print("No significant pathways")
+  } else {genes.hippocampus.green <- genes.hippocampus.green$result
+  DT.table.jaccard(genes.hippocampus.green[c(11,4:6,3)])
+  
+ }
+```
+
+### Coral1 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hippocampus.coral1 <- genes.jaccard.pathways(Matched, "Hippocampus_coral1")
   
 ```
-### Darkslateblue
+
+#### Pathway Table
+```{r}
+if(is.null(genes.hippocampus.coral1)) {
+    print("No significant pathways")
+  } else {genes.hippocampus.coral1 <- genes.hippocampus.coral1$result
+  DT.table.jaccard(genes.hippocampus.coral1[c(11,4:6,3)])
+  
+ }
+```
+
+### Darkslateblue {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hippocampus.darkslateblue <- genes.jaccard.pathways(Matched, "Hippocampus_darkslateblue")
   
 ```
-### Darkolivegreen
+
+#### Pathway Table
+```{r}
+if(is.null(genes.hippocampus.darkslateblue)) {
+    print("No significant pathways")
+  } else {genes.hippocampus.darkslateblue <- genes.hippocampus.darkslateblue$result
+  DT.table.jaccard(genes.hippocampus.darkslateblue[c(11,4:6,3)])
+  
+ }
+```
+
+### Darkolivegreen {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hippocampus.darkolivegreen <- genes.jaccard.pathways(Matched, "Hippocampus_darkolivegreen")
   
 ```
-### Khaki3
+
+#### Pathway Table
+```{r}
+if(is.null(genes.hippocampus.darkolivegreen)) {
+    print("No significant pathways")
+  } else {genes.hippocampus.darkolivegreen <- genes.hippocampus.darkolivegreen$result
+  DT.table.jaccard(genes.hippocampus.darkolivegreen[c(11,4:6,3)])
+  
+ }
+```
+
+### Khaki3 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hippocampus.khaki3 <- genes.jaccard.pathways(Matched, "Hippocampus_khaki3")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.hippocampus.khaki3)) {
+    print("No significant pathways")
+  } else {genes.hippocampus.khaki3 <- genes.hippocampus.khaki3$result
+  DT.table.jaccard(genes.hippocampus.khaki3[c(11,4:6,3)])
+  
+ }
+```
+
 ## Hypothalamus {.tabset .tabset-fade .tabset-pills}
 
-### midnightblue
+### midnightblue {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hypothalamus.midnightblue <- genes.jaccard.pathways(Matched, "Hypothalamus_midnightblue")
   
 ```
-### Bisque4
+
+#### Pathway Table
+```{r}
+if(is.null(genes.hypothalamus.midnightblue)) {
+    print("No significant pathways")
+  } else {genes.hypothalamus.midnightblue <- genes.hypothalamus.midnightblue$result
+  DT.table.jaccard(genes.hypothalamus.midnightblue[c(11,4:6,3)])
+  
+ }
+```
+
+### Bisque4 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.hypothalamus.bisque4 <- genes.jaccard.pathways(Matched, "Hypothalamus_bisque4")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.hypothalamus.bisque4)) {
+    print("No significant pathways")
+  } else {genes.hypothalamus.bisque4 <- genes.hypothalamus.bisque4$result
+  DT.table.jaccard(genes.hypothalamus.bisque4[c(11,4:6,3)])
+  
+ }
+```
+
 ## Kidney {.tabset .tabset-fade .tabset-pills}
 
-### Lightyellow
+### Lightyellow {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.kidney.lightyellow <- genes.jaccard.pathways(Matched, "Kidney_lightyellow")
   
 ```
-### Purple
+
+#### Pathway Table
+```{r}
+if(is.null(genes.kidney.lightyellow)) {
+    print("No significant pathways")
+  } else {genes.kidney.lightyellow <- genes.kidney.lightyellow$result
+  DT.table.jaccard(genes.kidney.lightyellow[c(11,4:6,3)])
+  
+ }
+```
+
+### Purple {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.kidney.purple <- genes.jaccard.pathways(Matched, "Kidney_purple")
   
 ```
-### Lightcyan
+
+#### Pathway Table
+```{r}
+if(is.null(genes.kidney.purple)) {
+    print("No significant pathways")
+  } else {genes.kidney.purple <- genes.kidney.purple$result
+  DT.table.jaccard(genes.kidney.purple[c(11,4:6,3)])
+  
+ }
+```
+
+### Lightcyan {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.kidney.lightcyan <- genes.jaccard.pathways(Matched, "Kidney_lightcyan")
   
 ```
-### Blue
+
+#### Pathway Table
+```{r}
+if(is.null(genes.kidney.lightcyan)) {
+    print("No significant pathways")
+  } else {genes.kidney.lightcyan <- genes.kidney.lightcyan$result
+  DT.table.jaccard(genes.kidney.lightcyan[c(11,4:6,3)])
+  
+ }
+```
+
+### Blue {.tabset .tabset-fade .tabset-pills}
 Server won't run this module currently
 ```{r, results='asis'}
 #genes.kidney.blue <- genes.jaccard.pathways(Matched, "Kidney_blue")
   
 ```
-### Pink
+
+#### Pathway Table
+```{r}
+# if(is.null(genes.kidney.blue)) {
+#     print("No significant pathways")
+#   } else {genes.kidney.blue <- genes.kidney.blue$result
+#   DT.table.jaccard(genes.kidney.blue[c(11,4:6,3)])
+#   
+#  }
+```
+
+### Pink {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.kidney.pink <- genes.jaccard.pathways(Matched, "Kidney_pink")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.kidney.pink)) {
+    print("No significant pathways")
+  } else {genes.kidney.pink <- genes.kidney.pink$result
+  DT.table.jaccard(genes.kidney.pink[c(11,4:6,3)])
+  
+ }
+```
+
 ## Liver {.tabset .tabset-fade .tabset-pills}
 
-### Darkturquoise
+### Darkturquoise {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.liver.darkturquoise <- genes.jaccard.pathways(Matched, "Liver_darkturquoise")
   
 ```
-### Darkolivegreen
+
+#### Pathway Table
+```{r}
+if(is.null(genes.liver.darkturquoise)) {
+    print("No significant pathways")
+  } else {genes.liver.darkturquoise <- genes.liver.darkturquoise$result
+  DT.table.jaccard(genes.liver.darkturquoise[c(11,4:6,3)])
+  
+ }
+```
+
+### Darkolivegreen {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.liver.darkolivegreen <- genes.jaccard.pathways(Matched, "Liver_darkolivegreen")
   
 ```
-### Skyblue3
+
+#### Pathway Table
+```{r}
+if(is.null(genes.liver.darkolivegreen)) {
+    print("No significant pathways")
+  } else {genes.liver.darkolivegreen <- genes.liver.darkolivegreen$result
+  DT.table.jaccard(genes.liver.darkolivegreen[c(11,4:6,3)])
+  
+ }
+```
+
+### Skyblue3 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.liver.skyblue3 <- genes.jaccard.pathways(Matched, "Liver_skyblue3")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.liver.skyblue3)) {
+    print("No significant pathways")
+  } else {genes.liver.skyblue3 <- genes.liver.skyblue3$result
+  DT.table.jaccard(genes.liver.skyblue3[c(11,4:6,3)])
+  
+ }
+```
+
 ## Prefrontal Cortex {.tabset .tabset-fade .tabset-pills}
 
-### Limegreen
+### Limegreen {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.limegreen <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_limegreen")
   
 ```
-### Rosybrown2
+
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.limegreen)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.limegreen <- genes.prefrontal.limegreen$result
+  DT.table.jaccard(genes.prefrontal.limegreen[c(11,4:6,3)])
+  
+ }
+```
+
+### Rosybrown2 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.rosybrown2 <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_rosybrown2")
   
 ```
-### Lavenderblush2
+
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.rosybrown2)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.rosybrown2 <- genes.prefrontal.rosybrown2$result
+  DT.table.jaccard(genes.prefrontal.rosybrown2[c(11,4:6,3)])
+  
+ }
+```
+
+### Lavenderblush2 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.lavenderblush2 <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_lavenderblush2")
   
 ```
-### Antiquewhite
+
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.lavenderblush2)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.lavenderblush2 <- genes.prefrontal.lavenderblush2$result
+  DT.table.jaccard(genes.prefrontal.lavenderblush2[c(11,4:6,3)])
+  
+ }
+```
+
+### Antiquewhite {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.antiquewhite <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_antiquewhite")
   
 ```
-### Pink
+
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.antiquewhite)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.antiquewhite <- genes.prefrontal.antiquewhite$result
+  DT.table.jaccard(genes.prefrontal.antiquewhite[c(11,4:6,3)])
+  
+ }
+```
+
+### Pink {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.pink <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_pink")
   
 ```
-### Goldenrod3
+
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.pink)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.pink <- genes.prefrontal.pink$result
+  DT.table.jaccard(genes.prefrontal.pink[c(11,4:6,3)])
+  
+ }
+```
+
+### Goldenrod3 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.goldenrod3 <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_goldenrod3")
   
 ```
-### Aquamarine
+
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.goldenrod3)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.goldenrod3 <- genes.prefrontal.goldenrod3$result
+  DT.table.jaccard(genes.prefrontal.goldenrod3[c(11,4:6,3)])
+  
+ }
+```
+
+### Aquamarine {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.prefrontal.aquamarine <- genes.jaccard.pathways(Matched, "Prefrontal Cortex_aquamarine")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.prefrontal.aquamarine)) {
+    print("No significant pathways")
+  } else {genes.prefrontal.aquamarine <- genes.prefrontal.aquamarine$result
+  DT.table.jaccard(genes.prefrontal.aquamarine[c(11,4:6,3)])
+  
+ }
+```
+
 ## Skeletal Muscle {.tabset .tabset-fade .tabset-pills}
 
-### Grey
+### Grey {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.skeletal.grey <- genes.jaccard.pathways(Matched, "Skeletal Muscle_grey")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.skeletal.grey)) {
+    print("No significant pathways")
+  } else {genes.skeletal.grey <- genes.skeletal.grey$result
+  DT.table.jaccard(genes.skeletal.grey[c(11,4:6,3)])
+  
+ }
+```
+
 ## Small Intestine {.tabset .tabset-fade .tabset-pills}
 
-### Green4
+### Green4 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.intestine.green4 <- genes.jaccard.pathways(Matched, "Small Intestine_green4")
   
 ```
-### Blue2
+
+#### Pathway Table
+```{r}
+if(is.null(genes.intestine.green4)) {
+    print("No significant pathways")
+  } else {genes.intestine.green4 <- genes.intestine.green4$result
+  DT.table.jaccard(genes.intestine.green4[c(11,4:6,3)])
+  
+ }
+```
+
+### Blue2 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.intestine.blue2 <- genes.jaccard.pathways(Matched, "Small Intestine_blue2")
   
 ```
-### Cornsilk
+
+#### Pathway Table
+```{r}
+if(is.null(genes.intestine.blue2)) {
+    print("No significant pathways")
+  } else {genes.intestine.blue2 <- genes.intestine.blue2$result
+  DT.table.jaccard(genes.intestine.blue2[c(11,4:6,3)])
+  
+ }
+```
+
+### Cornsilk {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.intestine.cornsilk <- genes.jaccard.pathways(Matched, "Small Intestine_cornsilk")
   
 ```
-### Magenta2
+
+#### Pathway Table
+```{r}
+if(is.null(genes.intestine.cornsilk)) {
+    print("No significant pathways")
+  } else {genes.intestine.cornsilk <- genes.intestine.cornsilk$result
+  DT.table.jaccard(genes.intestine.cornsilk[c(11,4:6,3)])
+  
+ }
+```
+
+### Magenta2 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
-genes.intestine.Magenta2 <- genes.jaccard.pathways(Matched, "Small Intestine_magenta2")
+genes.intestine.magenta2 <- genes.jaccard.pathways(Matched, "Small Intestine_magenta2")
   
 ```
-### Darkgoldenrod4
+
+#### Pathway Table
+```{r}
+if(is.null(genes.intestine.magenta2)) {
+    print("No significant pathways")
+  } else {genes.intestine.magenta2 <- genes.intestine.magenta2$result
+  DT.table.jaccard(genes.intestine.magenta2[c(11,4:6,3)])
+  
+ }
+```
+
+### Darkgoldenrod4 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.intestine.darkgoldenrod4 <- genes.jaccard.pathways(Matched, "Small Intestine_darkgoldenrod4")
   
 ```
 
+#### Pathway Table
+```{r}
+if(is.null(genes.intestine.darkgoldenrod4)) {
+    print("No significant pathways")
+  } else {genes.intestine.darkgoldenrod4 <- genes.intestine.darkgoldenrod4$result
+  DT.table.jaccard(genes.intestine.darkgoldenrod4[c(11,4:6,3)])
+  
+ }
+```
+
 ## Spleen {.tabset .tabset-fade .tabset-pills}
 
-### Tan4
+### Tan4 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.spleen.tan4 <- genes.jaccard.pathways(Matched, "Spleen_tan4")
   
 ```
-### Mediumpurple1
+
+#### Pathway Table
+```{r}
+if(is.null(genes.spleen.tan4)) {
+    print("No significant pathways")
+  } else {genes.spleen.tan4 <- genes.spleen.tan4$result
+  DT.table.jaccard(genes.spleen.tan4[c(11,4:6,3)])
+  
+ }
+```
+
+### Mediumpurple1 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.spleen.mediumpurple1 <- genes.jaccard.pathways(Matched, "Spleen_mediumpurple1")
   
 ```
-### Palevioletred3
+
+#### Pathway Table
+```{r}
+if(is.null(genes.spleen.mediumpurple1)) {
+    print("No significant pathways")
+  } else {genes.spleen.mediumpurple1 <- genes.spleen.mediumpurple1$result
+  DT.table.jaccard(genes.spleen.mediumpurple1[c(11,4:6,3)])
+  
+ }
+```
+
+### Palevioletred3 {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 genes.spleen.palevioletred3 <- genes.jaccard.pathways(Matched, "Spleen_palevioletred3")
   
+```
+
+#### Pathway Table
+```{r}
+if(is.null(genes.spleen.palevioletred3)) {
+    print("No significant pathways")
+  } else {genes.spleen.palevioletred3 <- genes.spleen.palevioletred3$result
+  DT.table.jaccard(genes.spleen.palevioletred3[c(11,4:6,3)])
+  
+ }
 ```

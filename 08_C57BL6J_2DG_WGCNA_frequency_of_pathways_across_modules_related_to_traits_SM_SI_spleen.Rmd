@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="httpss://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="httpss://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="httpss://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -138,10 +128,42 @@ tissue.time.treat.pathways <- list()
 
 ### Tissue {.tabset .tabset-fade .tabset-pills}
 ```{r,results='asis', cache=TRUE}
-count.pathways(tissue.pathways)
+count <- count.pathways(tissue.pathways)
+```
+
+#### Frequency Table
+```{r}
+DT.table.freq(count)
+```
+
+#### Frequency Plot
+```{r}
+  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$list.pathways) + xlab("Modules")
+  print(p)
+  #dev.off()
+  cat("\n \n")
 ```
 
 ### Tissue by time {.tabset .tabset-fade .tabset-pills}
 ```{r,results='asis', cache=TRUE}
-count.pathways(tissue.time.pathways)
+count <- count.pathways(tissue.time.pathways)
+```
+
+#### Frequency Table
+```{r}
+DT.table.freq(count)
+```
+
+#### Frequency Plot
+```{r}
+  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$list.pathways) + xlab("Modules")
+  print(p)
+  #dev.off()
+  cat("\n \n")
 ```

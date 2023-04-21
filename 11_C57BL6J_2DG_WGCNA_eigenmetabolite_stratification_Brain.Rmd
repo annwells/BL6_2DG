@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -93,18 +83,221 @@ model.data$Time <- as.factor(model.data$Time)
 model.data$Tissue <- as.factor(model.data$Tissue)
 model.data$Treatment <- as.factor(model.data$Treatment)
 
+final.anova <- list()
 for (m in colnames(module.eigens)) {
   a <- art(data = model.data, model.data[,m] ~ Time*Treatment*Tissue)
   model <- anova(a)
   adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
   
   name <- sapply(str_split(colnames(module.eigens[m]),"_"),"[",2)
-  cat("\n### Module", name, "\n")
-  print(knitr::kable(cbind(model,adjust)) %>% 
-          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-
-  cat("\n \n")
+  
+  final.anova[[m]] <- cbind(model, adjust)
 }
+```
+
+### Antiquewhite Module
+```{r}
+DT.table(final.anova[[1]])
+```
+
+### Cyan Module
+```{r}
+DT.table(final.anova[[2]])
+```
+
+### Lavenderblush1 Module
+```{r}
+DT.table(final.anova[[3]])
+```
+
+### Darkolivegreen4 Module
+```{r}
+DT.table(final.anova[[4]])
+```
+
+### Darkgrey Module
+```{r}
+DT.table(final.anova[[5]])
+```
+
+### Brown3 Module
+```{r}
+DT.table(final.anova[[6]])
+```
+
+### Orangered1 Module
+```{r}
+DT.table(final.anova[[7]])
+```
+
+### Deeppink2 Module
+```{r}
+DT.table(final.anova[[8]])
+```
+
+### Grey Module
+```{r}
+DT.table(final.anova[[9]])
+```
+
+### Magenta1 Module
+```{r}
+DT.table(final.anova[[10]])
+```
+
+### Mediumpurple Module
+```{r}
+DT.table(final.anova[[11]])
+```
+
+### Darkslateblue Module
+```{r}
+DT.table(final.anova[[12]])
+```
+
+### Magenta4 Module
+```{r}
+DT.table(final.anova[[13]])
+```
+
+### Firebrick4 Module
+```{r}
+DT.table(final.anova[[14]])
+```
+
+### Honeydew Module
+```{r}
+DT.table(final.anova[[15]])
+```
+
+### Brown1 Module
+```{r}
+DT.table(final.anova[[16]])
+```
+
+### Coral3 Module
+```{r}
+DT.table(final.anova[[17]])
+```
+
+### Royalblue Module
+```{r}
+DT.table(final.anova[[18]])
+```
+
+### Green3 Module
+```{r}
+DT.table(final.anova[[19]])
+```
+
+### Lavenderblush3 Module
+```{r}
+DT.table(final.anova[[20]])
+```
+
+### Green4 Module
+```{r}
+DT.table(final.anova[[21]])
+```
+
+### Lightblue1 Module
+```{r}
+DT.table(final.anova[[22]])
+```
+
+### Magenta3 Module
+```{r}
+DT.table(final.anova[[23]])
+```
+
+### Blanchedalmond Module
+```{r}
+DT.table(final.anova[[24]])
+```
+
+### Orangered4 Module
+```{r}
+DT.table(final.anova[[25]])
+```
+
+### Darkseagreen Module
+```{r}
+DT.table(final.anova[[26]])
+```
+
+### Paleturquoise4 Module
+```{r}
+DT.table(final.anova[[27]])
+```
+
+### Chocolate3 Module
+```{r}
+DT.table(final.anova[[28]])
+```
+
+### Indianred3 Module
+```{r}
+DT.table(final.anova[[29]])
+```
+
+### Plum Module
+```{r}
+DT.table(final.anova[[30]])
+```
+
+### Lightcoral Module
+```{r}
+DT.table(final.anova[[31]])
+```
+
+### Aliceblue Module
+```{r}
+DT.table(final.anova[[32]])
+```
+
+### Burlywood Module
+```{r}
+DT.table(final.anova[[33]])
+```
+
+### Thistle3 Module
+```{r}
+DT.table(final.anova[[34]])
+```
+
+### Lavenderblush2 Module
+```{r}
+DT.table(final.anova[[35]])
+```
+
+### Pink2 Module
+```{r}
+DT.table(final.anova[[36]])
+```
+
+### Lightblue2 Module
+```{r}
+DT.table(final.anova[[37]])
+```
+
+### Wheat3 Module
+```{r}
+DT.table(final.anova[[38]])
+```
+
+### Mediumorchid3 Module
+```{r}
+DT.table(final.anova[[39]])
+```
+
+### Orange3 Module
+```{r}
+DT.table(final.anova[[40]])
+```
+
+### Dodgerblue4 Module
+```{r}
+DT.table(final.anova[[41]])
 ```
 
 ## Interaction plots {.tabset .tabset-fade .tabset-pills}

@@ -193,7 +193,7 @@ write.csv(Jaccard,here("Data","Jaccard_Index_WGCNA_2DG_BL6_Tissue.csv"))
 
 ## Jaccard Index Subset
 This Jacard Index contains the 4 hotspots identified in the complete jaccard index.
-```{r}
+```{r, cache=TRUE}
 breaks<-seq(0,.5,length.out = 100)
 
 mods <- as.data.frame(mods)
@@ -347,7 +347,7 @@ list.pathways <- list()
 ```
 
 ### Frequency Plot
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
   #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
   p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
   p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()

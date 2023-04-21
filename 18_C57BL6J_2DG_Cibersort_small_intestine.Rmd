@@ -12,16 +12,6 @@ output:
    self_contained: no
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal liver, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will deconvolve the green4 module, as well as all genes identified in the small intestine due to the predominant immunological signature that was identified when looking at overrepresented pathways for the green4 module.
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -183,17 +173,9 @@ for(i in 1:length(adjust)){
 colnames(cibersort.matrix) <- c("Immune Cells","Time","Treatment","Time by Treatment")
 cibersort.matrix <- as.data.frame(cibersort.matrix)
 
-             print(knitr::kable(cibersort.matrix)) #%>% 
-                      #column_spec(2:4, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-        print(cibersort.matrix %>%
-          download_this(
-            output_name = "Cibersort Green4 module",
-            output_extension = ".csv",
-            button_label = "Download data as csv",
-            button_type = "info",
-            has_icon = TRUE,
-            icon = "fa fa-save"
-          ))
+DT::datatable(cibersort.matrix, extensions = 'Buttons', rownames = FALSE,
+              filter="top", options = list(dom = 'Blfrtip', buttons = c('copy', 'csv', 'excel'), lengthMenu = list(c(10,25,50,-1), c(10,25,50,"All")), 
+                                           scrollX= TRUE), class = "display")
 ```
 
 ### All Small Intestine Genes
@@ -222,17 +204,9 @@ for(i in 1:length(adjust)){
 colnames(cibersort.all.matrix) <- c("Immune Cells","Time","Treatment","Time by Treatment")
 cibersort.all.matrix <- as.data.frame(cibersort.all.matrix)
 
-             print(knitr::kable(cibersort.all.matrix)) #%>% 
-                      #column_spec(2:4, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-             print(cibersort.all.matrix %>%
-          download_this(
-            output_name = "Cibersort all genes",
-            output_extension = ".csv",
-            button_label = "Download data as csv",
-            button_type = "info",
-            has_icon = TRUE,
-            icon = "fa fa-save"
-          ))
+DT::datatable(cibersort.all.matrix, extensions = 'Buttons', rownames = FALSE,
+              filter="top", options = list(dom = 'Blfrtip', buttons = c('copy', 'csv', 'excel'), lengthMenu = list(c(10,25,50,-1), c(10,25,50,"All")), 
+                                           scrollX= TRUE), class = "display")
 ```
 
 ### Compare module to all genes in small intestine
@@ -261,17 +235,9 @@ for(i in 1:length(adjust)){
 colnames(cibersort.all.matrix) <- c("Immune Cells","Module","Time","Treatment","Module:Time","Module:Treatment","Time:Treatment","Module:Time:Treatment")
 cibersort.all.matrix <- as.data.frame(cibersort.all.matrix)
 
-             print(knitr::kable(cibersort.all.matrix)) #%>% 
-                      #column_spec(2:4, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-             print(cibersort.all.matrix %>%
-          download_this(
-            output_name = "Cibersort comparison",
-            output_extension = ".csv",
-            button_label = "Download data as csv",
-            button_type = "info",
-            has_icon = TRUE,
-            icon = "fa fa-save"
-          ))
+DT::datatable(cibersort.all.matrix, extensions = 'Buttons', rownames = FALSE,
+              filter="top", options = list(dom = 'Blfrtip', buttons = c('copy', 'csv', 'excel'), lengthMenu = list(c(10,25,50,-1), c(10,25,50,"All")), 
+                                           scrollX= TRUE), class = "display")
 ```
 
 ## Plot to compare Green4 module to all genes in small intestine

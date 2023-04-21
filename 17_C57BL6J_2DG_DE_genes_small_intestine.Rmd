@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -101,19 +91,15 @@ Treatment.sig.only <- frame %>%
 saveRDS(Treatment.sig.only, here("Data","Small Intestine","Chang_2DG_BL6_DE_genes_small_intestine.RData"))
 ```
 
+## ANOVA
 ```{r, results='asis'}
-cat("\n####","ANOVA","\n")
-print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", " Treatment by time", "BH Treatment by time")))
-
-frame %>%
-  download_this(
-    output_name = "Small Intestine ANOVA Gene Differential Expression",
-    output_extension = ".csv",
-    button_label = "Download data as csv",
-    button_type = "info",
-    has_icon = TRUE,
-    icon = "fa fa-save"
-  )
-cat("\n \n")
-
+DT::datatable(frame, extensions = 'Buttons',
+                                           rownames = FALSE, 
+                                           filter="top",
+                                           options = list(dom = 'Blfrtip',
+                                                          buttons = c('copy', 'csv', 'excel'),
+                                                          lengthMenu = list(c(10,25,50,-1),
+                                                                            c(10,25,50,"All")), 
+                                                          scrollX= TRUE), class = "display",
+              colnames = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", " Treatment by time", "BH Treatment by time"))
 ```

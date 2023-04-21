@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -88,6 +78,21 @@ WGCNA.pathway <- readRDS(here("Data","Hippocampus","Chang_B6_96hr_4wk_gprofiler_
 #pdf("Counts_of_each_pathway_identified_within_hippocampus.pdf")
 count.pathways(WGCNA.pathway)
 #dev.off()
+```
+
+### Frequency Table
+```{r}
+DT.table.freq(count)
+```
+
+### Frequency Plot
+```{r}
+  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$list.pathways) + xlab("Modules")
+  print(p)
+  #dev.off()
 ```
 
 ```{r, include=FALSE}

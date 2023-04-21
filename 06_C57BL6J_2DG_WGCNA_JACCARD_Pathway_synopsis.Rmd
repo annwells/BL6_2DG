@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, warning=FALSE, message=FALSE}
@@ -35,6 +25,7 @@ knitr::opts_knit$set(progress=FALSE)
 This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, liver, prefrontal cortex, skeletal muscle, small intestine, and spleen) from C57BL/6J mice that were fed 2-deoxyglucose (6g/L) through their drinking water for 96hrs or 4wks. 96hr mice were given their 2DG treatment 2 weeks after the other cohort started the 4 week treatment. The organs from the mice were harvested and processed for metabolomics and transcriptomics. The data in this document pertains to the transcriptomics data only. The counts that were used were FPKM normalized before being log transformed. It was determined that sample A113 had low RNAseq quality and through further analyses with PCA, MA plots, and clustering was an outlier and will be removed for the rest of the analyses performed. This document will look at modules that were significantly correlated with traits and had pathways identified within the WGCNA. Those modules will be assessed to see which modules from other tissues and their modules significantly overlapped.
 
 ## Load in Packages and read in files
+
 ```{r load packages}
 needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "rlist")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
@@ -47,12 +38,14 @@ filtered.pathways <- readRDS(here("Data","Chang_2DG_BL6_gprofiler_annotation_fil
 
 ```
 
-# Tissue {.tabset .tabset-fade .tabset-pills}
+## Tissue {.tabset .tabset-fade .tabset-pills}
+
 Each tissue module was compared to the traits in the experiment. The modules that were significantly correlated for a trait were then compared within the jaccard index across all other tissues. The significant overlaps were then summarized to determine which pathways were most common. Below are the pathway lists and their frequency for each module within a tissue that was also correlated to a trait and their frequency bar plots.
 
-## Heart {.tabset .tabset-fade .tabset-pills}
+### Heart {.tabset .tabset-fade .tabset-pills}
 
-### Darkgreen
+#### Darkgreen
+
 ```{r Heart darkgreen}
 jaccard.heart.darkgreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkgreen"))
 ]
@@ -77,11 +70,22 @@ jaccard.heart.darkgreen.merged <- map_df(jaccard.heart.darkgreen, ~as.data.frame
 jaccard.heart.darkgreen.merged <- jaccard.heart.darkgreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.heart.darkgreen.merged)
+  DT.table.jaccard.pathways(jaccard.heart.darkgreen.merged)
 ```
 
-### Darkgrey
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.heart.darkgreen.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.heart.darkgreen.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.heart.darkgreen.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Darkgrey
 
 ```{r Heart darkgrey}
 jaccard.heart.darkgrey <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkgrey"))
@@ -107,11 +111,22 @@ jaccard.heart.darkgrey.merged <- map_df(jaccard.heart.darkgrey, ~as.data.frame(.
 jaccard.heart.darkgrey.merged <- jaccard.heart.darkgrey.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.heart.darkgrey.merged)
+  DT.table.jaccard.pathways(jaccard.heart.darkgrey.merged)
 ```
 
-### Darkorange
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.heart.darkgrey.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.heart.darkgrey.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.heart.darkgrey.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Darkorange
 ```{r Heart darkorange}
 jaccard.heart.darkorange <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_darkorange"))
 ]
@@ -136,11 +151,22 @@ jaccard.heart.darkorange.merged <- map_df(jaccard.heart.darkorange, ~as.data.fra
 jaccard.heart.darkorange.merged <- jaccard.heart.darkorange.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results="asis", cache=TRUE}
-module.jaccard.pathways(jaccard.heart.darkorange.merged)
+##### Frequency Table
+```{r, results='asis', cache=TRUE}
+  DT.table.jaccard.pathways(jaccard.heart.darkorange.merged)
 ```
 
-### Plum1
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.heart.darkorange.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.heart.darkorange.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.heart.darkorange.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Plum1
 ```{r Heart plum1}
 jaccard.heart.plum1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Heart_plum1"))
 ]
@@ -165,12 +191,24 @@ jaccard.heart.plum1.merged <- map_df(jaccard.heart.plum1, ~as.data.frame(.)) %>%
 jaccard.heart.plum1.merged <- jaccard.heart.plum1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results="asis", cache=TRUE}
-module.jaccard.pathways(jaccard.heart.plum1.merged)
+##### Frequency Table
+```{r, results='asis', cache=TRUE}
+  DT.table.jaccard.pathways(jaccard.heart.plum1.merged)
 ```
 
-## Hippocampus {.tabset .tabset-fade .tabset-pills}
-### Green
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.heart.plum1.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.heart.plum1.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.heart.plum1.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Hippocampus {.tabset .tabset-fade .tabset-pills}
+
+#### Green
 ```{r Hippocampus green}
 jaccard.Hippocampus.green <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_green"))
 ]
@@ -195,11 +233,22 @@ jaccard.Hippocampus.green.merged <- map_df(jaccard.Hippocampus.green, ~as.data.f
 jaccard.Hippocampus.green.merged <- jaccard.Hippocampus.green.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Hippocampus.green.merged)
+  DT.table.jaccard.pathways(jaccard.Hippocampus.green.merged)
 ```
 
-### Coral1
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Hippocampus.green.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Hippocampus.green.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Hippocampus.green.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Coral1
 ```{r Hippocampus coral1}
 jaccard.hippocampus.coral1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_coral1"))
 ]
@@ -224,11 +273,22 @@ jaccard.hippocampus.coral1.merged <- map_df(jaccard.hippocampus.coral1, ~as.data
 jaccard.hippocampus.coral1.merged <- jaccard.hippocampus.coral1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.hippocampus.coral1.merged)
+  DT.table.jaccard.pathways(jaccard.hippocampus.coral1.merged)
 ```
 
-### Darkslateblue
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.hippocampus.coral1.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.hippocampus.coral1.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.hippocampus.coral1.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Darkslateblue
 ```{r Hippocampus darkslateblue}
 jaccard.hippocampus.darkslateblue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_darkslateblue"))
 ]
@@ -253,11 +313,22 @@ jaccard.hippocampus.darkslateblue.merged <- map_df(jaccard.hippocampus.darkslate
 jaccard.hippocampus.darkslateblue.merged <- jaccard.hippocampus.darkslateblue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.hippocampus.darkslateblue.merged)
+  DT.table.jaccard.pathways(jaccard.hippocampus.darkslateblue.merged)
 ```
 
-### Darkolivegreen
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.hippocampus.darkslateblue.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.hippocampus.darkslateblue.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.hippocampus.darkslateblue.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Darkolivegreen
 ```{r Hippocampus darkolivegreen}
 jaccard.hippocampus.darkolivegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_darkolivegreen"))
 ]
@@ -282,11 +353,22 @@ jaccard.hippocampus.darkolivegreen.merged <- map_df(jaccard.hippocampus.darkoliv
 jaccard.hippocampus.darkolivegreen.merged <- jaccard.hippocampus.darkolivegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.hippocampus.darkolivegreen.merged)
+  DT.table.jaccard.pathways(jaccard.hippocampus.darkolivegreen.merged)
 ```
 
-### Khaki3
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.hippocampus.darkolivegreen.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.hippocampus.darkolivegreen.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.hippocampus.darkolivegreen.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Khaki3
 ```{r Hippocampus khaki3}
 jaccard.hippocampus.khaki3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hippocampus_khaki3"))
 ]
@@ -311,12 +393,23 @@ jaccard.hippocampus.khaki3.merged <- map_df(jaccard.hippocampus.khaki3, ~as.data
 jaccard.hippocampus.khaki3.merged <- jaccard.hippocampus.khaki3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.hippocampus.khaki3.merged)
+  DT.table.jaccard.pathways(jaccard.hippocampus.khaki3.merged)
 ```
 
-## Hypothalamus {.tabset .tabset-fade .tabset-pills}
-### Midnightblue
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.hippocampus.khaki3.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.hippocampus.khaki3.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.hippocampus.khaki3.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Hypothalamus {.tabset .tabset-fade .tabset-pills}
+#### Midnightblue
 ```{r Hypothalamus midnightblue}
 jaccard.Hypothalamus.midnightblue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hypothalamus_midnightblue"))
 ]
@@ -341,11 +434,22 @@ jaccard.Hypothalamus.midnightblue.merged <- map_df(jaccard.Hypothalamus.midnight
 jaccard.Hypothalamus.midnightblue.merged <- jaccard.Hypothalamus.midnightblue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Hypothalamus.midnightblue.merged)
+  DT.table.jaccard.pathways(jaccard.Hypothalamus.midnightblue.merged)
 ```
 
-### Bisque4
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Hypothalamus.midnightblue.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Hypothalamus.midnightblue.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Hypothalamus.midnightblue.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Bisque4
 ```{r Hypothalamus bisque4}
 jaccard.Hypothalamus.bisque4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Hypothalamus_bisque4"))
 ]
@@ -370,12 +474,23 @@ jaccard.Hypothalamus.bisque4.merged <- map_df(jaccard.Hypothalamus.bisque4, ~as.
 jaccard.Hypothalamus.bisque4.merged <- jaccard.Hypothalamus.bisque4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Hypothalamus.bisque4.merged)
+  DT.table.jaccard.pathways(jaccard.Hypothalamus.bisque4.merged)
 ```
 
-## Kidney {.tabset .tabset-fade .tabset-pills}
-### Lightyellow
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Hypothalamus.bisque4.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Hypothalamus.bisque4.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Hypothalamus.bisque4.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Kidney {.tabset .tabset-fade .tabset-pills}
+#### Lightyellow
 ```{r Kidney lightyellow}
 jaccard.Kidney.lightyellow <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_lightyellow"))
 ]
@@ -400,11 +515,22 @@ jaccard.Kidney.lightyellow.merged <- map_df(jaccard.Kidney.lightyellow, ~as.data
 jaccard.Kidney.lightyellow.merged <- jaccard.Kidney.lightyellow.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Kidney.lightyellow.merged)
+  DT.table.jaccard.pathways(jaccard.Kidney.lightyellow.merged)
 ```
 
-### Purple
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Kidney.lightyellow.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Kidney.lightyellow.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Kidney.lightyellow.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Purple
 ```{r Kidney purple}
 jaccard.Kidney.purple <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_purple"))
 ]
@@ -429,11 +555,22 @@ jaccard.Kidney.purple.merged <- map_df(jaccard.Kidney.purple, ~as.data.frame(.))
 jaccard.Kidney.purple.merged <- jaccard.Kidney.purple.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Kidney.purple.merged)
+  DT.table.jaccard.pathways(jaccard.Kidney.purple.merged)
 ```
 
-### Lightcyan
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Kidney.purple.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Kidney.purple.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Kidney.purple.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Lightcyan
 ```{r Kidney lightcyan}
 jaccard.Kidney.lightcyan <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_lightcyan"))
 ]
@@ -458,11 +595,22 @@ jaccard.Kidney.lightcyan.merged <- map_df(jaccard.Kidney.lightcyan, ~as.data.fra
 jaccard.Kidney.lightcyan.merged <- jaccard.Kidney.lightcyan.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Kidney.lightcyan.merged)
+  DT.table.jaccard.pathways(jaccard.Kidney.lightcyan.merged)
 ```
 
-### Blue
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Kidney.lightcyan.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Kidney.lightcyan.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Kidney.lightcyan.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Blue
 ```{r Kidney blue}
 jaccard.Kidney.blue <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_blue"))
 ]
@@ -487,11 +635,22 @@ jaccard.Kidney.blue.merged <- map_df(jaccard.Kidney.blue, ~as.data.frame(.)) %>%
 jaccard.Kidney.blue.merged <- jaccard.Kidney.blue.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Kidney.blue.merged)
+  DT.table.jaccard.pathways(jaccard.Kidney.blue.merged)
 ```
 
-### Pink
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Kidney.blue.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Kidney.blue.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Kidney.blue.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Pink
 ```{r Kidney pink}
 jaccard.Kidney.pink <- filtered.pathways[which(str_detect(names(filtered.pathways),"Kidney_pink"))
 ]
@@ -516,12 +675,23 @@ jaccard.Kidney.pink.merged <- map_df(jaccard.Kidney.pink, ~as.data.frame(.)) %>%
 jaccard.Kidney.pink.merged <- jaccard.Kidney.pink.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Kidney.pink.merged)
+  DT.table.jaccard.pathways(jaccard.Kidney.pink.merged)
 ```
 
-## Liver {.tabset .tabset-fade .tabset-pills}
-### Darkturquoise
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Kidney.pink.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Kidney.pink.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Kidney.pink.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Liver {.tabset .tabset-fade .tabset-pills}
+#### Darkturquoise
 ```{r Liver darkturquoise}
 jaccard.Liver.darkturquoise <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_darkturquoise"))
 ]
@@ -546,11 +716,22 @@ jaccard.Liver.darkturquoise.merged <- map_df(jaccard.Liver.darkturquoise, ~as.da
 jaccard.Liver.darkturquoise.merged <- jaccard.Liver.darkturquoise.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Liver.darkturquoise.merged)
+  DT.table.jaccard.pathways(jaccard.Liver.darkturquoise.merged)
 ```
 
-### Darkolivegreen
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Liver.darkturquoise.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Liver.darkturquoise.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Liver.darkturquoise.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Darkolivegreen
 ```{r Liver darkolivegreen}
 jaccard.Liver.darkolivegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_darkolivegreen"))
 ]
@@ -575,11 +756,22 @@ jaccard.Liver.darkolivegreen.merged <- map_df(jaccard.Liver.darkolivegreen, ~as.
 jaccard.Liver.darkolivegreen.merged <- jaccard.Liver.darkolivegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
-```{r, results='asis', cache=TRUE,cache=TRUE}
-module.jaccard.pathways(jaccard.Liver.darkolivegreen.merged)
+##### Frequency Table
+```{r, results='asis', cache=TRUE}
+  DT.table.jaccard.pathways(jaccard.Liver.darkolivegreen.merged)
 ```
 
-### Skyblue3
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Liver.darkolivegreen.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Liver.darkolivegreen.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Liver.darkolivegreen.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Skyblue3
 ```{r Liver skyblue3}
 jaccard.Liver.skyblue3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Liver_skyblue3"))
 ]
@@ -604,12 +796,23 @@ jaccard.Liver.skyblue3.merged <- map_df(jaccard.Liver.skyblue3, ~as.data.frame(.
 jaccard.Liver.skyblue3.merged <- jaccard.Liver.skyblue3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Liver.skyblue3.merged)
+  DT.table.jaccard.pathways(jaccard.Liver.skyblue3.merged)
 ```
 
-## Prefrontal Cortex {.tabset .tabset-fade .tabset-pills}
-### Limegreen
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Liver.skyblue3.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Liver.skyblue3.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Liver.skyblue3.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Prefrontal Cortex {.tabset .tabset-fade .tabset-pills}
+#### Limegreen
 ```{r Prefrontal Cortex limegreen}
 jaccard.Prefrontal.Cortex.limegreen <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_limegreen"))
 ]
@@ -634,11 +837,22 @@ jaccard.Prefrontal.Cortex.limegreen.merged <- map_df(jaccard.Prefrontal.Cortex.l
 jaccard.Prefrontal.Cortex.limegreen.merged <- jaccard.Prefrontal.Cortex.limegreen.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.limegreen.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.limegreen.merged)
 ```
 
-### Rosybrown2
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.limegreen.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.limegreen.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.limegreen.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Rosybrown2
 ```{r Prefrontal Cortex rosybrown2}
 jaccard.Prefrontal.Cortex.rosybrown2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_rosybrown2"))
 ]
@@ -663,11 +877,22 @@ jaccard.Prefrontal.Cortex.rosybrown2.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.rosybrown2.merged <- jaccard.Prefrontal.Cortex.rosybrown2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.rosybrown2.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.rosybrown2.merged)
 ```
 
-### Lavenderblush2
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.rosybrown2.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.rosybrown2.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.rosybrown2.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Lavenderblush2
 ```{r Prefrontal Cortex lavenderblush2}
 jaccard.Prefrontal.Cortex.lavenderblush2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_lavenderblush2"))
 ]
@@ -692,11 +917,22 @@ jaccard.Prefrontal.Cortex.lavenderblush2.merged <- map_df(jaccard.Prefrontal.Cor
 jaccard.Prefrontal.Cortex.lavenderblush2.merged <- jaccard.Prefrontal.Cortex.lavenderblush2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.lavenderblush2.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.lavenderblush2.merged)
 ```
 
-### Antiquewhite
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.lavenderblush2.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.lavenderblush2.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.lavenderblush2.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Antiquewhite
 ```{r Prefrontal Cortex antiquewhite}
 jaccard.Prefrontal.Cortex.antiquewhite <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_antiquewhite"))
 ]
@@ -721,11 +957,22 @@ jaccard.Prefrontal.Cortex.antiquewhite.merged <- map_df(jaccard.Prefrontal.Corte
 jaccard.Prefrontal.Cortex.antiquewhite.merged <- jaccard.Prefrontal.Cortex.antiquewhite.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.antiquewhite.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.antiquewhite.merged)
 ```
 
-### Pink
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.antiquewhite.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.antiquewhite.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.antiquewhite.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Pink
 ```{r Prefrontal Cortex pink}
 jaccard.Prefrontal.Cortex.pink <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_pink"))
 ]
@@ -750,11 +997,22 @@ jaccard.Prefrontal.Cortex.pink.merged <- map_df(jaccard.Prefrontal.Cortex.pink, 
 jaccard.Prefrontal.Cortex.pink.merged <- jaccard.Prefrontal.Cortex.pink.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.pink.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.pink.merged)
 ```
 
-###Lightpink1
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.pink.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.pink.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.pink.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+####Lightpink1
 ```{r Prefrontal Cortex lightpink1}
 jaccard.Prefrontal.Cortex.lightpink1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_lightpink1"))
 ]
@@ -779,11 +1037,22 @@ jaccard.Prefrontal.Cortex.lightpink1.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.lightpink1.merged <- jaccard.Prefrontal.Cortex.lightpink1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.lightpink1.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.lightpink1.merged)
 ```
 
-### Goldenrod3
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.lightpink1.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.lightpink1.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.lightpink1.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Goldenrod3
 ```{r Prefrontal Cortex goldenrod3}
 jaccard.Prefrontal.Cortex.goldenrod3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_goldenrod3"))
 ]
@@ -808,11 +1077,22 @@ jaccard.Prefrontal.Cortex.goldenrod3.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.goldenrod3.merged <- jaccard.Prefrontal.Cortex.goldenrod3.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.goldenrod3.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.goldenrod3.merged)
 ```
 
-### Aquamarine
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.goldenrod3.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.goldenrod3.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.goldenrod3.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Aquamarine
 ```{r Prefrontal Cortex aquamarine}
 jaccard.Prefrontal.Cortex.aquamarine <- filtered.pathways[which(str_detect(names(filtered.pathways),"Prefrontal Cortex_aquamarine"))
 ]
@@ -837,12 +1117,23 @@ jaccard.Prefrontal.Cortex.aquamarine.merged <- map_df(jaccard.Prefrontal.Cortex.
 jaccard.Prefrontal.Cortex.aquamarine.merged <- jaccard.Prefrontal.Cortex.aquamarine.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Prefrontal.Cortex.aquamarine.merged)
+  DT.table.jaccard.pathways(jaccard.Prefrontal.Cortex.aquamarine.merged)
 ```
 
-## Skeletal Muscle {.tabset .tabset-fade .tabset-pills}
-### Grey
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Prefrontal.Cortex.aquamarine.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Prefrontal.Cortex.aquamarine.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Prefrontal.Cortex.aquamarine.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Skeletal Muscle {.tabset .tabset-fade .tabset-pills}
+#### Grey
 ```{r Skeletal Muscle grey}
 jaccard.Skeletal.Muscle.grey <- filtered.pathways[which(str_detect(names(filtered.pathways),"Skeletal Muscle_grey"))
 ]
@@ -867,12 +1158,23 @@ jaccard.Skeletal.Muscle.grey.merged <- map_df(jaccard.Skeletal.Muscle.grey, ~as.
 jaccard.Skeletal.Muscle.grey.merged <- jaccard.Skeletal.Muscle.grey.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Skeletal.Muscle.grey.merged)
+  DT.table.jaccard.pathways(jaccard.Skeletal.Muscle.grey.merged)
 ```
 
-## Small Intestine {.tabset .tabset-fade .tabset-pills}
-### Green4
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Skeletal.Muscle.grey.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Skeletal.Muscle.grey.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Skeletal.Muscle.grey.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Small Intestine {.tabset .tabset-fade .tabset-pills}
+#### Green4
 ```{r Small Intestine green4}
 jaccard.Small.Intestine.green4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_green4"))
 ]
@@ -897,11 +1199,22 @@ jaccard.Small.Intestine.green4.merged <- map_df(jaccard.Small.Intestine.green4, 
 jaccard.Small.Intestine.green4.merged <- jaccard.Small.Intestine.green4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Small.Intestine.green4.merged)
+  DT.table.jaccard.pathways(jaccard.Small.Intestine.green4.merged)
 ```
 
-### Blue2
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Small.Intestine.green4.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Small.Intestine.green4.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Small.Intestine.green4.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Blue2
 ```{r Small Intestine blue2}
 jaccard.Small.Intestine.blue2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_blue2"))
 ]
@@ -926,11 +1239,22 @@ jaccard.Small.Intestine.blue2.merged <- map_df(jaccard.Small.Intestine.blue2, ~a
 jaccard.Small.Intestine.blue2.merged <- jaccard.Small.Intestine.blue2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Small.Intestine.blue2.merged)
+  DT.table.jaccard.pathways(jaccard.Small.Intestine.blue2.merged)
 ```
 
-### Cornsilk
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Small.Intestine.blue2.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Small.Intestine.blue2.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Small.Intestine.blue2.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Cornsilk
 ```{r Small Intestine cornsilk}
 jaccard.Small.Intestine.cornsilk <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_cornsilk"))
 ]
@@ -955,11 +1279,22 @@ jaccard.Small.Intestine.cornsilk.merged <- map_df(jaccard.Small.Intestine.cornsi
 jaccard.Small.Intestine.cornsilk.merged <- jaccard.Small.Intestine.cornsilk.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Small.Intestine.cornsilk.merged)
+  DT.table.jaccard.pathways(jaccard.Small.Intestine.cornsilk.merged)
 ```
 
-### Magenta2
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Small.Intestine.cornsilk.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Small.Intestine.cornsilk.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Small.Intestine.cornsilk.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Magenta2
 ```{r Small Intestine magenta2}
 jaccard.Small.Intestine.magenta2 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_magenta2"))
 ]
@@ -984,11 +1319,22 @@ jaccard.Small.Intestine.magenta2.merged <- map_df(jaccard.Small.Intestine.magent
 jaccard.Small.Intestine.magenta2.merged <- jaccard.Small.Intestine.magenta2.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Small.Intestine.magenta2.merged)
+  DT.table.jaccard.pathways(jaccard.Small.Intestine.magenta2.merged)
 ```
 
-### Darkgoldenrod4
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Small.Intestine.magenta2.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Small.Intestine.magenta2.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Small.Intestine.magenta2.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Darkgoldenrod4
 ```{r Small Intestine darkgoldenrod4}
 jaccard.Small.Intestine.darkgoldenrod4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Small Intestine_darkgoldenrod4"))
 ]
@@ -1013,12 +1359,23 @@ jaccard.Small.Intestine.darkgoldenrod4.merged <- map_df(jaccard.Small.Intestine.
 jaccard.Small.Intestine.darkgoldenrod4.merged <- jaccard.Small.Intestine.darkgoldenrod4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Small.Intestine.darkgoldenrod4.merged)
+  DT.table.jaccard.pathways(jaccard.Small.Intestine.darkgoldenrod4.merged)
 ```
 
-## Spleen {.tabset .tabset-fade .tabset-pills}
-### Tan4
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Small.Intestine.darkgoldenrod4.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Small.Intestine.darkgoldenrod4.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Small.Intestine.darkgoldenrod4.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Spleen {.tabset .tabset-fade .tabset-pills}
+#### Tan4
 ```{r Spleen tan4}
 jaccard.Spleen.tan4 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_tan4"))
 ]
@@ -1043,11 +1400,22 @@ jaccard.Spleen.tan4.merged <- map_df(jaccard.Spleen.tan4, ~as.data.frame(.)) %>%
 jaccard.Spleen.tan4.merged <- jaccard.Spleen.tan4.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Spleen.tan4.merged)
+  DT.table.jaccard.pathways(jaccard.Spleen.tan4.merged)
 ```
 
-### Mediumpurple1
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Spleen.tan4.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Spleen.tan4.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Spleen.tan4.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Mediumpurple1
 ```{r Spleen mediumpurple1}
 jaccard.Spleen.mediumpurple1 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_mediumpurple1"))
 ]
@@ -1072,11 +1440,22 @@ jaccard.Spleen.mediumpurple1.merged <- map_df(jaccard.Spleen.mediumpurple1, ~as.
 jaccard.Spleen.mediumpurple1.merged <- jaccard.Spleen.mediumpurple1.merged %>% group_by(term_name) %>% summarise_each(funs(max)) 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Spleen.mediumpurple1.merged)
+  DT.table.jaccard.pathways(jaccard.Spleen.mediumpurple1.merged)
 ```
 
-### Palevioletred3
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Spleen.mediumpurple1.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Spleen.mediumpurple1.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Spleen.mediumpurple1.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+#### Palevioletred3
 ```{r Spleen palevioletred3}
 jaccard.Spleen.palevioletred3 <- filtered.pathways[which(str_detect(names(filtered.pathways),"Spleen_palevioletred3"))
 ]
@@ -1102,6 +1481,17 @@ jaccard.Spleen.palevioletred3.merged <- jaccard.Spleen.palevioletred3.merged %>%
 
 ```
 
+##### Frequency Table
 ```{r, results='asis', cache=TRUE}
-module.jaccard.pathways(jaccard.Spleen.palevioletred3.merged)
+  DT.table.jaccard.pathways(jaccard.Spleen.palevioletred3.merged)
+```
+
+##### Frequency Plot
+```{r, results='asis'}
+#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=jaccard.Spleen.palevioletred3.merged,aes(x=term_name,y=count))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(jaccard.Spleen.palevioletred3.merged[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=jaccard.Spleen.palevioletred3.merged$Var1) + xlab("Modules")
+  print(p)
+  #dev.off()
 ```

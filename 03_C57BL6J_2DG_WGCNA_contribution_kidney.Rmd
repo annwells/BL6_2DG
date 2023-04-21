@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -108,17 +98,15 @@ dim(textMatrix) = dim(moduleTraitCor)
 heat <- pheatmap(moduleTraitCor, main = paste("Module-trait relationships"), display_numbers = textMatrix,color=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(10), cluster_rows = F, cluster_cols = F, fontsize_number = 4, angle_col = 45, number_color = "black", border_color = "white")
 heat
 
-knitr::kable(moduleTraitPvalue)
 
-as.data.frame(moduleTraitPvalue) %>%
-  download_this(
-    output_name = "Kidney Module-Trait Relationship",
-    output_extension = ".csv",
-    button_label = "Download data as csv",
-    button_type = "info",
-    has_icon = TRUE,
-    icon = "fa fa-save"
-  )
+DT::datatable(moduleTraitPvalue, extensions = 'Buttons',
+                  rownames = TRUE, 
+                  filter="top",
+                  options = list(dom = 'Blfrtip',
+                                 buttons = c('copy', 'csv', 'excel'),
+                                 lengthMenu = list(c(10,25,50,-1),
+                                                   c(10,25,50,"All")), 
+                                 scrollX= TRUE), class = "display")
 ```
 
 # Partial Correlation {.tabset .tabset-fade .tabset-pills}

@@ -12,16 +12,6 @@ output:
    self_contained: no
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 options(stringsAsFactors = F)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -67,7 +57,212 @@ ensembl.location <- readRDS(here("Data","Ensembl_gene_id_and_location.RData"))
 Hub genes are genes in the module network that have the highest connectivity. For instance, if the gene significance of a particular module is associated with treatment. The hub genes in this module are likely associated with this trait.
 
 ```{r, results='asis'}
-hub.genes(net.deg,module.labels,modules,ensembl.location)
+hub.genes.list <- hub.genes(net.deg,module.labels,modules,ensembl.location)
+```
+
+### Antiquewhite Module
+```{r}
+DT.table.hub(hub.genes.list[[1]])
+```
+
+### Cyan Module
+```{r}
+DT.table.hub(hub.genes.list[[2]])
+```
+
+### Lavenderblush1 Module
+```{r}
+DT.table.hub(hub.genes.list[[3]])
+```
+
+### Darkolivegreen4 Module
+```{r}
+DT.table.hub(hub.genes.list[[4]])
+```
+
+### Darkgrey Module
+```{r}
+DT.table.hub(hub.genes.list[[5]])
+```
+
+### Brown3 Module
+```{r}
+DT.table.hub(hub.genes.list[[6]])
+```
+
+### Orangered1 Module
+```{r}
+DT.table.hub(hub.genes.list[[7]])
+```
+
+### Deeppink2 Module
+```{r}
+DT.table.hub(hub.genes.list[[8]])
+```
+
+### Grey Module
+```{r}
+DT.table.hub(hub.genes.list[[9]])
+```
+
+### Magenta1 Module
+```{r}
+DT.table.hub(hub.genes.list[[10]])
+```
+
+### Mediumpurple Module
+```{r}
+DT.table.hub(hub.genes.list[[11]])
+```
+
+### Darkslateblue Module
+```{r}
+DT.table.hub(hub.genes.list[[12]])
+```
+
+### Magenta4 Module
+```{r}
+DT.table.hub(hub.genes.list[[13]])
+```
+
+### Firebrick4 Module
+```{r}
+DT.table.hub(hub.genes.list[[14]])
+```
+
+### Honeydew Module
+```{r}
+DT.table.hub(hub.genes.list[[15]])
+```
+
+### Brown1 Module
+```{r}
+DT.table.hub(hub.genes.list[[16]])
+```
+
+### Coral3 Module
+```{r}
+DT.table.hub(hub.genes.list[[17]])
+```
+
+### Royalblue Module
+```{r}
+DT.table.hub(hub.genes.list[[18]])
+```
+
+### Green3 Module
+```{r}
+DT.table.hub(hub.genes.list[[19]])
+```
+
+### Lavenderblush3 Module
+```{r}
+DT.table.hub(hub.genes.list[[20]])
+```
+
+### Green4 Module
+```{r}
+DT.table.hub(hub.genes.list[[21]])
+```
+
+### Lightblue1 Module
+```{r}
+DT.table.hub(hub.genes.list[[22]])
+```
+
+### Magenta3 Module
+```{r}
+DT.table.hub(hub.genes.list[[23]])
+```
+
+### Blanchedalmond Module
+```{r}
+DT.table.hub(hub.genes.list[[24]])
+```
+
+### Orangered4 Module
+```{r}
+DT.table.hub(hub.genes.list[[25]])
+```
+
+### Darkseagreen Module
+```{r}
+DT.table.hub(hub.genes.list[[26]])
+```
+
+### Paleturquoise4 Module
+```{r}
+DT.table.hub(hub.genes.list[[27]])
+```
+
+### Chocolate3 Module
+```{r}
+DT.table.hub(hub.genes.list[[28]])
+```
+
+### Indianred3 Module
+```{r}
+DT.table.hub(hub.genes.list[[29]])
+```
+
+### Plum Module
+```{r}
+DT.table.hub(hub.genes.list[[30]])
+```
+
+### Lightcoral Module
+```{r}
+DT.table.hub(hub.genes.list[[31]])
+```
+
+### Aliceblue Module
+```{r}
+DT.table.hub(hub.genes.list[[32]])
+```
+
+### Burlywood Module
+```{r}
+DT.table.hub(hub.genes.list[[33]])
+```
+
+### Thistle3 Module
+```{r}
+DT.table.hub(hub.genes.list[[34]])
+```
+
+### Lavenderblush2 Module
+```{r}
+DT.table.hub(hub.genes.list[[35]])
+```
+
+### Pink2 Module
+```{r}
+DT.table.hub(hub.genes.list[[36]])
+```
+
+### Lightblue2 Module
+```{r}
+DT.table.hub(hub.genes.list[[37]])
+```
+
+### Wheat3 Module
+```{r}
+DT.table.hub(hub.genes.list[[38]])
+```
+
+### Mediumorchid3 Module
+```{r}
+DT.table.hub(hub.genes.list[[39]])
+```
+
+### Orange3 Module
+```{r}
+DT.table.hub(hub.genes.list[[40]])
+```
+
+### Dodgerblue4 Module
+```{r}
+DT.table.hub(hub.genes.list[[41]])
 ```
 
 ## ANOVA {.tabset .tabset-fade .tabset-pills}
@@ -95,7 +290,7 @@ for(m in module.labels) {
              model <- anova(m)
              adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
              print(knitr::kable(cbind(model,adjust)) %>% 
-                      column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
+                      column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))) %>% kable_styling(bootstrap_options = c("striped", "hover", "responsive")))
              cat("\n \n")
              }
           cat("\n \n")

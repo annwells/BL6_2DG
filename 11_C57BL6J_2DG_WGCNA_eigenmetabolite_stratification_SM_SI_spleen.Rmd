@@ -13,16 +13,6 @@ output:
    
 ---
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
-
 # Introduction and Data files
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
@@ -90,18 +80,34 @@ model.data$Time <- as.factor(model.data$Time)
 model.data$Tissue <- as.factor(model.data$Tissue)
 model.data$Treatment <- as.factor(model.data$Treatment)
 
+final.anova <- list()
 for (m in colnames(module.eigens)) {
   a <- art(data = model.data, model.data[,m] ~ Time*Treatment*Tissue)
   model <- anova(a)
   adjust <- p.adjust(model$`Pr(>F)`, method = "BH")
   
-  name <- sapply(str_split(colnames(module.eigens[m]),"_"),"[",2)
-  cat("\n### Module", name, "\n")
-  print(knitr::kable(cbind(model,adjust)) %>% 
-          column_spec(8, color = "white", background = spec_color(adjust, end = 0.05, scale_from = c(0,0.05))))
-
-  cat("\n \n")
+  final.anova[[m]] <- cbind(model, adjust)
 }
+```
+
+### Turquoise Module
+```{r}
+DT.table(final.anova[[1]])
+```
+
+### Blue Module
+```{r}
+DT.table(final.anova[[2]])
+```
+
+### Brown Module
+```{r}
+DT.table(final.anova[[3]])
+```
+
+### Green Module
+```{r}
+DT.table(final.anova[[4]])
 ```
 
 ## Interaction plots {.tabset .tabset-fade .tabset-pills}
