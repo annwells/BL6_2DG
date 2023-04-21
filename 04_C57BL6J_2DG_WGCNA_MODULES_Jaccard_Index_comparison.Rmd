@@ -3,25 +3,15 @@ title: "Jaccard Indeces Comparing WGCNA Modules Across Tissues"
 author: Ann Wells
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
 output:
- html_document:
-   keep_md: TRUE
-   code_folding: hide
-   collapsed: no
-   toc: yes
-   toc_float: yes
-   self_contained: no
+  html_document:
+    keep_md: TRUE
+    code_folding: hide
+    collapsed: no
+    toc: yes
+    toc_float: yes
+    self_contained: no
    
 ---
-
-<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css">
-<script src="http://code.jquery.com/jquery-2.1.2.min.js"></script>
-<script src="http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script type="text/javascript">
-         $(document).ready(function() {
-             $("table").DataTable();
-         } );
-</script>
 
 # Introduction and Data files
 
@@ -38,7 +28,7 @@ This dataset contains nine tissues (heart, hippocampus, hypothalamus, kidney, li
 
 ## Load in Packages and read in files
 ```{r load packages}
-needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "rlist")
+needed.packages <- c("tidyverse", "here", "functional", "gplots", "dplyr", "GeneOverlap", "R.utils", "reshape2","magrittr","data.table", "RColorBrewer","preprocessCore", "ARTool","emmeans", "phia", "gprofiler2", "rlist", "downloadthis")
 for(i in 1:length(needed.packages)){library(needed.packages[i], character.only = TRUE)}
 
 source(here("source_files","WGCNA_source.R"))
@@ -175,6 +165,7 @@ breaks<-seq(0,.1,length.out = 100)
 pheatmap(mods,cluster_cols=T,cluster_rows=T, fontsize = 10, fontsize_row = 2,fontsize_col = 2,breaks=breaks)
 #dev.off()
 ```
+
 ## Fisher's Exact
 P-values were obtained for each overlap to determine which overlapping modules are significant.
 ```{r, eval=FALSE}
@@ -322,7 +313,7 @@ saveRDS(filtered.pathways,here("Data","Chang_2DG_BL6_gprofiler_annotation_filter
 
 ```
 
-## Pathway Analysis {.tabset .tabset-fade .tabset-pills}
+## Pathway Analysis 
 Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Each pathway listed represents the pathways shared among the two modules. All modules represented were significantly overlapped and all pathways represented are significant according to their adjusted p-value (FDR < 0.05).
 ```{r, results='asis', cache=TRUE}
 filtered.pathways <- readRDS(here("Data","Chang_2DG_BL6_gprofiler_annotation_filtered_list_modules.RData"))
@@ -343,7 +334,36 @@ The number of times each pathway was identified across pairwise overlaps was cou
 ```{r, results='asis'}
 filtered.pathways <- readRDS(here("Data","Chang_2DG_BL6_gprofiler_annotation_filtered_list_modules.RData"))
 
-#pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
-count.pathways(filtered.pathways)
-#dev.off()
+list.pathways <- list()
+  for(i in 1:length(filtered.pathways)){
+    if(class(filtered.pathways[[i]]) == "numeric") {next}
+    else {list.pathways[[i]] <- filtered.pathways[[i]]$term_name}
+  }
+  
+  list.pathways <- unlist(list.pathways)
+  
+  count <- as.data.frame(table(list.pathways)) %>% arrange(desc(Freq))
+
+```
+
+### Frequency Plot
+```{r, results='asis'}
+  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
+  p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
+  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
+  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$list.pathways) + xlab("Modules")
+  print(p)
+  #dev.off()
+```
+
+### Frequency Table
+```{r, results='asis'}
+DT::datatable(count, colnames = c("Pathway", "Frequency"), extensions = 'Buttons',
+                                           rownames = FALSE, 
+                                           filter="top",
+                                           options = list(dom = 'Blfrtip',
+                                                          buttons = c('copy', 'csv', 'excel'),
+                                                          lengthMenu = list(c(10,25,50,-1),
+                                                                            c(10,25,50,"All")), 
+                                                          scrollX= TRUE), class = "display")
 ```
