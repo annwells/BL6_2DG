@@ -86,7 +86,7 @@ moduleTraitPvalue <- corPvalueStudent(moduleTraitCor, nSamples)
 ```
 
 # Relationship between Modules and Traits
-```{r, results='asis'}
+```{r, results='asis', cache=TRUE}
 #sizeGrWindow(10,6)
 # Will display correlations and their p-values
 textMatrix = paste(signif(moduleTraitCor, 2), "\n(",

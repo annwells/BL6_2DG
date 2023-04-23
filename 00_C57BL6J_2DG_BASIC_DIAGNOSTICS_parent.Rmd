@@ -89,7 +89,7 @@ saveRDS(tdata.FPKM, here("Data", "20190406_RNAseq_B6_4wk_2DG_counts_numeric.RDat
 # PCA (logged all data) {.tabset .tabset-fade .tabset-pills}
 These plots contain all tissues, treatments, and times.
 
-```{r PCA logged all data, child='knitr-pca-logged-all-data.Rmd'}
+```{r PCA logged all data, cache=TRUE,child='knitr-pca-logged-all-data.Rmd'}
 ```
 
 ***
@@ -97,7 +97,7 @@ These plots contain all tissues, treatments, and times.
 # PCA (log Time) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so all tissues and treatments are plotted for a single time point.
 
-```{r PCA logged time, child='knitr-pca-logged-single-timepoint.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-single-timepoint.Rmd'}
 ```
 
 ***
@@ -105,7 +105,7 @@ These plots subset the data so all tissues and treatments are plotted for a sing
 # PCA (log Treatment) {.tabset .tabset-fade .tabset-pills}
 These plots use subsetted data so the dataset plotted contains all tissues and time points per treatment type (2DG or control).
 
-```{r PCA logged time, child='knitr-pca-logged-single-treatment.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-single-treatment.Rmd'}
 ```
 
 ***
@@ -113,7 +113,7 @@ These plots use subsetted data so the dataset plotted contains all tissues and t
 # PCA (log Tissue) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains treatment and time for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-single-tissue.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-single-tissue.Rmd'}
 ```
 
 ***
@@ -121,7 +121,7 @@ These plots subset the data so each plot contains treatment and time for each ti
 # PCA (log Tissue 96hr 2DG) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice treated with 2DG for 96hrs for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-96hr-2DG-tissue.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-96hr-2DG-tissue.Rmd'}
 ```
 
 ***
@@ -129,7 +129,7 @@ These plots subset the data so each plot contains mice treated with 2DG for 96hr
 # PCA (log Tissue 96hr control) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice treated with nothing for 96hrs for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-96hr-control-tissue.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-96hr-control-tissue.Rmd'}
 ```
 
 ***
@@ -137,7 +137,7 @@ These plots subset the data so each plot contains mice treated with nothing for 
 # PCA (log Tissue 4wk 2DG) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice treated with 2DG for 4wks for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-4wk-2DG-tissue.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-4wk-2DG-tissue.Rmd'}
 ```
 
 ***
@@ -145,7 +145,7 @@ These plots subset the data so each plot contains mice treated with 2DG for 4wks
 # PCA (log Tissue 4wk control) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice treated with nothing for 4wks for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-4wk-control-tissue.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-4wk-control-tissue.Rmd'}
 ```
 
 ***
@@ -153,7 +153,7 @@ These plots subset the data so each plot contains mice treated with nothing for 
 # PCA (log Treatment by tissue 96hr) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice that were treated or untreated for 96hrs for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-treatment-tissue-96hr.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-treatment-tissue-96hr.Rmd'}
 ```
 
 ***
@@ -161,7 +161,7 @@ These plots subset the data so each plot contains mice that were treated or untr
 # PCA (log Treatment by tissue 4wk) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice that were treated or untreated for 4wks for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-treatment-tissue-4wk.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-treatment-tissue-4wk.Rmd'}
 ```
 
 ***
@@ -169,7 +169,7 @@ These plots subset the data so each plot contains mice that were treated or untr
 # PCA (log Time by tissue 2DG) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice that were treated with 2DG for 96hrs or 4wks for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-time-tissue-2DG.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-time-tissue-2DG.Rmd'}
 ```
 
 ***
@@ -177,7 +177,7 @@ These plots subset the data so each plot contains mice that were treated with 2D
 # PCA (log Time by tissue control) {.tabset .tabset-fade .tabset-pills}
 These plots subset the data so each plot contains mice that were treated with nothing for 96hrs or 4wks for each tissue.
 
-```{r PCA logged time, child='knitr-pca-logged-time-tissue-control.Rmd'}
+```{r PCA logged time, cache=TRUE, child='knitr-pca-logged-time-tissue-control.Rmd'}
 ```
 
 ***

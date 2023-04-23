@@ -60,12 +60,12 @@ eigens <- read.csv(here("Data","Prefrontal Cortex","log.tdata.FPKM.sample.info.s
 ## Module Sample Contribution {.tabset .tabset-fade .tabset-pills}
 The heatmap shows the expression level of each gene in the module across all samples present in this subsetted dataset. The bar plot shows the relative eigen value summarizing gene expression for each sample present in this subsetted dataset.
 
-```{r, results = 'asis'}
+```{r, results = 'asis', cache=TRUE}
 eigen.expression(eigens,log.tdata.FPKM.sample.info.subset.prefrontal.cortex)
 ```
 
 ## Module Sample Contribution Dot plot {.tabset .tabset-fade .tabset-pills}
 
-```{r, results = 'asis'}
+```{r, results = 'asis', cache=TRUE}
 dot.plot(eigens)
 ```

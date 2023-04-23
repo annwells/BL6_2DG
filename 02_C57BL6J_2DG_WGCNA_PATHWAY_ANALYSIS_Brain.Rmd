@@ -353,7 +353,7 @@ if(class(WGCNA.pathway[[40]]) == "numeric"){
 
 ### Wheat3
 ```{r, results='asis'}
-if(class(WGCNA.pathway[41]) == "numeric"){
+if(class(WGCNA.pathway[[41]]) == "numeric"){
    print("No pathways significantly overrepresented")
    } else {DT.table.path(WGCNA.pathway[[41]][c(11,3:6)])}
 ```
@@ -365,17 +365,17 @@ if(class(WGCNA.pathway[41]) == "numeric"){
 WGCNA.pathway <- readRDS(here("Data","Brain","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_hip_hyp_cortex_WGCNA.RData"))
 
 #pdf("Counts_of_each_pathway_identified_within_brain.pdf")
-count.pathways(WGCNA.pathway)
+count <- count.pathways(WGCNA.pathway)
 #dev.off()
 ```
 
 ### Frequency Table
-```{r}
+```{r, results='asis'}
 DT.table.freq(count)
 ```
 
 ### Frequency Plot
-```{r}
+```{r, results='asis'}
   #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
   p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
   p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()

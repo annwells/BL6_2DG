@@ -148,6 +148,7 @@ modulenames <- sort(modulenames)
 
 names(Matched.module.cortex) <- modulenames
 ```
+
 ### With Brain
 ```{r, cache=TRUE}
 tissues.treat <- list("Heart" = Matched.module.heart$darkgreen, "Hypothalamus" = Matched.module.hyp$bisque4, "Liver" = Matched.module.liver$darkolivegreen, "Prefrontal Cortex" = Matched.module.cortex$bisque2, "Skeletal Muscle" = Matched.module.SM$salmon2, "Small Intestine" = Matched.module.SI$green4)
@@ -162,9 +163,8 @@ tissues.treat.nobrain <- list("Heart" = Matched.module.heart$darkgreen, "Liver" 
 upset(nsets=, fromList(tissues.treat.nobrain), main.bar.color = "salmon", matrix.color = "midnightblue", sets.bar.color = "darkolivegreen", text.scale = 1)
 ```
 
-### Pathways
+## Pathways
 
-## Load data
 ```{r load data pathways}
 heart <- readRDS(here("Data","Heart","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_heart_WGCNA.RData"))
 names(heart) <- as.list(names(Matched.module.heart))

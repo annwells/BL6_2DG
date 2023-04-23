@@ -44,7 +44,7 @@ module_barplot(modules)
 Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Modules that did not contain any significant pathways are blank.
 
 ## Pathway plots {.tabset .tabset-fade .tabset-pills}
-```{r}
+```{r, cache=TRUE}
 WGCNA<-read.table(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.membership.csv"), header=T)
 
 Data_setup(WGCNA, file = "Annotated_genes_in_skeletal_muscle_WGCNA_Chang_B6_96hr_4wk.RData", folder="Skeletal Muscle")
@@ -63,9 +63,290 @@ gost.plot(Matched)
 ## Table of Pathways {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 WGCNA.pathway <- readRDS(here("Data","Skeletal Muscle","Chang_B6_96hr_4wk_gprofiler_gprofiler_pathway_annotation_list_skeletal_muscle_WGCNA.RData"))
+```
 
-pathways.list(WGCNA.pathway, Matched)
+### Antiquewhite2
 
+```{r, results='asis'}
+if(class(WGCNA.pathway[[1]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[1]][c(11,3:6)])}
+```
+
+
+### Bisque4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[2]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[2]][c(11,3:6)])}
+```
+
+### Brown2
+```{r, results='asis'}
+if(class(WGCNA.pathway[[3]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[3]][c(11,3:6)])}
+```
+
+### Brown4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[4]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[4]][c(11,3:6)])}
+```
+
+### Coral
+```{r, results='asis'}
+if(class(WGCNA.pathway[[5]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[5]][c(11,3:6)])}
+```
+
+### Coral2
+```{r, results='asis'}
+if(class(WGCNA.pathway[[6]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[6]][c(11,3:6)])}
+```
+
+
+### Coral3
+```{r, results='asis'}
+if(class(WGCNA.pathway[[7]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[7]][c(11,3:6)])}
+```
+
+### Darkgrey
+```{r, results='asis'}
+if(class(WGCNA.pathway[[8]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[8]][c(11,3:6)])}
+```
+
+### Darkseagreen3
+```{r, results='asis'}
+if(class(WGCNA.pathway[[9]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[9]][c(11,3:6)])}
+```
+
+### Darkslateblue
+```{r, results='asis'}
+if(class(WGCNA.pathway[[10]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[10]][c(11,3:6)])}
+```
+
+
+### Firebrick4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[11]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[11]][c(11,3:6)])}
+```
+
+### Floralwhite
+```{r, results='asis'}
+if(class(WGCNA.pathway[[12]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[12]][c(11,3:6)])}
+```
+
+### Green
+```{r, results='asis'}
+if(class(WGCNA.pathway[[13]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[13]][c(11,3:6)])}
+```
+
+### Grey
+```{r, results='asis'}
+if(class(WGCNA.pathway[[14]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[14]][c(11,3:6)])}
+```
+
+### Grey60
+```{r, results='asis'}
+if(class(WGCNA.pathway[[15]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[15]][c(11,3:6)])}
+```
+
+### Honeydew
+```{r, results='asis'}
+if(class(WGCNA.pathway[[16]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[16]][c(11,3:6)])}
+```
+
+### Honeydew1
+```{r, results='asis'}
+if(class(WGCNA.pathway[[17]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[17]][c(11,3:6)])}
+```
+
+### Lavenderblush2
+```{r, results='asis'}
+if(class(WGCNA.pathway[[18]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[18]][c(11,3:6)])}
+```
+
+### Lightcoral
+```{r, results='asis'}
+if(class(WGCNA.pathway[[19]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[19]][c(11,3:6)])}
+```
+
+### Lightcyan1
+```{r, results='asis'}
+if(class(WGCNA.pathway[[20]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[20]][c(11,3:6)])}
+```
+
+### Lightpink3
+```{r, results='asis'}
+if(class(WGCNA.pathway[[21]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[21]][c(11,3:6)])}
+```
+
+### Lightpink4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[22]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[22]][c(11,3:6)])}
+```
+
+### lightsteelblue1
+```{r, results='asis'}
+if(class(WGCNA.pathway[[23]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[23]][c(11,3:6)])}
+```
+
+### Magenta4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[24]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[24]][c(11,3:6)])}
+```
+
+### Mediumpurple3
+```{r, results='asis'}
+if(class(WGCNA.pathway[[25]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[25]][c(11,3:6)])}
+```
+
+### Navajowhite1
+```{r, results='asis'}
+if(class(WGCNA.pathway[[26]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[26]][c(11,3:6)])}
+```
+
+### Navajowhite2
+```{r, results='asis'}
+if(class(WGCNA.pathway[[27]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[27]][c(11,3:6)])}
+```
+
+### Orangered1
+```{r, results='asis'}
+if(class(WGCNA.pathway[[28]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[28]][c(11,3:6)])}
+```
+
+### Orangered3
+```{r, results='asis'}
+if(class(WGCNA.pathway[[29]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[29]][c(11,3:6)])}
+```
+
+### Orangered4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[30]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[30]][c(11,3:6)])}
+```
+
+### Palevioletred2
+```{r, results='asis'}
+if(class(WGCNA.pathway[[31]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[31]][c(11,3:6)])}
+```
+
+### Plum3
+```{r, results='asis'}
+if(class(WGCNA.pathway[[32]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[32]][c(11,3:6)])}
+```
+
+### Purple
+```{r, results='asis'}
+if(class(WGCNA.pathway[[33]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[33]][c(11,3:6)])}
+```
+
+### Saddlebrown
+```{r, results='asis'}
+if(class(WGCNA.pathway[[34]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[34]][c(11,3:6)])}
+```
+
+### Salmon2
+```{r, results='asis'}
+if(class(WGCNA.pathway[[35]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[35]][c(11,3:6)])}
+```
+
+### Sienna4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[36]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[36]][c(11,3:6)])}
+```
+
+### Skyblue4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[37]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[37]][c(11,3:6)])}
+```
+
+### Thistle1
+```{r, results='asis'}
+if(class(WGCNA.pathway[[38]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[38]][c(11,3:6)])}
+```
+
+### Turquoise
+```{r, results='asis'}
+if(class(WGCNA.pathway[[39]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[39]][c(11,3:6)])}
+```
+
+### Yellow4
+```{r, results='asis'}
+if(class(WGCNA.pathway[[40]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[40]][c(11,3:6)])}
 ```
 
 ## Pathway Frequency {.tabset .tabset-fade .tabset-pills}
@@ -74,7 +355,7 @@ pathways.list(WGCNA.pathway, Matched)
 WGCNA.pathway <- readRDS(here("Data","Skeletal Muscle","Chang_B6_96hr_4wk_gprofiler_gprofiler_pathway_annotation_list_skeletal_muscle_WGCNA.RData"))
 
 #pdf("Counts_of_each_pathway_identified_within_skeletal_muscle.pdf")
-count.pathways(WGCNA.pathway)
+count <- count.pathways(WGCNA.pathway)
 #dev.off()
 ```
 

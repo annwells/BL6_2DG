@@ -33,7 +33,7 @@ source(here("source_files","WGCNA_source.R"))
 
 There were 16 samples (4 per time and treatment). Mice were fed 2DG (6g/L) or nothing in their water for 96hrs or 4 weeks. WGCNA analysis was performed to determine gene clustering. A soft-thresholding power was chosen so that the scale-free topology correlation attempts to hit 0.9. The power chosen for heart was 5, which allowed the correlations to hover around 0.88. This power clustered the genes into 42 modules originally, however, modules that were highly correlated (0.75 or higher) were further merged together to create 25 modules.
 
-```{r}
+```{r, cache=TRUE}
 modules<-read.csv(here("Data","Heart","log.tdata.FPKM.sample.info.subset.heart.WGCNA.module.membership.csv"), header=T)
 
 module_barplot(modules)

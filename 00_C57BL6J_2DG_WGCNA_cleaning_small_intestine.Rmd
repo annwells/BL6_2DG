@@ -68,7 +68,7 @@ cat("logFPKM: ", goodSamplesGenes(log.tdata.FPKM.sample.info.subset.small.intest
 
 WGCNA reports that all data are good! I now use hierarchical clustering to detect any obvious outliers. I did not see any particularly egregious outliers.
 
-```{r}
+```{r, cache=TRUE}
 sampleclustering(log.tdata.FPKM.sample.info.subset.small.intestine.missing)
 ```
 

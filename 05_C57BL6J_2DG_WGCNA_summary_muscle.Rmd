@@ -32,7 +32,7 @@ source(here("source_files","WGCNA_source.R"))
 
 There were 15 samples (4 per time and treatment with one 96hr control missing due to low RNA quality). Mice were fed 2DG (6g/L) or nothing in their water for 96hrs or 4 weeks. WGCNA analysis was performed to determine gene clustering. A soft-thresholding power was chosen so that the scale-free topology correlation attempts to hit 0.9. The power chosen for skeletal muscle was 13, which allowed the correlations to hover around 0.88. This power clustered the genes into 98 modules originally, however, modules that were highly correlated (0.75 or higher) were further merged together to create 40 modules.
 
-```{r}
+```{r, cache=TRUE}
 modules<-read.csv(here("Data","Skeletal Muscle","log.tdata.FPKM.sample.info.subset.skeletal.muscle.WGCNA.module.membership.csv"), header=T)
 
 module_barplot(modules)

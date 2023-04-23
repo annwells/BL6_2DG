@@ -44,7 +44,7 @@ module_barplot(modules)
 Pathway analysis was performed using the gprofiler package. Genes associated with each module were compared against KEGG and REACTOME databases. Modules that did not contain any significant pathways are blank.
 
 ## Pathway plots {.tabset .tabset-fade .tabset-pills}
-```{r}
+```{r, cache=TRUE}
 WGCNA<-read.table(here("Data","SM.SI.spleen","log.tdata.FPKM.sample.info.subset.SM.SI.spleen.WGCNA.module.membership.csv"), header=T)
 
 Data_setup(WGCNA, file = "Annotated_genes_in_SM_SI_spleen_WGCNA_Chang_B6_96hr_4wk.RData", folder="SM.SI.spleen")
@@ -63,9 +63,36 @@ gost.plot(Matched)
 ## Table of Pathways {.tabset .tabset-fade .tabset-pills}
 ```{r, results='asis'}
 WGCNA.pathway <- readRDS(here("Data","SM.SI.spleen","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_SM_SI_spleen_WGCNA.RData"))
+```
 
-pathways.list(WGCNA.pathway, Matched)
+### Blue
 
+```{r, results='asis'}
+if(class(WGCNA.pathway[[1]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[1]][c(11,3:6)])}
+```
+
+
+### Brown
+```{r, results='asis'}
+if(class(WGCNA.pathway[[2]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[2]][c(11,3:6)])}
+```
+
+### Green
+```{r, results='asis'}
+if(class(WGCNA.pathway[[3]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[3]][c(11,3:6)])}
+```
+
+### Turquoise
+```{r, results='asis'}
+if(class(WGCNA.pathway[[4]]) == "numeric"){
+   print("No pathways significantly overrepresented")
+   } else {DT.table.path(WGCNA.pathway[[4]][c(11,3:6)])}
 ```
 
 ## Pathway Frequency {.tabset .tabset-fade .tabset-pills}
@@ -74,7 +101,7 @@ pathways.list(WGCNA.pathway, Matched)
 WGCNA.pathway <- readRDS(here("Data","SM.SI.spleen","Chang_B6_96hr_4wk_gprofiler_pathway_annotation_list_SM_SI_spleen_WGCNA.RData"))
 
 #pdf("Counts_of_each_pathway_identified_within_SM.SI.spleen.pdf")
-count.pathways(WGCNA.pathway)
+count <- count.pathways(WGCNA.pathway)
 #dev.off()
 ```
 
