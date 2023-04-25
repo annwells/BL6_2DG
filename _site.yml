@@ -1,6 +1,6 @@
-name: "C57BL6J website"
+name: "C57BL/6J website"
 navbar:
-  title: "C57BL6J"
+  title: "C57BL/6J"
   type: "inverse"
   left:
     - text: "Home"
@@ -368,7 +368,7 @@ navbar:
         - text: "Spleen"
           href: 17_C57BL6J_2DG_DE_genes_spleen.html
       - text: "UpSet Plots for Differential Expression Analysis"
-        href: 19_C57BL6J_2DG_UpSet_plots_for_diff_exp_and pathways_all_genes.html
+        href: 19_C57BL6J_2DG_UpSet_plots_for_diff_exp_and_pathways_all_genes.html
       - text: "Correlations Across Tissue Modules Chosen for Manuscript"
         href: 19_C57BL6J_2DG_Correlations_for_tissue_modules_chosen.html
   
@@ -378,7 +378,7 @@ navbar:
     - icon: fa-github
       href: https://github.com/annwells/BL6_2DG/tree/main
     - icon: fa-database
-      href: 10.6084/m9.figshare.22134095
+      href: https://doi.org/10.6084/m9.figshare.22501906
     - icon: fa-paper-plane
       href: mailto:<ann.wells@jax.org, lucas.chang@jax.org>
       

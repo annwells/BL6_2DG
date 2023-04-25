@@ -167,6 +167,7 @@ pathways.list <-function(pathway, matched){
   }  
   name <- str_split(samples,"\"")
   
+  pathway.print <- list()
   for(i in 1:length(name)){
     cat("\n###",name[[i]], "Module","\n")
     if(class(pathway[[i]]) == "numeric"){next}
@@ -342,6 +343,7 @@ dot.plot <-function(eigens){
     cat("\n \n")
   }
 }
+
 ##Plot the number of times a pathway appears across all modules
 
 count.pathways <- function(pathways){
@@ -359,49 +361,9 @@ count.pathways <- function(pathways){
   print(length(unique(list.pathways)))
   
   count <- as.data.frame(table(list.pathways)) %>% arrange(desc(Freq))
-  
-  cat("\n####","Frequency Table","\n")
-  print(knitr::kable(count, col.names = c("Pathway", "Frequency")))
-  data <- count
-  names(data) <- c("Pathway", "Frequency") 
-  print(data %>%
-    download_this(
-      output_name = "Pathway Frequency Table",
-      output_extension = ".csv",
-      button_label = "Download data as csv",
-      button_type = "info",
-      has_icon = TRUE,
-      icon = "fa fa-save"
-    ))
-  cat("\n \n")
-  
-  cat("\n####","Frequency Plot","\n")
-  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
-  p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
-  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
-  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$list.pathways) + xlab("Modules")
-  print(p)
-  #dev.off()
-  cat("\n \n")
-  
 }
+  
 
-# Plot frequency of pathways shared between tissues in jaccard overlaps
-module.jaccard.pathways <- function(count, tissue){
-  cat("\n####","Frequency Table","\n")
-  print(knitr::kable(count, col.names = c("Pathway", "Heart", "Hippo","Hypo","Kidney",
-                                          "Liver","Cortex","Muscle","Intestine","Spleen", "Freq")))
-  cat("\n \n")
-  
-  cat("\n####","Frequency Plot","\n")
-  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
-  p <- ggplot(data=count,aes(x=term_name,y=count))
-  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
-  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$Var1) + xlab("Modules")
-  print(p)
-  #dev.off()
-  cat("\n \n")
-}
 
 # Plot pathways shared genes between tissues in jaccard overlaps
 
@@ -411,15 +373,9 @@ genes.jaccard.pathways <- function(Matched, module){
   genes.module <- map_df(genes.module, ~as.data.frame(.))
   gene <- as.vector(genes.module$Genes)
   profiler <- gost(gene,organism = "mmusculus", correction_method = "fdr", sources = c("KEGG","REAC"))
-  if(is.null(profiler)) {cat("\n####","Pathway Table","\n") 
-    print("No significant pathways")
-    cat("\n \n")
-  } else {pathway <- profiler$result
-  
-  cat("\n####","Pathway Table","\n")
-  print(knitr::kable(pathway[c(11,4:6,3)], col.names = c("Pathway", "Term Size", "Query Size", "Intersection Size", "FDR")))
-  cat("\n \n")}
 }
+  
+
 
 
 ##Plot the number of times a pathway appears across all modules related to trait
@@ -439,35 +395,13 @@ count.pathways.traits <- function(pathways){
   print(length(unique(list.pathways)))
   
   count <- as.data.frame(table(list.pathways)) %>% arrange(desc(Freq))
-  
-  cat("\n####","Frequency Table","\n")
-  print(knitr::kable(count, col.names = c("Pathway", "Frequency"))) 
-  data <- count
-  names(data) <- c("Pathway", "Frequency")
-  print(data %>%
-    download_this(
-      output_name = "Frequency Table",
-      output_extension = ".csv",
-      button_label = "Download data as csv",
-      button_type = "info",
-      has_icon = TRUE,
-      icon = "fa fa-save"
-    ))
-  cat("\n \n")
-  
-  cat("\n####","Frequency Plot","\n")
-  #pdf("Counts_of_each_pathway_identified_within_jaccard_index.pdf")
-  p <- ggplot(data=count,aes(x=list.pathways,y=Freq))
-  p <- p + geom_bar(color="black", fill=colorRampPalette(brewer.pal(n = 12, name = "Paired"))(length(count[,1])), stat="identity",position="identity") + theme_classic()
-  p <- p + theme(axis.text.x = element_text(angle = 90, hjust =1, size = 3)) + scale_x_discrete(labels=count$list.pathways) + xlab("Modules")
-  print(p)
-  #dev.off()
-  cat("\n \n")
-  
+  return(count)
 }
+
 
 ## Hub genes
 hub.genes <- function(net.deg, module.labels,modules,gene.name){
+  hub <- list()
   for(m in module.labels) {
     name <- str_split(m,"_")[[1]][2]
     hub.met <- net.deg[modules$Gene,] %>%
@@ -476,22 +410,10 @@ hub.genes <- function(net.deg, module.labels,modules,gene.name){
       dplyr::arrange(desc(kWithin)) %>%
       dplyr::select(Gene, kWithin)
     gene <- gene.name$external_gene_name[match(hub.met$Gene,gene.name$ensembl_gene_id)]
-    cat("\n###",name, "\n")
-    print(knitr::kable(cbind(gene,hub.met), col.names = c("Gene name", "Ensembl Gene", "kWithin")))
-    data <- as.data.frame(cbind(gene,hub.met))
-    names <- c("Gene name", "Ensembl Gene", "kWithin")
-    output_name <- paste(name, "Module Hub Genes")
-    print(data %>%
-      download_this(
-        output_name = output_name,
-        output_extension = ".csv",
-        button_label = "Download data as csv",
-        button_type = "info",
-        has_icon = TRUE,
-        icon = "fa fa-save"
-      ))
-    cat("\n \n")
+    
+    hub[[m]] <- cbind(gene,hub.met)
   }
+  return(hub)
 }
 
 ## Hub genes ANOVA and barplots
@@ -677,19 +599,19 @@ gene.significance <- function(factors, data, modules){
                                         xaxis = list(tickfont = list(size = 15), title = paste(levels(data2$Color)[i],"Module")), 
                                         xaxis2 = list(tickfont = list(size = 15), title = "Within-Module Connectivity"), 
                                         yaxis2 = list(tickfont = list(size = 15), title = paste0("-Log10(P-Value) with ", trait)))))
-      print(knitr::kable(data2[,c(1,2,4)]))
-      download <- data2[,c(1,2,4)]
-      names(download) <- c("Gene","Log 10 p-value","Connectivity")
-      output_name <- paste(levels(data2$Color)[i],"Module Hub Genes")
-      print(download %>%
-        download_this(
-          output_name = output_name,
-          output_extension = ".csv",
-          button_label = "Download data as csv",
-          button_type = "info",
-          has_icon = TRUE,
-          icon = "fa fa-save"
-        ))
+      # print(knitr::kable(data2[,c(1,2,4)]))
+      # download <- data2[,c(1,2,4)]
+      # names(download) <- c("Gene","Log 10 p-value","Connectivity")
+      # output_name <- paste(levels(data2$Color)[i],"Module Hub Genes")
+      # print(download %>%
+      #   download_this(
+      #     output_name = output_name,
+      #     output_extension = ".csv",
+      #     button_label = "Download data as csv",
+      #     button_type = "info",
+      #     has_icon = TRUE,
+      #     icon = "fa fa-save"
+      #   ))
       cat("\n \n")
       
     }
@@ -1017,7 +939,7 @@ ANOVA.gene.pathways <- function(WGCNA.gene, logdata){
   
   for (i in 1:length(WGCNA.gene)){
   cat("\n###",modules[i],"{.tabset .tabset-fade .tabset-pills}"," \n")
-    if(is.list(WGCNA.gene[[i]])==FALSE){next}
+    if(is.list(WGCNA.gene[[i]])==FALSE){print("No significantly overrepresented pathways reported")}
     else{
   for(j in 1:length(WGCNA.gene[[i]])){
 
@@ -1044,7 +966,9 @@ ANOVA.gene.pathways <- function(WGCNA.gene, logdata){
     
     frame <- as.data.frame(frame)
     
-    print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", "Treatment by time", "BH Treatment by time")))
+    print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment",
+                                            "Time", "BH Time", "Treatment by time", "BH Treatment by time")) %>% 
+            kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "responsive")))
     
     output_name <- paste("Genes in", names(WGCNA.gene[[i]])[j], " pathway for Heart", modules[i])
     
@@ -1057,6 +981,7 @@ ANOVA.gene.pathways <- function(WGCNA.gene, logdata){
               has_icon = TRUE,
               icon = "fa fa-save"
             ))
+    
     cat("\n \n")
   }             
   cat("\n \n")
@@ -1102,7 +1027,8 @@ ANOVA.gene.tissues.pathways <- function(WGCNA.gene, logdata){
         
         frame <- as.data.frame(frame)
         
-        print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", "Tissue", "BH Tissue", "Treatment by time", "BH Treatment by time", "Time by Tissue","BH Time by Tissue", "Treatment by Tissue", "BH Treatment by Tissue", "Time by Treatment by Tissue", "BH Time by Treatment by Tissue")))
+        print(knitr::kable(frame, col.names = c("External Gene Name", "Gene ID", "Treatment", "BH Treatment","Time", "BH Time", "Tissue", "BH Tissue", "Treatment by time", "BH Treatment by time", "Time by Tissue","BH Time by Tissue", "Treatment by Tissue", "BH Treatment by Tissue", "Time by Treatment by Tissue", "BH Time by Treatment by Tissue")) %>%
+          kable_styling(bootstrap_options = c("striped", "hover", "responsive")))
         
         output_name <- paste("Genes in", names(WGCNA.gene[[i]])[j], " pathway for Heart", modules[i])
         
@@ -1121,3 +1047,71 @@ ANOVA.gene.tissues.pathways <- function(WGCNA.gene, logdata){
     }
   }
 }
+
+## Create wrapper for DT table with basic theme
+DT.table <- function(data){DT::datatable(data, extensions = 'Buttons',
+              rownames = FALSE, 
+              filter="top",
+              options = list(dom = 'Blfrtip',
+                             buttons = c('copy', 'csv', 'excel'),
+                             lengthMenu = list(c(10,25,50,-1),
+                                               c(10,25,50,"All")), 
+                             scrollX= TRUE), class = "display") 
+}
+
+## Create wrapper for DT table with column names for hub genes
+DT.table.hub <- function(data){DT::datatable(data, extensions = 'Buttons',
+                                         rownames = FALSE, 
+                                         filter="top",
+                                         options = list(dom = 'Blfrtip',
+                                                        buttons = c('copy', 'csv', 'excel'),
+                                                        lengthMenu = list(c(10,25,50,-1),
+                                                                          c(10,25,50,"All")), 
+                                                        scrollX= TRUE), class = "display", colnames = c("Gene name", "Ensembl Gene", "kWithin")) 
+}
+
+## Create wrapper for DT table with column names for Jaccard genes
+DT.table.jaccard <- function(data){DT::datatable(data, extensions = 'Buttons',
+                                             rownames = FALSE, 
+                                             filter="top",
+                                             options = list(dom = 'Blfrtip',
+                                                            buttons = c('copy', 'csv', 'excel'),
+                                                            lengthMenu = list(c(10,25,50,-1),
+                                                                              c(10,25,50,"All")), 
+                                                            scrollX= TRUE), class = "display", colnames = c("Pathway", "Term Size", "Query Size", "Intersection Size", "FDR"))
+}
+
+## Create wrapper for DT table with column names for Jaccard pathways
+DT.table.jaccard.pathways <- function(data){DT::datatable(data, extensions = 'Buttons',
+                                                 rownames = FALSE, 
+                                                 filter="top",
+                                                 options = list(dom = 'Blfrtip',
+                                                                buttons = c('copy', 'csv', 'excel'),
+                                                                lengthMenu = list(c(10,25,50,-1),
+                                                                                  c(10,25,50,"All")), 
+                                                                scrollX= TRUE), class = "display", colnames = c("Pathway", "Heart", "Hippo","Hypo","Kidney",
+                                                                                                                "Liver","Cortex","Muscle","Intestine","Spleen", "Freq"))
+}
+
+## Create wrapper for DT table for frequency plot
+DT.table.freq <- function(data){DT::datatable(data, extensions = 'Buttons',
+                                         rownames = FALSE, 
+                                         filter="top",
+                                         options = list(dom = 'Blfrtip',
+                                                        buttons = c('copy', 'csv', 'excel'),
+                                                        lengthMenu = list(c(10,25,50,-1),
+                                                                          c(10,25,50,"All")), 
+                                                        scrollX= TRUE), class = "display", colnames = c("Pathway", "Frequency"))
+}
+
+## Create wrapper for DT table for pathways
+DT.table.path <- function(data){DT::datatable(data, extensions = 'Buttons',
+                                              rownames = FALSE, 
+                                              filter="top",
+                                              options = list(dom = 'Blfrtip',
+                                                             buttons = c('copy', 'csv', 'excel'),
+                                                             lengthMenu = list(c(10,25,50,-1),
+                                                                               c(10,25,50,"All")), 
+                                                             scrollX= TRUE), class = "display", colnames = c("Pathway","FDR p-value","Term Size", "Query Size", "Overlap Size"))
+}
+
